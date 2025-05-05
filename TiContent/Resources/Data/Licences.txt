@@ -1,0 +1,48 @@
+﻿1. CommunityToolkit.Common
+-----------------------------------------
+License: MIT License
+Description: A collection of common utilities for .NET applications.
+Repository: https://github.com/CommunityToolkit/dotnet
+License Text: https://licenses.nuget.org/MIT
+
+2. CommunityToolkit.HighPerformance
+--------------------------------------------------
+License: MIT License
+Description: High-performance utilities for .NET, focusing on memory and span operations.
+Repository: https://github.com/CommunityToolkit/dotnet
+License Text: https://licenses.nuget.org/MIT
+
+3. CommunityToolkit.Mvvm
+----------------------------------------
+License: MIT License
+Description: A set of MVVM helpers for .NET, including observable objects and commands.
+Repository: https://github.com/CommunityToolkit/dotnet
+License Text: https://licenses.nuget.org/MIT
+
+4. JetBrains.Annotations
+------------------------------------------
+License: MIT License
+Description: Code annotation attributes to improve code analysis and readability.
+Repository: https://github.com/JetBrains/annotations
+License Text: https://licenses.nuget.org/MIT
+
+6. Microsoft.Extensions.Hosting
+-----------------------------------------------
+License: MIT License
+Description: Hosting and startup abstractions for .NET applications.
+Repository: https://github.com/dotnet/extensions
+License Text: https://licenses.nuget.org/MIT
+
+7. WPF-UI
+--------------------------
+License: MIT License
+Description: A modern UI library for WPF applications with Fluent Design support.
+Repository: https://github.com/lepoco/wpfui
+License Text: https://licenses.nuget.org/MIT
+
+8. WPF-UI.Violeta
+------------------------------------
+License: MIT License
+Description: Additional themes and styles for WPF-UI library.
+Repository: https://github.com/lepoco/wpfui
+License Text: https://licenses.nuget.org/MIT
