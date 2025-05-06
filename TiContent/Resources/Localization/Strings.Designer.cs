@@ -96,6 +96,24 @@ namespace TiContent.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty....
+        /// </summary>
+        public static string HomePage_Empty {
+            get {
+                return ResourceManager.GetString("HomePage.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please,wait....
+        /// </summary>
+        public static string HomePage_InProgress {
+            get {
+                return ResourceManager.GetString("HomePage.InProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string HomePage_Title {

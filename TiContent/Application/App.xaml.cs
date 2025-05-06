@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TiContent.Components.Wrappers;
 using TiContent.Services.Storage;
 using Wpf.Ui.Violeta.Controls;
 
@@ -11,7 +12,7 @@ public partial class App
 {
     private static readonly IHost AppHost = Host
         .CreateDefaultBuilder()
-        .ConfigureAppConfiguration(b => b.SetBasePath(AppContext.BaseDirectory))
+        .ConfigureAppConfiguration(b => b.SetBasePath(Environment.CurrentDirectory))
         .ConfigureServices(ConfigureServices)
         .Build();
 
@@ -22,18 +23,21 @@ public partial class App
     
     protected override async void OnStartup(StartupEventArgs e)
     {
-        base.OnStartup(e);
-        
-        await AppHost.Services.GetRequiredService<IStorageService>().ObtainAsync();
-        await AppHost.StartAsync();
+        try
+        {
+            base.OnStartup(e);
+            await AppHost.StartAsync();
+        }
+        catch
+        {
+            // Empty
+        }
     }
     
     protected override async void OnExit(ExitEventArgs e)
     {
-        await AppHost.Services.GetRequiredService<IStorageService>().SaveAsync();
         await AppHost.StopAsync();
         AppHost.Dispose();
-        
         base.OnExit(e);
     }
 }

@@ -18,19 +18,13 @@ public class JacredService(
     
     private readonly IRestClient _client = client ?? throw new ArgumentNullException(nameof(client));
 
-    /// <inheritdoc />
-    public async Task<List<JacredEntity>> ObtainTorrentsAsync(string search)
+    public async Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default)
     {
-        if (string.IsNullOrWhiteSpace(search))
-            throw new ArgumentException("Поисковый запрос не может быть пустым", nameof(search));
-
-        var baseUrl = (await storage.ObtainAsync()).BaseUrl;
+        var baseUrl = storage.Cached?.BaseUrl;
         var request = new RestRequest(baseUrl + TorrentsEndpoint);
         request.AddParameter(SearchParameterName, search);
         
-        var response = await _client.ExecuteAsync<List<JacredEntity>>(request);
-        response.ThrowIfError();
-        
+        var response = await _client.ExecuteAsync<List<JacredEntity>>(request, token);
         return response.Data ?? [];
     }
 }

@@ -1,0 +1,15 @@
+﻿// ⠀
+// ViewStateEnum.cs
+// TiContent
+// 
+// Created by the_timick on 05.05.2025.
+// ⠀
+
+namespace TiContent.Components.Abstractions;
+
+public enum ViewStateEnum
+{
+    Content,
+    Empty,
+    InProgress,
+}

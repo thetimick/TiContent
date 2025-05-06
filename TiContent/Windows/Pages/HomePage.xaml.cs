@@ -1,5 +1,5 @@
-﻿using TiContent.ViewModels.Pages;
-using Wpf.Ui;
+﻿using System.Windows.Input;
+using TiContent.ViewModels.Pages;
 
 namespace TiContent.Windows.Pages;
 
@@ -13,8 +13,5 @@ public partial class HomePage
         DataContext = viewModel;
 
         InitializeComponent();
-        
-        Loaded += (_, _) => viewModel.LoadedCommand.Execute(null);
-        Unloaded += (_, _) => viewModel.UnloadedCommand.Execute(null);
     }
 }

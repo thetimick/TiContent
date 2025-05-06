@@ -44,6 +44,7 @@
             </ComboBox>
         </ui:Grid>
 
+        <!--  Content  -->
         <ui:DataGrid
             Grid.Row="1"
             Margin="0,4,0,0"
@@ -56,25 +57,132 @@
             CanUserSortColumns="True"
             HorizontalScrollBarVisibility="Hidden"
             IsReadOnly="True"
-            ItemsSource="{Binding Items, Mode=TwoWay}">
+            ItemsSource="{Binding Items, Mode=TwoWay}"
+            SelectionMode="Single"
+            Visibility="{Binding ViewState, Converter={StaticResource ViewStateToVisibilityConverter}}">
 
             <ui:DataGrid.Columns>
-                <DataGridTextColumn
+                <DataGridTemplateColumn
+                    Width="Auto"
+                    CanUserReorder="False"
+                    CanUserResize="False"
+                    CanUserSort="False">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:HyperlinkButton
+                                Width="32"
+                                Height="32"
+                                Margin="0,0,4,0"
+                                Padding="8,0,0,0"
+                                CornerRadius="16"
+                                Icon="{ui:SymbolIcon Shapes16}"
+                                NavigateUri="{Binding Magnet}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
+                <DataGridTemplateColumn
                     Width="*"
-                    Binding="{Binding Title}"
-                    Header="Название" />
+                    Header="Название"
+                    SortMemberPath="Title">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:StackPanel
+                                Margin="0,4,0,4"
+                                Orientation="Vertical"
+                                Spacing="2">
+
+                                <ui:TextBlock
+                                    FontTypography="BodyStrong"
+                                    Text="{Binding Title}"
+                                    TextWrapping="Wrap" />
+
+                                <ui:TextBlock
+                                    Appearance="Tertiary"
+                                    FontTypography="Caption"
+                                    Text="{Binding AggregatedDescription}" />
+                            </ui:StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTextColumn
-                    Width="0.15*"
-                    Binding="{Binding Tracker, Converter={StaticResource EnumDescriptionConverter}}"
-                    Header="Трекер" />
+                    Width="Auto"
+                    Binding="{Binding CreateTime, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
+                    Header="Дата" />
+
+                <DataGridTemplateColumn
+                    Width="Auto"
+                    Header="Сиды &amp; Пиры"
+                    SortMemberPath="Sid">
+
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <ui:StackPanel
+                                Margin="12"
+                                HorizontalAlignment="Center"
+                                Orientation="Horizontal"
+                                Spacing="4">
+
+                                <ui:StackPanel Orientation="Horizontal" Spacing="2">
+                                    <ui:SymbolIcon Symbol="ArrowUp24" />
+                                    <ui:TextBlock FontTypography="BodyStrong" Text="{Binding Sid}" />
+                                </ui:StackPanel>
+
+                                <ui:StackPanel Orientation="Horizontal" Spacing="2">
+                                    <ui:SymbolIcon Symbol="ArrowDown24" />
+                                    <ui:TextBlock FontTypography="BodyStrong" Text="{Binding Pir}" />
+                                </ui:StackPanel>
+                            </ui:StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
 
                 <DataGridTextColumn
-                    Width="0.15*"
+                    Width="Auto"
                     Binding="{Binding Size, Converter={StaticResource ByteSizeToStringConverter}}"
+                    FontSize="14"
+                    FontWeight="SemiBold"
                     Header="Размер"
                     SortMemberPath="Size.Bytes" />
             </ui:DataGrid.Columns>
         </ui:DataGrid>
+
+        <!--  Empty  -->
+        <ui:TextBlock
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Appearance="Tertiary"
+            FontTypography="Subtitle"
+            Text="{x:Static loc:Strings.HomePage_Empty}"
+            Visibility="{Binding ViewState, Converter={StaticResource ViewStateToVisibilityConverter}, ConverterParameter='empty'}" />
+
+        <!--  InProgress  -->
+        <ui:StackPanel
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Orientation="Horizontal"
+            Spacing="16"
+            Visibility="{Binding ViewState, Converter={StaticResource ViewStateToVisibilityConverter}, ConverterParameter='progress'}">
+
+            <ui:ProgressRing
+                Width="54"
+                Height="54"
+                VerticalAlignment="Center"
+                IsIndeterminate="True" />
+
+            <ui:TextBlock
+                VerticalAlignment="Center"
+                Appearance="Tertiary"
+                FontTypography="Subtitle"
+                Text="{x:Static loc:Strings.HomePage_InProgress}"
+                TextWrapping="Wrap" />
+        </ui:StackPanel>
     </ui:Grid>
 </Page>

@@ -15,8 +15,11 @@
                 <vio:ControlsDictionary />
             </ResourceDictionary.MergedDictionaries>
 
-            <converters:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:EnumDescriptionToStringConverter x:Key="EnumDescriptionConverter" />
             <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
+            <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+            <converters:ViewStateToVisibilityConverter x:Key="ViewStateToVisibilityConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -11,7 +11,7 @@ using Humanizer;
 
 namespace TiContent.Components.Converters;
 
-public class EnumDescriptionConverter : IValueConverter
+public class EnumDescriptionToStringConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {

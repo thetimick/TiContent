@@ -168,4 +168,10 @@
   <data name="SettingsPage.IsWindowSizePersistent.Description" xml:space="preserve">
     <value>При каждом запуске размер окна будет как в прошлый раз</value>
   </data>
+  <data name="HomePage.InProgress" xml:space="preserve">
+    <value>Пожалуйста, подождите...</value>
+  </data>
+  <data name="HomePage.Empty" xml:space="preserve">
+    <value>Нет контента для отображения...</value>
+  </data>
 </root>

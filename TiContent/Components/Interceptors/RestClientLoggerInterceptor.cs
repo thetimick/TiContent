@@ -13,15 +13,13 @@ namespace TiContent.Components.Interceptors;
 
 public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> logger) : Interceptor
 {
-    private readonly ILogger<RestClientLoggerInterceptor> _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
     public override ValueTask BeforeRequest(RestRequest request, CancellationToken cancellationToken)
     {
         var resource = request.Resource;
         var query = GetQueryString(request);
         var url = $"{resource}{query}";
 
-        _logger.LogInformation(
+        logger.LogInformation(
             "REQUEST: {Method} {Url}{NL}Headers: {Headers}{NL}Body: {Body}",
             request.Method,
             url,
@@ -41,7 +39,7 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
         var queryString = GetQueryString(request);
         var url = $"{resource}{queryString}";
 
-        _logger.LogInformation(
+        logger.LogInformation(
             "RESPONSE: {StatusCode} {Method} {Url}",
             (int)response.StatusCode,
             request.Method,
@@ -50,7 +48,7 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
 
         if (!response.IsSuccessful)
         {
-            _logger.LogError(
+            logger.LogError(
                 "{StatusCode} {ReasonPhrase}. Error: {ErrorMessage}",
                 (int)response.StatusCode,
                 response.StatusDescription,
@@ -60,11 +58,11 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
 
         return base.AfterRequest(response, cancellationToken);
     }
-
+    
     private static string GetQueryString(RestRequest request)
     {
         var queryParams = request.Parameters
-            .Where(p => p.Type == ParameterType.QueryString)
+            .Where(p => p.Type == ParameterType.GetOrPost)
             .Select(p => $"{p.Name}={p.Value}")
             .ToList();
         

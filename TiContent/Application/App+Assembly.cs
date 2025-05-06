@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using TiContent.Components.Interceptors;
@@ -21,6 +22,7 @@ public partial class App
     {
         // Hosted
         services.AddHostedService<WindowService>();
+        services.AddSingleton<IFileProvider, PhysicalFileProvider>();
 
         // External Services
         services.AddSingleton<INavigationService, NavigationService>();

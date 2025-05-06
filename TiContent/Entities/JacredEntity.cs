@@ -1,8 +1,12 @@
 ﻿using System.ComponentModel;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using ByteSizeLib;
+using Humanizer;
+using Humanizer.Bytes;
+using TiContent.Components.Extensions;
 
+// ReSharper disable CollectionNeverUpdated.Global
 // ReSharper disable UnusedMember.Global
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
@@ -11,6 +15,16 @@ namespace TiContent.Entities;
 
 public record JacredEntity
 {
+    public enum VideoTypeEntity
+    {
+        [Description("SDR")]
+        SDR,
+        [Description("HDR")]
+        HDR,
+        [Description("n/n")]
+        None
+    }
+    
     public enum TrackerEntity
     {
         [Description("bitru")]
@@ -24,12 +38,14 @@ public record JacredEntity
         [Description("rutor")]
         Rutor,
         [Description("rutracker")]
-        Rutracker
+        Rutracker,
+        [Description("n/n")]
+        None
     }
     
     [JsonPropertyName("tracker")]
     [JsonConverter(typeof(TrackerConverter))]
-    public TrackerEntity? Tracker { get; init; }
+    public TrackerEntity Tracker { get; init; }
 
     [JsonPropertyName("url")]
     public string? Url { get; init; }
@@ -67,7 +83,8 @@ public record JacredEntity
     public int Released { get; init; }
 
     [JsonPropertyName("videotype")]
-    public string? VideoType { get; init; }
+    [JsonConverter(typeof(VideoTypeConverter))]
+    public VideoTypeEntity VideoType { get; init; }
     
     [JsonPropertyName("quality")]
     public int? Quality { get; init; }
@@ -80,13 +97,31 @@ public record JacredEntity
     
     [JsonPropertyName("types")]
     public List<string>? Types { get; init; }
+    
+    public string AggregatedDescription => MakeDescription();
+
+    private string MakeDescription()
+    {
+        var builder = new StringBuilder();
+        
+        builder.Append(Tracker.Humanize());
+        if (!Types.IsEmpty()) 
+            builder.Append($" · {Types.Humanize()}");
+        if (!Seasons.IsEmpty()) 
+            builder.Append($" · сезон(-ы): {Seasons.Humanize()}");
+        if (!Voices.IsEmpty()) 
+            builder.Append($" · озвучка(-и): {Voices.Humanize()}");
+        
+        return builder.ToString();
+    }
 }
 
-internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity?>
+internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
 {
-    public override JacredEntity.TrackerEntity? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override JacredEntity.TrackerEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        return reader.GetString() switch
+        var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
+        return value switch
         {
             "bitru" => JacredEntity.TrackerEntity.Bitru,
             "kinozal" => JacredEntity.TrackerEntity.Kinozal,
@@ -94,41 +129,13 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity?>
             "nnmclub" => JacredEntity.TrackerEntity.NNMClub,
             "rutor" => JacredEntity.TrackerEntity.Rutor,
             "rutracker" => JacredEntity.TrackerEntity.Rutracker,
-            _ => null
+            _ => JacredEntity.TrackerEntity.None
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, JacredEntity.TrackerEntity? value, JsonSerializerOptions options)
+    public override void Write(Utf8JsonWriter writer, JacredEntity.TrackerEntity value, JsonSerializerOptions options)
     {
-        if (!value.HasValue)
-        {
-            writer.WriteNullValue();
-            return;
-        }
-
-        switch (value.Value)
-        {
-            case JacredEntity.TrackerEntity.Bitru:
-                writer.WriteStringValue("bitru");
-                break;
-            case JacredEntity.TrackerEntity.Kinozal:
-                writer.WriteStringValue("kinozal");
-                break;
-            case JacredEntity.TrackerEntity.Megapeer:
-                writer.WriteStringValue("megapeer");
-                break;
-            case JacredEntity.TrackerEntity.NNMClub:
-                writer.WriteStringValue("nnmclub");
-                break;
-            case JacredEntity.TrackerEntity.Rutor:
-                writer.WriteStringValue("rutor");
-                break;
-            case JacredEntity.TrackerEntity.Rutracker:
-                writer.WriteStringValue("rutracker");
-                break;
-            default:
-                throw new ArgumentOutOfRangeException(nameof(value));
-        }
+        throw new NotImplementedException();
     }
 }
 
@@ -142,7 +149,7 @@ public class ByteSizeConverter : JsonConverter<ByteSize>
 
     public override void Write(Utf8JsonWriter writer, ByteSize value, JsonSerializerOptions options)
     {
-        writer.WriteNumberValue(value.Bytes);
+        throw new NotImplementedException();
     }
 }
 
@@ -157,6 +164,25 @@ public class DateTimeConverter : JsonConverter<DateTime?>
     
     public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value?.ToString("yyyy-MM-ddTHH:mm:ss"));
+        throw new NotImplementedException();
+    }
+}
+
+internal class VideoTypeConverter : JsonConverter<JacredEntity.VideoTypeEntity>
+{
+    public override JacredEntity.VideoTypeEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    {
+        var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
+        return value switch
+        {
+            "sdr" => JacredEntity.VideoTypeEntity.SDR,
+            "hdr" => JacredEntity.VideoTypeEntity.HDR,
+            _ => JacredEntity.VideoTypeEntity.None
+        };
+    }
+
+    public override void Write(Utf8JsonWriter writer, JacredEntity.VideoTypeEntity value, JsonSerializerOptions options)
+    {
+        throw new NotImplementedException();
     }
 }

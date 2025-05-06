@@ -15,4 +15,9 @@ public static class DispatcherWrapper
     {
         System.Windows.Application.Current.Dispatcher.Invoke(action);
     }
+    
+    public static Task StartNewAsync(Action action, CancellationToken token = default)
+    {
+        return Task.Factory.StartNew(action, token);
+    }
 }

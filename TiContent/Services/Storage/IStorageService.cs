@@ -16,11 +16,11 @@ public interface IStorageService
     /// Получить данные из хранилища
     /// </summary>
     /// <returns>Данные хранилища</returns>
-    public Task<StorageEntity> ObtainAsync();
+    public StorageEntity Obtain();
 
     /// <summary>
     /// Сохранить текущие данные в хранилище
     /// </summary>
     /// <returns>Сохраненные данные</returns>
-    public Task<StorageEntity> SaveAsync();
+    public StorageEntity Save();
 }

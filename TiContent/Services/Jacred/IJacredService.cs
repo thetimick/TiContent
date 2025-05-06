@@ -18,6 +18,7 @@ public interface IJacredService
     /// Получает список торрентов по поисковому запросу
     /// </summary>
     /// <param name="search">Поисковый запрос</param>
+    /// <param name="token">Токен отмены</param>
     /// <returns>Список найденных торрентов</returns>
-    Task<List<JacredEntity>> ObtainTorrentsAsync(string search);
+    Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default);
 }

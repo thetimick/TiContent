@@ -1,8 +1,11 @@
 ﻿using System.Windows;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TiContent.Components.Abstractions;
 using TiContent.Components.Wrappers;
 using TiContent.Services.Storage;
+using TiContent.ViewModels.Pages;
 using TiContent.Windows;
 
 namespace TiContent.Application;
@@ -16,10 +19,11 @@ public partial class App
         private readonly IStorageService _storageService = provider.GetRequiredService<IStorageService>();
         private readonly MainWindow _mainWindow = provider.GetRequiredService<MainWindow>();
         
-        public async Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
+            _storageService.Obtain();
             if (_storageService.Cached is not { } storage)
-                return;
+                return Task.CompletedTask;
 
             // Устанавливаем тему
             ApplicationThemeManagerWrapper.Apply(storage.Window.ThemeIndex);
@@ -45,13 +49,20 @@ public partial class App
                     _mainWindow.Top = storage.Window.Y ?? 0;
                 }
             }
+            
+            // Подписываемся на события
+            _mainWindow.Loaded += (_, _) => WeakReferenceMessenger.Default.Send(new WindowAction(WindowAction.ActionType.Loaded));
+            _mainWindow.Closing += (_, _) => WeakReferenceMessenger.Default.Send(new WindowAction(WindowAction.ActionType.Unloaded));
 
             // Показываем окно
-            await Current.Dispatcher.InvokeAsync(() => _mainWindow.Show());
+            _mainWindow.Show();
+            
+            return Task.CompletedTask;
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            _storageService.Save();
             return Task.CompletedTask;
         }
 

@@ -1,23 +1,22 @@
 ﻿// ⠀
-// ByteSizeToStringConverter.cs
+// DateTimeToStringConverter.cs
 // TiContent
 // 
-// Created by the_timick on 28.04.2025.
+// Created by the_timick on 05.05.2025.
 // ⠀
 
 using System.Globalization;
 using System.Windows.Data;
-using Humanizer.Bytes;
 
 namespace TiContent.Components.Converters;
 
-public class ByteSizeToStringConverter: IValueConverter
+public class DateTimeToStringConverter: IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is ByteSize size)
-            return size.ToString();
-
+        if (value is DateTime date && parameter is string format)
+            return date.ToString(format, CultureInfo.InvariantCulture);
+        
         return value;
     }
 

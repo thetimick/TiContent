@@ -1,24 +1,26 @@
 ﻿// ⠀
-// ByteSizeToStringConverter.cs
+// BoolToVisibilityConverter.cs
 // TiContent
 // 
-// Created by the_timick on 28.04.2025.
+// Created by the_timick on 05.05.2025.
 // ⠀
 
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
-using Humanizer.Bytes;
 
 namespace TiContent.Components.Converters;
 
-public class ByteSizeToStringConverter: IValueConverter
+public class BoolToVisibilityConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is ByteSize size)
-            return size.ToString();
-
-        return value;
+        if (value is not bool boolValue) 
+            return value;
+        
+        if (parameter is "inv")
+            return boolValue ? Visibility.Hidden : Visibility.Visible;
+        return boolValue ? Visibility.Visible : Visibility.Hidden;
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
