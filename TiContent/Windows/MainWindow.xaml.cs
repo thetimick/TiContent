@@ -41,7 +41,7 @@ public partial class MainWindow
         
         Loaded += (_, _) =>
         {
-            NavigationView.Navigate(typeof(HomePage));
+            NavigationView.Navigate(typeof(GamesPage));
         };
     }
 }

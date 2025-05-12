@@ -96,6 +96,24 @@ namespace TiContent.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Films &amp; Serials.
+        /// </summary>
+        public static string FilmsPage_Title {
+            get {
+                return ResourceManager.GetString("FilmsPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Games.
+        /// </summary>
+        public static string GamesPage_Title {
+            get {
+                return ResourceManager.GetString("GamesPage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Empty....
         /// </summary>
         public static string HomePage_Empty {
@@ -119,6 +137,15 @@ namespace TiContent.Resources.Localization {
         public static string HomePage_Title {
             get {
                 return ResourceManager.GetString("HomePage.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Catalogue.
+        /// </summary>
+        public static string MainWindow_NavigationItemHeader {
+            get {
+                return ResourceManager.GetString("MainWindow.NavigationItemHeader", resourceCulture);
             }
         }
         

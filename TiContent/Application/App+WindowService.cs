@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TiContent.Components.Abstractions;
 using TiContent.Components.Wrappers;
+using TiContent.Entities;
 using TiContent.Services.Storage;
 using TiContent.ViewModels.Pages;
 using TiContent.Windows;
@@ -28,7 +29,7 @@ public partial class App
             // Устанавливаем тему
             ApplicationThemeManagerWrapper.Apply(storage.Window.ThemeIndex);
 
-            if (!storage.Window.IsFirstLaunch)
+            if (!storage.Window.IsFirstLaunch())
             {
                 // Устанавливаем размер окна
                 if (storage.Window.IsWindowSizePersistent)

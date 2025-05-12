@@ -3,8 +3,9 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using TiContent.Components.Interceptors;
+using TiContent.DataSources;
 using TiContent.Providers;
-using TiContent.Services.API;
+using TiContent.Services.Hydra;
 using TiContent.Services.Jacred;
 using TiContent.Services.Storage;
 using TiContent.ViewModels;
@@ -38,9 +39,10 @@ public partial class App
         );
 
         // Internal Services
+        services.AddSingleton<IHydraFiltersDataSource, HydraFiltersDataSource>();
         services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<IJacredService, JacredService>();
-        services.AddSingleton<IApiService, ApiService>();
+        services.AddSingleton<IHydraApiService, HydraApiService>();
 
         // Providers
         services.AddSingleton<INavigationViewPageProvider, NavigationViewPageProvider>();
@@ -52,6 +54,12 @@ public partial class App
         // Pages & ViewModels
         services.AddSingleton<HomePage>();
         services.AddSingleton<HomePageViewModel>();
+
+        services.AddSingleton<FilmsPage>();
+        services.AddSingleton<FilmsPageViewModel>();
+        
+        services.AddSingleton<GamesPage>();
+        services.AddSingleton<GamesPageViewModel>();
 
         services.AddSingleton<SettingsPage>();
         services.AddSingleton<SettingsPageViewModel>();

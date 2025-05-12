@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using RestSharp;
+﻿using RestSharp;
 using TiContent.Entities;
 using TiContent.Services.Storage;
 
@@ -12,19 +11,21 @@ public class JacredService(
     IRestClient client, 
     IStorageService storage
 ) : IJacredService {
+    // Endpoints
+    private static class Endpoints
+    {
+        public const string TorrentsEndpoint = "/api/v1.0/torrents";
+    }
     
-    private const string TorrentsEndpoint = "/api/v1.0/torrents";
-    private const string SearchParameterName = "search";
-    
+    // Private Props
+    private string BaseUrl => storage.Cached?.Urls.JacredApiBaseUrl ?? "";
     private readonly IRestClient _client = client ?? throw new ArgumentNullException(nameof(client));
 
+    // IJacredService
     public async Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default)
     {
-        var baseUrl = storage.Cached?.BaseUrl;
-        var request = new RestRequest(baseUrl + TorrentsEndpoint);
-        request.AddParameter(SearchParameterName, search);
-        
-        var response = await _client.ExecuteAsync<List<JacredEntity>>(request, token);
-        return response.Data ?? [];
+        var request = new RestRequest(BaseUrl + Endpoints.TorrentsEndpoint)
+            .AddQueryParameter("search", search);
+        return (await _client.ExecuteAsync<List<JacredEntity>>(request, token)).Data ?? [];
     }
 }

@@ -174,4 +174,13 @@
   <data name="HomePage.Empty" xml:space="preserve">
     <value>Empty...</value>
   </data>
+  <data name="MainWindow.NavigationItemHeader" xml:space="preserve">
+    <value>Catalogue</value>
+  </data>
+  <data name="GamesPage.Title" xml:space="preserve">
+    <value>Games</value>
+  </data>
+  <data name="FilmsPage.Title" xml:space="preserve">
+    <value>Films &amp; Serials</value>
+  </data>
 </root>

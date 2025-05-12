@@ -6,6 +6,7 @@
 // ⠀
 
 using System.Collections.ObjectModel;
+using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TiContent.Resources.Localization;
 using TiContent.Windows.Pages;
@@ -15,9 +16,18 @@ namespace TiContent.ViewModels;
 
 public partial class MainWindowViewModel : ObservableObject
 {
-    [ObservableProperty]
+    [ObservableProperty] 
     public partial ObservableCollection<object> MenuItems { get; set; } = [
-        new NavigationViewItem(Strings.HomePage_Title, SymbolRegular.Home24, typeof(HomePage))
+        new NavigationViewItem(Strings.HomePage_Title, SymbolRegular.Home24, typeof(HomePage)),
+        new NavigationViewItemHeader
+        {
+            Text = Strings.MainWindow_NavigationItemHeader,
+            FontSize = 14, 
+            FontWeight = FontWeights.SemiBold,
+            Margin = new Thickness(6,4,0,5)
+        },
+        // new NavigationViewItem(Strings.FilmsPage_Title, SymbolRegular.Filmstrip24, typeof(FilmsPage)),
+        new NavigationViewItem(Strings.GamesPage_Title, SymbolRegular.Games24, typeof(GamesPage))
     ];
 
     [ObservableProperty]

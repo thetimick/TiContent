@@ -12,7 +12,6 @@
     d:DesignHeight="720"
     d:DesignWidth="1280"
     ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
-    ui:NavigationView.HeaderContent="{x:Static loc:Strings.AboutPage_Title}"
     Foreground="{DynamicResource TextFillColorPrimaryBrush}"
     ScrollViewer.CanContentScroll="False"
     mc:Ignorable="d">

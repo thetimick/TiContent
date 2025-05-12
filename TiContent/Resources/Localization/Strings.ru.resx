@@ -174,4 +174,13 @@
   <data name="HomePage.Empty" xml:space="preserve">
     <value>Нет контента для отображения...</value>
   </data>
+  <data name="MainWindow.NavigationItemHeader" xml:space="preserve">
+    <value>Каталог</value>
+  </data>
+  <data name="GamesPage.Title" xml:space="preserve">
+    <value>Игры</value>
+  </data>
+  <data name="FilmsPage.Title" xml:space="preserve">
+    <value>Фильмы &amp; Сериалы</value>
+  </data>
 </root>
