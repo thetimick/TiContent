@@ -1,5 +1,4 @@
-﻿using System.Windows.Input;
-using TiContent.ViewModels.Pages;
+﻿using TiContent.ViewModels.Pages;
 
 namespace TiContent.Windows.Pages;
 

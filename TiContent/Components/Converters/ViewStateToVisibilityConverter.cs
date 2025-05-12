@@ -36,6 +36,13 @@ public class ViewStateToVisibilityConverter: IValueConverter
                 ViewStateEnum.InProgress => Visibility.Visible,
                 _ => throw new ArgumentOutOfRangeException(nameof(value))
             },
+            "inv_content" => viewState switch
+            {
+                ViewStateEnum.Content => Visibility.Hidden,
+                ViewStateEnum.Empty => Visibility.Visible,
+                ViewStateEnum.InProgress => Visibility.Visible,
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
+            },
             _ => viewState switch
             {
                 ViewStateEnum.Content => Visibility.Visible,

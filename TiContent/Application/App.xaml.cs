@@ -1,9 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TiContent.Components.Wrappers;
-using TiContent.Services.Storage;
 using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.Application;

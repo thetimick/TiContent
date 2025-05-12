@@ -1,7 +1,5 @@
 ﻿using System.IO;
 using System.Text.Json;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Logging;
 using TiContent.Entities;
 
 namespace TiContent.Services.Storage;

@@ -7,7 +7,6 @@
 
 using System.Windows.Controls;
 using TiContent.ViewModels.Pages;
-using Wpf.Ui.Controls;
 
 namespace TiContent.Windows.Pages;
 

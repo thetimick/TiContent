@@ -18,7 +18,7 @@ public partial class MainWindowViewModel : ObservableObject
 {
     [ObservableProperty] 
     public partial ObservableCollection<object> MenuItems { get; set; } = [
-        new NavigationViewItem(Strings.HomePage_Title, SymbolRegular.Home24, typeof(HomePage)),
+        // new NavigationViewItem(Strings.HomePage_Title, SymbolRegular.Home24, typeof(HomePage)),
         new NavigationViewItemHeader
         {
             Text = Strings.MainWindow_NavigationItemHeader,
@@ -26,7 +26,7 @@ public partial class MainWindowViewModel : ObservableObject
             FontWeight = FontWeights.SemiBold,
             Margin = new Thickness(6,4,0,5)
         },
-        // new NavigationViewItem(Strings.FilmsPage_Title, SymbolRegular.Filmstrip24, typeof(FilmsPage)),
+        new NavigationViewItem(Strings.FilmsPage_Title, SymbolRegular.Filmstrip24, typeof(FilmsPage)),
         new NavigationViewItem(Strings.GamesPage_Title, SymbolRegular.Games24, typeof(GamesPage))
     ];
 

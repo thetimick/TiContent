@@ -15,10 +15,49 @@
     ScrollViewer.CanContentScroll="False"
     mc:Ignorable="d">
 
-    <ui:Grid Margin="16,0,16,16">
+    <ui:Grid Margin="16,0,16,16" ColumnDefinitions="4*, Auto, *">
         <ui:TextBlock
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Text="Hello, World!" />
+
+        <!--  Splitter  -->
+        <GridSplitter
+            Grid.Column="1"
+            Width="4"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Stretch"
+            Background="Transparent" />
+
+        <!--  Filters  -->
+        <ui:Grid
+            Grid.Column="2"
+            Margin="0,4,0,0"
+            RowDefinitions="Auto, *">
+
+            <!--  Search  -->
+            <ui:TextBox
+                Grid.Row="0"
+                Icon="{ui:SymbolIcon Search24}"
+                PlaceholderText="Поиск по каталогу..."
+                Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+            <!--  Filters  -->
+            <ui:Card
+                Grid.Row="1"
+                Margin="0,4,0,0"
+                VerticalAlignment="Stretch"
+                VerticalContentAlignment="Stretch">
+
+                <ui:TextBlock
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    Appearance="Tertiary"
+                    FontTypography="BodyStrong"
+                    Text="Здесь когда-нибудь будут фильтры..."
+                    TextAlignment="Center"
+                    TextWrapping="Wrap" />
+            </ui:Card>
+        </ui:Grid>
     </ui:Grid>
 </Page>

@@ -231,7 +231,7 @@ namespace TiContent.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Windows (default).
+        ///   Looks up a localized string similar to Default.
         /// </summary>
         public static string SettingsPage_Theme_Item_2 {
             get {
