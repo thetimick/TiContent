@@ -9,10 +9,10 @@ using TiContent.Services.Hydra;
 using TiContent.Services.Jacred;
 using TiContent.Services.Storage;
 using TiContent.Services.TMDB;
-using TiContent.ViewModels;
-using TiContent.ViewModels.Pages;
-using TiContent.Windows;
-using TiContent.Windows.Pages;
+using TiContent.ViewModels.Main;
+using TiContent.ViewModels.Main.Pages;
+using TiContent.Windows.Main;
+using TiContent.Windows.Main.Pages;
 using Wpf.Ui;
 using Wpf.Ui.Abstractions;
 

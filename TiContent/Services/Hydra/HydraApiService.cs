@@ -11,16 +11,7 @@ using TiContent.Services.Storage;
 
 namespace TiContent.Services.Hydra;
 
-public interface IHydraApiService
-{
-    Task<HydraCatalogueSearchResponseEntity> GetCatalogue(HydraCatalogueSearchRequestEntity @params, CancellationToken token = default);
-    Task<HydraFiltersEntity> GetFilters(CancellationToken token = default);
-}
-
-public class HydraApiService(
-    IRestClient client, 
-    IStorageService storage
-) : IHydraApiService {
+public class HydraApiService(IRestClient client, IStorageService storage) : IHydraApiService {
     // Endpoints
     private static class Endpoints
     {

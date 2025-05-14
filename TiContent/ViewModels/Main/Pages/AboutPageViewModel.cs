@@ -10,7 +10,7 @@ using System.Reflection;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-namespace TiContent.ViewModels.Pages;
+namespace TiContent.ViewModels.Main.Pages;
 
 public partial class AboutPageViewModel : ObservableObject
 {

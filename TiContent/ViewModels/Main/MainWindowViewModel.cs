@@ -9,10 +9,10 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TiContent.Resources.Localization;
-using TiContent.Windows.Pages;
+using TiContent.Windows.Main.Pages;
 using Wpf.Ui.Controls;
 
-namespace TiContent.ViewModels;
+namespace TiContent.ViewModels.Main;
 
 public partial class MainWindowViewModel : ObservableObject
 {

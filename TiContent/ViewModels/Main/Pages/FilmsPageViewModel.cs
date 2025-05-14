@@ -13,12 +13,11 @@ using ThrottleDebounce;
 using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
 using TiContent.Components.Wrappers;
-using TiContent.Entities;
 using TiContent.Entities.TMDB;
 using TiContent.Entities.TMDB.Requests;
 using TiContent.Services.TMDB;
 
-namespace TiContent.ViewModels.Pages;
+namespace TiContent.ViewModels.Main.Pages;
 
 public partial class FilmsPageViewModel : ObservableObject
 {

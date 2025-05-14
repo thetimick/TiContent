@@ -6,9 +6,9 @@
 // ⠀
 
 using System.Windows.Controls;
-using TiContent.ViewModels.Pages;
+using TiContent.ViewModels.Main.Pages;
 
-namespace TiContent.Windows.Pages;
+namespace TiContent.Windows.Main.Pages;
 
 public partial class GamesPage
 {

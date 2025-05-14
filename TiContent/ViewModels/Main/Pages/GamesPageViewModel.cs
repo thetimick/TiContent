@@ -18,7 +18,7 @@ using TiContent.DataSources;
 using TiContent.Entities.Hydra;
 using TiContent.Services.Hydra;
 
-namespace TiContent.ViewModels.Pages;
+namespace TiContent.ViewModels.Main.Pages;
 
 public partial class GamesPageViewModel: ObservableObject
 {

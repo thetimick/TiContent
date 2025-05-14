@@ -10,7 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using TiContent.Components.Wrappers;
 using TiContent.Services.Storage;
 
-namespace TiContent.ViewModels.Pages;
+namespace TiContent.ViewModels.Main.Pages;
 
 public partial class SettingsPageViewModel(
     IStorageService storageService

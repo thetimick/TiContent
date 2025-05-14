@@ -20,7 +20,7 @@ using TiContent.Entities;
 using TiContent.Services.Jacred;
 using TiContent.Services.Storage;
 
-namespace TiContent.ViewModels.Pages;
+namespace TiContent.ViewModels.Main.Pages;
 
 public partial class HomePageViewModel : ObservableObject, IRecipient<WindowAction> {
     // Observable

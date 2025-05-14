@@ -6,7 +6,7 @@ using TiContent.Components.Abstractions;
 using TiContent.Components.Wrappers;
 using TiContent.Entities;
 using TiContent.Services.Storage;
-using TiContent.Windows;
+using TiContent.Windows.Main;
 
 namespace TiContent.Application;
 
