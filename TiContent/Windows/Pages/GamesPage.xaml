@@ -52,7 +52,7 @@
                                 Height="108"
                                 CornerRadius="8"
                                 Source="{Binding LibraryImageUrl}"
-                                Stretch="UniformToFill" />
+                                Stretch="Fill" />
 
                             <ui:StackPanel>
                                 <ui:TextBlock
@@ -86,7 +86,7 @@
                     VerticalAlignment="Center"
                     Appearance="Tertiary"
                     FontTypography="Subtitle"
-                    Text="{x:Static loc:Strings.HomePage_Empty}"
+                    Text="{x:Static loc:Strings.GamesPage_Empty}"
                     Visibility="{Binding ViewState, Converter={StaticResource ViewStateToVisibilityConverter}, ConverterParameter='empty'}" />
 
                 <!--  InProgress  -->
@@ -107,7 +107,7 @@
                         VerticalAlignment="Center"
                         Appearance="Tertiary"
                         FontTypography="Subtitle"
-                        Text="{x:Static loc:Strings.HomePage_InProgress}"
+                        Text="{x:Static loc:Strings.GamesPage_InProgress}"
                         TextWrapping="Wrap" />
                 </ui:StackPanel>
             </ui:Grid>
@@ -131,7 +131,7 @@
             <ui:TextBox
                 Grid.Row="0"
                 Icon="{ui:SymbolIcon Search24}"
-                PlaceholderText="Поиск по каталогу..."
+                PlaceholderText="{x:Static loc:Strings.GamesPage_Search_Placeholder}"
                 Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <!--  Filters  -->
@@ -146,7 +146,7 @@
                     VerticalAlignment="Center"
                     Appearance="Tertiary"
                     FontTypography="BodyStrong"
-                    Text="Здесь когда-нибудь будут фильтры..."
+                    Text="{x:Static loc:Strings.GamesPage_Filters_Placeholder}"
                     TextAlignment="Center"
                     TextWrapping="Wrap" />
             </ui:Card>

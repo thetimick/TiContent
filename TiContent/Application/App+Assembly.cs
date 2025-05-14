@@ -4,9 +4,11 @@ using RestSharp;
 using TiContent.Components.Interceptors;
 using TiContent.DataSources;
 using TiContent.Providers;
+using TiContent.Services.Cub;
 using TiContent.Services.Hydra;
 using TiContent.Services.Jacred;
 using TiContent.Services.Storage;
+using TiContent.Services.TMDB;
 using TiContent.ViewModels;
 using TiContent.ViewModels.Pages;
 using TiContent.Windows;
@@ -41,6 +43,8 @@ public partial class App
         services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<IJacredService, JacredService>();
         services.AddSingleton<IHydraApiService, HydraApiService>();
+        services.AddSingleton<ITMDBService, TMDBService>();
+        services.AddSingleton<ICubApiService, CubApiService>();
 
         // Providers
         services.AddSingleton<INavigationViewPageProvider, NavigationViewPageProvider>();

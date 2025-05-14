@@ -183,4 +183,16 @@
   <data name="FilmsPage.Title" xml:space="preserve">
     <value>Films &amp; Serials</value>
   </data>
+  <data name="GamesPage.Empty" xml:space="preserve">
+    <value>Empty...</value>
+  </data>
+  <data name="GamesPage.InProgress" xml:space="preserve">
+    <value>Please,wait...</value>
+  </data>
+  <data name="GamesPage.Search.Placeholder" xml:space="preserve">
+    <value>Search on catalogue...</value>
+  </data>
+  <data name="GamesPage.Filters.Placeholder" xml:space="preserve">
+    <value>Filters in progress</value>
+  </data>
 </root>

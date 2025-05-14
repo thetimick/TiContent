@@ -20,6 +20,7 @@
             <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
             <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
             <converters:ViewStateToVisibilityConverter x:Key="ViewStateToVisibilityConverter" />
+            <converters:TMDBPosterPathConverter x:Key="TMDBPosterPathConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

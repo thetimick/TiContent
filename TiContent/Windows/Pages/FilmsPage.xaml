@@ -16,10 +16,115 @@
     mc:Ignorable="d">
 
     <ui:Grid Margin="16,0,16,16" ColumnDefinitions="4*, Auto, *">
-        <ui:TextBlock
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            Text="Hello, World!" />
+        <!--  Content  -->
+        <ItemsControl
+            Grid.Column="0"
+            Margin="0,4,0,0"
+            ItemsSource="{Binding Items}"
+            Visibility="{Binding ViewState, Converter={StaticResource ViewStateToVisibilityConverter}}">
+
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ui:DynamicScrollViewer
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalScrollBarVisibility="Disabled"
+                        ScrollChanged="ScrollViewer_OnScrollChanged"
+                        VerticalScrollBarVisibility="Auto">
+
+                        <ItemsPresenter />
+                    </ui:DynamicScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ui:CardAction Margin="0,0,0,4" IsChevronVisible="False">
+                        <ui:AutoGrid ColumnDefinitions="*, Auto, Auto" RowCount="2">
+                            <ui:AutoGrid
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                ColumnDefinitions="Auto, *">
+
+                                <ui:Image
+                                    Grid.Column="0"
+                                    Width="100"
+                                    Height="142"
+                                    Margin="0,0,8,0"
+                                    CornerRadius="8"
+                                    Source="{Binding PosterPath, Converter={StaticResource TMDBPosterPathConverter}}"
+                                    Stretch="Fill" />
+
+                                <ui:AutoGrid Grid.Column="1" RowCount="3">
+                                    <ui:TextBlock
+                                        Grid.Row="0"
+                                        FontTypography="Subtitle"
+                                        Text="{Binding Title}" />
+
+                                    <ui:TextBlock
+                                        Grid.Row="1"
+                                        Appearance="Tertiary"
+                                        FontTypography="Caption"
+                                        Text="{Binding OriginalTitle}" />
+
+                                    <ui:TextBlock
+                                        Grid.Row="2"
+                                        MaxHeight="58"
+                                        Margin="0,4,0,0"
+                                        Appearance="Tertiary"
+                                        FontTypography="Caption"
+                                        Text="{Binding Overview}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap"
+                                        ToolTip="{Binding Overview}" />
+                                </ui:AutoGrid>
+                            </ui:AutoGrid>
+
+                            <Separator Grid.Column="1" Margin="4,0,8,0" />
+
+                            <ui:StackPanel
+                                Grid.Column="2"
+                                Margin="0,8,0,0"
+                                VerticalAlignment="Center"
+                                Orientation="Vertical"
+                                Spacing="4">
+
+                                <ui:DropDownButton
+                                    Height="32"
+                                    CornerRadius="16"
+                                    Icon="{ui:SymbolIcon Symbol=Share24}">
+
+                                    <ui:DropDownButton.Flyout>
+                                        <ContextMenu>
+                                            <MenuItem Header="Google" Icon="{ui:SymbolIcon Symbol=Open24}" />
+                                            <MenuItem Header="The Movie Database" Icon="{ui:SymbolIcon Symbol=Open24}" />
+                                            <MenuItem Header="iMDB" Icon="{ui:SymbolIcon Symbol=Open24}" />
+                                        </ContextMenu>
+                                    </ui:DropDownButton.Flyout>
+                                </ui:DropDownButton>
+
+                                <ui:DropDownButton
+                                    Height="32"
+                                    CornerRadius="16"
+                                    Icon="{ui:SymbolIcon Symbol=Merge24}">
+
+                                    <ui:DropDownButton.Flyout>
+                                        <ContextMenu>
+                                            <MenuItem Header="Jacred" Icon="{ui:SymbolIcon Symbol=Open24}" />
+                                        </ContextMenu>
+                                    </ui:DropDownButton.Flyout>
+                                </ui:DropDownButton>
+                            </ui:StackPanel>
+                        </ui:AutoGrid>
+                    </ui:CardAction>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
 
         <!--  Splitter  -->
         <GridSplitter

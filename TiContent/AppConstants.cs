@@ -12,7 +12,13 @@ public static class AppConstants
     public static class Urls
     {
         public const string JacredApi = "https://jacred.xyz";
+        
         public const string HydraApi = "https://hydra-api-us-east-1.losbroxas.org";
         public const string HydraAssetsApi = "https://assets.hydralauncher.gg";
+        
+        public const string CubApiBaseUrl = "https://tmdb.cub.rip";
+        
+        public const string TMDBApiBaseUrl = "https://apitmdb.cub.rip";
+        public const string TMDBAssetsApi = "https://imagetmdb.com";
     }
 }

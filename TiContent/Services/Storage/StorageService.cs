@@ -14,17 +14,13 @@ public class StorageService : IStorageService {
     public StorageEntity Obtain()
     {
         if (!File.Exists(FileName))
-        {
             return Save();
-        }
 
         try
         {
             var json = File.ReadAllText(FileName);
             Cached = JsonSerializer.Deserialize<StorageEntity>(json, _options);
-
             ArgumentNullException.ThrowIfNull(Cached);
-
             return Cached;
         }
         catch

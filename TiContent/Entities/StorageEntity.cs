@@ -7,6 +7,14 @@ public record StorageEntity
         public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
         public string HydraApiBaseUrl { get; init; } = AppConstants.Urls.HydraApi;
         public string HydraAssetsApiBaseUrl { get; init; } = AppConstants.Urls.HydraAssetsApi;
+        public string CubApiBaseUrl { get; init; } = AppConstants.Urls.CubApiBaseUrl;
+        public string TMDBApiBaseUrl { get; init; } = AppConstants.Urls.TMDBApiBaseUrl;
+        public string TMDBAssetsApiBaseUrl { get; init; } = AppConstants.Urls.TMDBAssetsApi;
+    }
+
+    public record KeysEntity
+    {
+        public string? TMDBApiKey { get; init; }
     }
     
     public record WindowEntity
@@ -27,6 +35,7 @@ public record StorageEntity
     }
     
     public UrlsEntity Urls { get; init; } = new();
+    public KeysEntity Keys { get; init; } = new();
     public WindowEntity Window { get; init; } = new();
     public HomePageEntity HomePage { get; init; } = new();
 }

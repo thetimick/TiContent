@@ -105,6 +105,42 @@ namespace TiContent.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty....
+        /// </summary>
+        public static string GamesPage_Empty {
+            get {
+                return ResourceManager.GetString("GamesPage.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Filters in progress.
+        /// </summary>
+        public static string GamesPage_Filters_Placeholder {
+            get {
+                return ResourceManager.GetString("GamesPage.Filters.Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please,wait....
+        /// </summary>
+        public static string GamesPage_InProgress {
+            get {
+                return ResourceManager.GetString("GamesPage.InProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search on catalogue....
+        /// </summary>
+        public static string GamesPage_Search_Placeholder {
+            get {
+                return ResourceManager.GetString("GamesPage.Search.Placeholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Games.
         /// </summary>
         public static string GamesPage_Title {
