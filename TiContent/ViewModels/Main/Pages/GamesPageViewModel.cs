@@ -7,7 +7,9 @@
 
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Humanizer;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
 using TiContent.Components.Abstractions;
@@ -16,7 +18,11 @@ using TiContent.Components.Pagination;
 using TiContent.Components.Wrappers;
 using TiContent.DataSources;
 using TiContent.Entities.Hydra;
-using TiContent.Services.Hydra;
+using TiContent.Services.Hydra.V2;
+using TiContent.Windows.HydraLinks;
+using Wpf.Ui.Controls;
+using Wpf.Ui.Extensions;
+using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.ViewModels.Main.Pages;
 
@@ -31,15 +37,16 @@ public partial class GamesPageViewModel: ObservableObject
     public partial string Query { get; set; } = string.Empty;
     
     [ObservableProperty]
-    public partial ObservableCollection<HydraCatalogueSearchResponseEntity.EdgesEntity> Items { get; set; } = [];
+    public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } = [];
     
     [ObservableProperty]
     public partial HydraFiltersEntity Filters { get; set; } = new();
     
     // Private Props
     
-    private readonly IHydraApiService _hydraService;
+    private readonly IHydraApiServiceV2 _hydraService;
     private readonly IHydraFiltersDataSource _hydraFiltersDataSource;
+    private readonly IServiceProvider _provider;
     private readonly ILogger<GamesPageViewModel> _logger;
     
     private readonly RateLimitedAction _debounceOnQueryChangedAction;
@@ -54,15 +61,19 @@ public partial class GamesPageViewModel: ObservableObject
     // Lifecycle
     
     public GamesPageViewModel(
-        IHydraApiService hydraService, 
+        IHydraApiServiceV2 hydraService, 
         IHydraFiltersDataSource hydraFiltersDataSource, 
+        IServiceProvider provider,
         ILogger<GamesPageViewModel> logger
     ) {
         _hydraService = hydraService;
-        _logger = logger;
         _hydraFiltersDataSource = hydraFiltersDataSource;
-
+        _provider = provider;
+        _logger = logger;
+        
         _debounceOnQueryChangedAction = Debouncer.Debounce(() => ObtainItems(true), TimeSpan.FromSeconds(1));
+        
+        _logger.LogInformation(FontSymbols.Search);
     }
 
     public void OnLoaded()
@@ -89,6 +100,15 @@ public partial class GamesPageViewModel: ObservableObject
         }
         
         _debounceOnQueryChangedAction.Invoke();
+    }
+    
+    // Commands
+
+    [RelayCommand]
+    private void TapOnOpenHydraLinks()
+    {
+        var window = _provider.GetRequiredService<HydraLinksWindow>();
+        window.ShowDialog();
     }
 
     // Private Methods
@@ -131,18 +151,26 @@ public partial class GamesPageViewModel: ObservableObject
             {
                 try
                 {
-                    var request = new HydraCatalogueSearchRequestEntity
+                    var request = new HydraApiSearchRequestParamsEntity
                     {
                         Title = PreparedQuery,
                         Take = take,
                         Skip = skip,
                     };
-                    var entity = await _hydraService.GetCatalogue(request, token);
+                    var entity = await _hydraService.ObtainSearchAsync(request, token);
                     DispatcherWrapper.InvokeOnMain(() => SetItems(entity, pagination));
                 }
                 catch (Exception ex)
                 {
                     _logger.LogError("{ex}", ex);
+                    DispatcherWrapper.InvokeOnMain(
+                        () =>
+                        {
+                            if (ViewState != ViewStateEnum.Content)
+                                ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.InProgress; 
+                            ExceptionReport.Show(ex);
+                        }
+                    );
                 }
             }, 
             token
@@ -172,7 +200,7 @@ public partial class GamesPageViewModel: ObservableObject
         );
     }
 
-    private void SetItems(HydraCatalogueSearchResponseEntity entity, bool pagination = false)
+    private void SetItems(HydraApiSearchResponseEntity entity, bool pagination = false)
     {
         if (entity.Edges.IsEmpty())
         {

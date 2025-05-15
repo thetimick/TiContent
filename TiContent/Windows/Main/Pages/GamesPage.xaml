@@ -45,29 +45,39 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:CardAction Margin="0,0,0,4" IsChevronVisible="False">
-                        <ui:StackPanel Orientation="Horizontal" Spacing="8">
-                            <ui:Image
-                                Width="230"
-                                Height="108"
-                                CornerRadius="8"
-                                Source="{Binding LibraryImageUrl}"
-                                Stretch="Fill" />
+                    <ui:CardExpander Margin="0,0,0,4">
+                        <ui:CardExpander.Header>
+                            <ui:StackPanel Orientation="Horizontal" Spacing="8">
+                                <ui:Image
+                                    Width="230"
+                                    Height="108"
+                                    CornerRadius="8"
+                                    Source="{Binding LibraryImageUrl}"
+                                    Stretch="Fill" />
 
-                            <ui:StackPanel>
-                                <ui:TextBlock
-                                    FontTypography="Subtitle"
-                                    Text="{Binding Title}"
-                                    TextWrapping="Wrap" />
+                                <ui:StackPanel>
+                                    <ui:TextBlock
+                                        FontTypography="Subtitle"
+                                        Text="{Binding Title}"
+                                        TextWrapping="Wrap" />
 
-                                <ui:TextBlock
-                                    Appearance="Tertiary"
-                                    FontTypography="Caption"
-                                    Text="{Binding Description}"
-                                    TextWrapping="Wrap" />
+                                    <ui:TextBlock
+                                        Appearance="Tertiary"
+                                        FontTypography="Caption"
+                                        Text="{Binding Description}"
+                                        TextWrapping="Wrap" />
+                                </ui:StackPanel>
                             </ui:StackPanel>
+                        </ui:CardExpander.Header>
+
+                        <ui:StackPanel>
+                            <ui:Button
+                                Height="32"
+                                Command="{Binding DataContext.TapOnOpenHydraLinksCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                Content="Открыть источники"
+                                CornerRadius="16" />
                         </ui:StackPanel>
-                    </ui:CardAction>
+                    </ui:CardExpander>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

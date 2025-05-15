@@ -16,7 +16,7 @@ namespace TiContent.Entities.Hydra;
 
 using System.Text.Json.Serialization;
 
-public record HydraCatalogueSearchResponseEntity
+public record HydraApiSearchResponseEntity
 {
     /// <summary>
     /// Общее количество записей в результате поиска.

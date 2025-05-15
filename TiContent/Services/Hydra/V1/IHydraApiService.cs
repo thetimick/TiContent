@@ -7,10 +7,10 @@
 
 using TiContent.Entities.Hydra;
 
-namespace TiContent.Services.Hydra;
+namespace TiContent.Services.Hydra.V1;
 
 public interface IHydraApiService
 {
-    Task<HydraCatalogueSearchResponseEntity> GetCatalogue(HydraCatalogueSearchRequestEntity @params, CancellationToken token = default);
+    Task<HydraApiSearchResponseEntity> GetCatalogue(HydraApiSearchRequestParamsEntity @params, CancellationToken token = default);
     Task<HydraFiltersEntity> GetFilters(CancellationToken token = default);
 }

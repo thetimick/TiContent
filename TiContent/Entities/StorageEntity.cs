@@ -10,6 +10,7 @@ public record StorageEntity
         public string CubApiBaseUrl { get; init; } = AppConstants.Urls.CubApiBaseUrl;
         public string TMDBApiBaseUrl { get; init; } = AppConstants.Urls.TMDBApiBaseUrl;
         public string TMDBAssetsApiBaseUrl { get; init; } = AppConstants.Urls.TMDBAssetsApi;
+        public string HydraLinksBaseUrl { get; init; } = AppConstants.Urls.HydraLinksBaseUrl;
     }
 
     public record KeysEntity

@@ -1,18 +1,25 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Globalization;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using TiContent.Components.Interceptors;
 using TiContent.DataSources;
+using TiContent.Entities.HydraLinks;
 using TiContent.Providers;
 using TiContent.Services.Cub;
-using TiContent.Services.Hydra;
+using TiContent.Services.Hydra.V1;
+using TiContent.Services.Hydra.V2;
+using TiContent.Services.HydraLinks;
 using TiContent.Services.Jacred;
 using TiContent.Services.Storage;
 using TiContent.Services.TMDB;
+using TiContent.ViewModels.HydraLinks;
 using TiContent.ViewModels.Main;
 using TiContent.ViewModels.Main.Pages;
+using TiContent.Windows.HydraLinks;
 using TiContent.Windows.Main;
 using TiContent.Windows.Main.Pages;
+using TiContent.Workers;
 using Wpf.Ui;
 using Wpf.Ui.Abstractions;
 
@@ -24,6 +31,9 @@ public partial class App
     {
         // Hosted
         services.AddHostedService<WindowService>();
+        
+        // Workers
+        services.AddHostedService<HydraLinksBackgroundWorker>();
 
         // External Services
         services.AddSingleton<INavigationService, NavigationService>();
@@ -32,7 +42,12 @@ public partial class App
             {
                 var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
                 var interceptor = new RestClientLoggerInterceptor(logger);
-                var options = new RestClientOptions { Interceptors = [interceptor] };
+                
+                var options = new RestClientOptions
+                {
+                    Interceptors = [interceptor], 
+                    Timeout = new TimeSpan(0,0,0,10)
+                };
                 
                 return new RestClient(options);
             }
@@ -40,18 +55,40 @@ public partial class App
 
         // Internal Services
         services.AddSingleton<IHydraFiltersDataSource, HydraFiltersDataSource>();
+        services.AddSingleton<IHydraLinksDataSource, HydraLinksDataSource>();
+        
         services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<IJacredService, JacredService>();
         services.AddSingleton<IHydraApiService, HydraApiService>();
+        services.AddSingleton<IHydraApiServiceV2, HydraApiServiceV2>();
         services.AddSingleton<ITMDBService, TMDBService>();
         services.AddSingleton<ICubApiService, CubApiService>();
+        services.AddSingleton<IHydraLinksService, HydraLinksService>();
 
         // Providers
         services.AddSingleton<INavigationViewPageProvider, NavigationViewPageProvider>();
-
+        
+        // DataBase
+        services.AddDbContext<AppDataBaseContext>();
+        
+        // Mappers
+        services.AddAutoMapper(
+            configuration =>
+            {
+                configuration.CreateMap<HydraLinksResponseEntity.ItemsEntity, HydraLinksEntity>()
+                    .ForMember(
+                        dest => dest.UploadDate, 
+                        opt => opt.MapFrom(src => src.ParseDateTimeOrDefault())
+                    );
+            }
+        );
+        
         // Windows & ViewModels
         services.AddSingleton<MainWindow>();
         services.AddSingleton<MainWindowViewModel>();
+
+        services.AddTransient<HydraLinksWindow>();
+        services.AddTransient<HydraLinksWindowViewModel>();
 
         // Pages & ViewModels
         services.AddSingleton<HomePage>();

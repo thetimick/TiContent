@@ -9,6 +9,12 @@ namespace TiContent;
 
 public static class AppConstants
 {
+    public static class FileNames
+    {
+        public const string DataBaseFileName = "TiContent.db";
+        public const string StorageFileName = "TiContent.storage.json";
+    }
+    
     public static class Urls
     {
         public const string JacredApi = "https://jacred.xyz";
@@ -20,5 +26,7 @@ public static class AppConstants
         
         public const string TMDBApiBaseUrl = "https://apitmdb.cub.rip";
         public const string TMDBAssetsApi = "https://imagetmdb.com";
+
+        public const string HydraLinksBaseUrl = "https://hydralinks.cloud";
     }
 }

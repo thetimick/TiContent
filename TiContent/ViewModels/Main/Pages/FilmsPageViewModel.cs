@@ -16,6 +16,7 @@ using TiContent.Components.Wrappers;
 using TiContent.Entities.TMDB;
 using TiContent.Entities.TMDB.Requests;
 using TiContent.Services.TMDB;
+using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.ViewModels.Main.Pages;
 
@@ -115,6 +116,14 @@ public partial class FilmsPageViewModel : ObservableObject
                 catch (Exception ex)
                 {
                     _logger.LogError("{ex}", ex);
+                    DispatcherWrapper.InvokeOnMain(
+                        () =>
+                        {
+                            if (ViewState != ViewStateEnum.Content)
+                                ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.InProgress; 
+                            ExceptionReport.Show(ex);
+                        }
+                    );
                 }
             }, 
             token

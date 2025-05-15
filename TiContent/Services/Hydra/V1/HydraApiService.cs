@@ -9,7 +9,7 @@ using RestSharp;
 using TiContent.Entities.Hydra;
 using TiContent.Services.Storage;
 
-namespace TiContent.Services.Hydra;
+namespace TiContent.Services.Hydra.V1;
 
 public class HydraApiService(IRestClient client, IStorageService storage) : IHydraApiService {
     // Endpoints
@@ -35,12 +35,12 @@ public class HydraApiService(IRestClient client, IStorageService storage) : IHyd
     
     // IHydraApiService
 
-    public async Task<HydraCatalogueSearchResponseEntity> GetCatalogue(HydraCatalogueSearchRequestEntity @params, CancellationToken token = default)
+    public async Task<HydraApiSearchResponseEntity> GetCatalogue(HydraApiSearchRequestParamsEntity @params, CancellationToken token = default)
     {
         var request = new RestRequest(BaseUrl + Endpoints.Catalogue.Search, Method.Post)
             .AddBody(@params, ContentType.Json);
         
-        var response = await client.ExecuteAsync<HydraCatalogueSearchResponseEntity>(request, token);
+        var response = await client.ExecuteAsync<HydraApiSearchResponseEntity>(request, token);
         if (response is { IsSuccessful: true, Data: { } entity })
             return entity;
 

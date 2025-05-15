@@ -1,0 +1,118 @@
+﻿<ui:FluentWindow
+    x:Class="TiContent.Windows.HydraLinks.HydraLinksWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="http://schemas.lepo.co/wpfui/2022/xaml"
+    xmlns:vm="clr-namespace:TiContent.ViewModels.HydraLinks"
+    Title="TiContent - HydraLinks"
+    Width="550"
+    Height="800"
+    d:DataContext="{d:DesignInstance Type=vm:HydraLinksWindowViewModel,
+                                     IsDesignTimeCreatable=True}"
+    ui:Design.Background="{DynamicResource ApplicationBackgroundBrush}"
+    ui:Design.Foreground="{DynamicResource TextFillColorPrimaryBrush}"
+    ExtendsContentIntoTitleBar="True"
+    WindowBackdropType="Mica"
+    WindowCornerPreference="Default"
+    WindowStartupLocation="CenterScreen"
+    mc:Ignorable="d">
+
+    <ui:AutoGrid Margin="16,0,16,16" RowDefinitions="Auto, Auto, *">
+        <ui:TitleBar
+            Title="TiContent - HydraLinks"
+            Grid.Row="0"
+            Margin="-16,0,-16,0"
+            CloseWindowByDoubleClickOnIcon="True"
+            ShowMaximize="False"
+            ShowMinimize="False">
+
+            <ui:TitleBar.Icon>
+                <ui:ImageIcon Source="../../Resources/Assets/wpfui.png" />
+            </ui:TitleBar.Icon>
+        </ui:TitleBar>
+
+        <ui:AutoGrid
+            Grid.Row="1"
+            Margin="0,0,0,4"
+            ColumnDefinitions="3*, Auto, Auto">
+
+            <ui:TextBox Grid.Column="0" PlaceholderText="Поиск..." />
+
+            <ComboBox
+                Grid.Column="1"
+                Margin="8,0,0,0"
+                FontSize="14"
+                FontWeight="SemiBold"
+                SelectedIndex="0">
+
+                <ComboBoxItem Content="По Названию" />
+                <ComboBoxItem Content="По Дате" />
+                <ComboBoxItem Content="По Размеру" />
+            </ComboBox>
+
+            <ComboBox
+                Grid.Column="2"
+                Margin="8,0,0,0"
+                FontSize="14"
+                FontWeight="SemiBold"
+                SelectedIndex="0">
+
+                <ComboBoxItem Content="Все" />
+                <Separator />
+                <ComboBoxItem Content="FitGirl" />
+                <ComboBoxItem Content="DODI" />
+            </ComboBox>
+        </ui:AutoGrid>
+
+        <ItemsControl Grid.Row="2" ItemsSource="{Binding Items}">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ui:DynamicScrollViewer
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto">
+
+                        <ItemsPresenter />
+                    </ui:DynamicScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ui:CardAction Margin="0,4,0,0">
+                        <ui:AutoGrid RowCount="2">
+                            <ui:TextBlock
+                                Grid.Row="0"
+                                MaxHeight="20"
+                                FontTypography="BodyStrong"
+                                Text="{Binding Title}"
+                                TextTrimming="WordEllipsis"
+                                ToolTip="{Binding Title}" />
+
+                            <ui:TextBlock
+                                Grid.Row="1"
+                                MaxHeight="16"
+                                Appearance="Tertiary"
+                                FontTypography="Caption">
+
+                                <Run Text="{Binding UploadDate, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy HH:MM'}" />
+                                <Run Text=" • " />
+                                <Run Text="{Binding Owner}" />
+                                <Run Text=" • " />
+                                <Run Text="{Binding FileSize}" />
+                            </ui:TextBlock>
+                        </ui:AutoGrid>
+                    </ui:CardAction>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ui:AutoGrid>
+</ui:FluentWindow>

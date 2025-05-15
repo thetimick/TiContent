@@ -97,13 +97,13 @@
                                 <ui:DropDownButton
                                     Height="32"
                                     CornerRadius="16"
-                                    Icon="{ui:SymbolIcon Symbol=Share24}">
+                                    Icon="{ui:SymbolIcon Share24}">
 
                                     <ui:DropDownButton.Flyout>
                                         <ContextMenu>
-                                            <MenuItem Header="Google" Icon="{ui:SymbolIcon Symbol=Open24}" />
-                                            <MenuItem Header="The Movie Database" Icon="{ui:SymbolIcon Symbol=Open24}" />
-                                            <MenuItem Header="iMDB" Icon="{ui:SymbolIcon Symbol=Open24}" />
+                                            <MenuItem Header="Google" Icon="{ui:SymbolIcon Open24}" />
+                                            <MenuItem Header="The Movie Database" Icon="{ui:SymbolIcon Open24}" />
+                                            <MenuItem Header="iMDB" Icon="{ui:SymbolIcon Open24}" />
                                         </ContextMenu>
                                     </ui:DropDownButton.Flyout>
                                 </ui:DropDownButton>
@@ -111,11 +111,11 @@
                                 <ui:DropDownButton
                                     Height="32"
                                     CornerRadius="16"
-                                    Icon="{ui:SymbolIcon Symbol=Merge24}">
+                                    Icon="{ui:SymbolIcon Merge24}">
 
                                     <ui:DropDownButton.Flyout>
                                         <ContextMenu>
-                                            <MenuItem Header="Jacred" Icon="{ui:SymbolIcon Symbol=Open24}" />
+                                            <MenuItem Header="Jacred" Icon="{ui:SymbolIcon Open24}" />
                                         </ContextMenu>
                                     </ui:DropDownButton.Flyout>
                                 </ui:DropDownButton>

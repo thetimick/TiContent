@@ -5,20 +5,18 @@ using TiContent.Entities;
 namespace TiContent.Services.Storage;
 
 public class StorageService : IStorageService {
-    private const string FileName = "TiContent.storage.json";
-
     public StorageEntity? Cached { get; private set; }
 
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
     public StorageEntity Obtain()
     {
-        if (!File.Exists(FileName))
+        if (!File.Exists(AppConstants.FileNames.StorageFileName))
             return Save();
 
         try
         {
-            var json = File.ReadAllText(FileName);
+            var json = File.ReadAllText(AppConstants.FileNames.StorageFileName);
             Cached = JsonSerializer.Deserialize<StorageEntity>(json, _options);
             ArgumentNullException.ThrowIfNull(Cached);
             return Cached;
@@ -33,7 +31,7 @@ public class StorageService : IStorageService {
     {
         Cached ??= new StorageEntity();
         var json = JsonSerializer.Serialize(Cached, _options);
-        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, FileName), json);
+        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, AppConstants.FileNames.StorageFileName), json);
         return Cached;
     }
 }

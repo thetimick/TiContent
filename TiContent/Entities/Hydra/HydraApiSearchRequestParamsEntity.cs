@@ -10,7 +10,7 @@ using System.Text.Json.Serialization;
 
 namespace TiContent.Entities.Hydra;
 
-public record HydraCatalogueSearchRequestEntity
+public record HydraApiSearchRequestParamsEntity
 {
     /// <summary>
     /// Название игры для поиска
