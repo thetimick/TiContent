@@ -74,6 +74,7 @@
                             <ui:Button
                                 Height="32"
                                 Command="{Binding DataContext.TapOnOpenHydraLinksCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding Id}"
                                 Content="Открыть источники"
                                 CornerRadius="16" />
                         </ui:StackPanel>

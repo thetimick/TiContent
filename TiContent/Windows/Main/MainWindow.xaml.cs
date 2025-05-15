@@ -7,11 +7,11 @@ namespace TiContent.Windows.Main;
 
 public partial class MainWindow
 {
-    public MainWindowViewModel ViewModel { get; }
+    private MainWindowViewModel ViewModel { get; }
 
     public MainWindow(
         MainWindowViewModel viewModel,
-        INavigationService navigationService,
+        INavigationService navigation,
         IStorageService storageService
     ) {
         ViewModel = viewModel;
@@ -19,7 +19,7 @@ public partial class MainWindow
 
         InitializeComponent();
 
-        navigationService.SetNavigationControl(NavigationView);
+        navigation.SetNavigationControl(NavigationView);
 
         SizeChanged += (_, args) =>
         {
@@ -39,9 +39,6 @@ public partial class MainWindow
             storageService.Cached.Window.Y = Top;
         };
         
-        Loaded += (_, _) =>
-        {
-            NavigationView.Navigate(typeof(FilmsPage));
-        };
+        Loaded += (_, _) => ViewModel.OnLoaded();
     }
 }

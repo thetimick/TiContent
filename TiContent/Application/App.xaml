@@ -18,6 +18,7 @@
             <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
             <converters:EnumDescriptionToStringConverter x:Key="EnumDescriptionConverter" />
             <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
+            <converters:BytesToStringConverter x:Key="BytesToStringConverter" />
             <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
             <converters:ViewStateToVisibilityConverter x:Key="ViewStateToVisibilityConverter" />
             <converters:TMDBPosterPathConverter x:Key="TMDBPosterPathConverter" />

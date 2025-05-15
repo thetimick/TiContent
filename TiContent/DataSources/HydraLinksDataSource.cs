@@ -6,6 +6,7 @@
 // ⠀
 
 using AutoMapper;
+using FuzzySharp;
 using Microsoft.EntityFrameworkCore;
 using TiContent.Application;
 using TiContent.Components.Extensions;
@@ -35,7 +36,8 @@ public partial class HydraLinksDataSource: IHydraLinksDataSource
     public async Task<List<HydraLinksEntity>> SearchLinksAsync(string query)
     {
         return await db.HydraLinksItems
-            .Where(entity => EF.Functions.Like(entity.Title.ToLower(), $"%{query.Trim().ToLower()}%"))
+            .AsNoTracking()
+            .Where(entity => EF.Functions.Like(entity.Title.ToLower(), $"%{query}%"))
             .OrderByDescending(entity => entity.Title)
             .ToListAsync();
     }
@@ -43,6 +45,7 @@ public partial class HydraLinksDataSource: IHydraLinksDataSource
     public async Task<List<HydraLinksEntity>> AllLinksAsync()
     {
         return await db.HydraLinksItems
+            .AsNoTracking()
             .OrderByDescending(entity => entity.Title)
             .ToListAsync();
     }

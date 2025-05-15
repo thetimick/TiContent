@@ -1,4 +1,5 @@
 ﻿using System.Globalization;
+using Humanizer.Bytes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RestSharp;
@@ -79,6 +80,21 @@ public partial class App
                     .ForMember(
                         dest => dest.UploadDate, 
                         opt => opt.MapFrom(src => src.ParseDateTimeOrDefault())
+                    )
+                    .ForMember(
+                        dest => dest.FileSize,
+                        opt => opt.MapFrom(
+                            (src, _) =>
+                            {
+                                var raw = src.FileSize
+                                    .Replace("МБ", "MB")
+                                    .Replace("ГБ", "GB")
+                                    .Replace(".", ",")
+                                    .Replace("+", "");
+                                
+                                return ByteSize.TryParse(raw, out var size) ? size.Bytes : 0;
+                            }
+                        )
                     );
             }
         );
@@ -88,7 +104,7 @@ public partial class App
         services.AddSingleton<MainWindowViewModel>();
 
         services.AddTransient<HydraLinksWindow>();
-        services.AddTransient<HydraLinksWindowViewModel>();
+        services.AddScoped<HydraLinksWindowViewModel>();
 
         // Pages & ViewModels
         services.AddSingleton<HomePage>();

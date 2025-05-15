@@ -13,11 +13,11 @@ public static class StringExtension
 	/// <summary>
 	/// Returns true if string is null or empty.
 	/// </summary>
-	public static bool IsNullOrEmpty(this string s)
+	public static bool IsNullOrEmpty(this string? s)
 	{
 		return string.IsNullOrEmpty(s);
 	}
-
+	
 	/// <summary>
 	/// Returns true if string is null, empty or only whitespaces.
 	/// </summary>

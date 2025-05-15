@@ -49,10 +49,6 @@ public partial class App
                     _mainWindow.Top = storage.Window.Y ?? 0;
                 }
             }
-            
-            // Подписываемся на события
-            _mainWindow.Loaded += (_, _) => WeakReferenceMessenger.Default.Send(new WindowAction(WindowAction.ActionType.Loaded));
-            _mainWindow.Closing += (_, _) => WeakReferenceMessenger.Default.Send(new WindowAction(WindowAction.ActionType.Unloaded));
 
             // Показываем окно
             _mainWindow.Show();

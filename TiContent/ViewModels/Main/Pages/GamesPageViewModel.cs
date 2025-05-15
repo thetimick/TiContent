@@ -8,7 +8,9 @@
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 using Humanizer;
+using Humanizer.Bytes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
@@ -19,6 +21,7 @@ using TiContent.Components.Wrappers;
 using TiContent.DataSources;
 using TiContent.Entities.Hydra;
 using TiContent.Services.Hydra.V2;
+using TiContent.ViewModels.HydraLinks;
 using TiContent.Windows.HydraLinks;
 using Wpf.Ui.Controls;
 using Wpf.Ui.Extensions;
@@ -72,8 +75,6 @@ public partial class GamesPageViewModel: ObservableObject
         _logger = logger;
         
         _debounceOnQueryChangedAction = Debouncer.Debounce(() => ObtainItems(true), TimeSpan.FromSeconds(1));
-        
-        _logger.LogInformation(FontSymbols.Search);
     }
 
     public void OnLoaded()
@@ -105,9 +106,14 @@ public partial class GamesPageViewModel: ObservableObject
     // Commands
 
     [RelayCommand]
-    private void TapOnOpenHydraLinks()
+    private void TapOnOpenHydraLinks(string id)
     {
+        var title = Items.FirstOrDefault(entity => entity.Id == id)?.Title ?? string.Empty;
+        if (title.IsNullOrEmpty())
+            return;
+        
         var window = _provider.GetRequiredService<HydraLinksWindow>();
+        WeakReferenceMessenger.Default.Send(new HydraLinksWindowViewModel.MessageEntity(title));
         window.ShowDialog();
     }
 

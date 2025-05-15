@@ -10,12 +10,15 @@ using System.Windows;
 using CommunityToolkit.Mvvm.ComponentModel;
 using TiContent.Resources.Localization;
 using TiContent.Windows.Main.Pages;
+using Wpf.Ui;
 using Wpf.Ui.Controls;
 
 namespace TiContent.ViewModels.Main;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel(INavigationService navigation) : ObservableObject
 {
+    // Observable
+    
     [ObservableProperty] 
     public partial ObservableCollection<object> MenuItems { get; set; } = [
         // new NavigationViewItem(Strings.HomePage_Title, SymbolRegular.Home24, typeof(HomePage)),
@@ -35,4 +38,11 @@ public partial class MainWindowViewModel : ObservableObject
         new NavigationViewItem(Strings.SettingsPage_Title, SymbolRegular.Settings24, typeof(SettingsPage)),
         new NavigationViewItem(Strings.AboutPage_Title, SymbolRegular.Info24, typeof(AboutPage))
     ];
+    
+    // Public Methods
+
+    public void OnLoaded()
+    {
+        navigation.Navigate(typeof(GamesPage));
+    }
 }

@@ -38,32 +38,29 @@
             Margin="0,0,0,4"
             ColumnDefinitions="3*, Auto, Auto">
 
-            <ui:TextBox Grid.Column="0" PlaceholderText="Поиск..." />
+            <ui:TextBox
+                Grid.Column="0"
+                IsReadOnly="True"
+                IsReadOnlyCaretVisible="True"
+                PlaceholderText="Поиск..."
+                Text="{Binding Query}" />
 
             <ComboBox
                 Grid.Column="1"
                 Margin="8,0,0,0"
                 FontSize="14"
                 FontWeight="SemiBold"
-                SelectedIndex="0">
-
-                <ComboBoxItem Content="По Названию" />
-                <ComboBoxItem Content="По Дате" />
-                <ComboBoxItem Content="По Размеру" />
-            </ComboBox>
+                ItemsSource="{Binding Sort.SortItems}"
+                SelectedIndex="{Binding Sort.SortItemsSelectedIndex}" />
 
             <ComboBox
                 Grid.Column="2"
                 Margin="8,0,0,0"
                 FontSize="14"
                 FontWeight="SemiBold"
-                SelectedIndex="0">
-
-                <ComboBoxItem Content="Все" />
-                <Separator />
-                <ComboBoxItem Content="FitGirl" />
-                <ComboBoxItem Content="DODI" />
-            </ComboBox>
+                IsEnabled="{Binding Filters.FilterOnOwnerIsEnabled}"
+                ItemsSource="{Binding Filters.FilterOnOwner, Mode=OneWay}"
+                SelectedIndex="{Binding Filters.FilterOnOwnerSelectedIndex, Mode=TwoWay}" />
         </ui:AutoGrid>
 
         <ItemsControl Grid.Row="2" ItemsSource="{Binding Items}">
@@ -107,7 +104,7 @@
                                 <Run Text=" • " />
                                 <Run Text="{Binding Owner}" />
                                 <Run Text=" • " />
-                                <Run Text="{Binding FileSize}" />
+                                <Run Text="{Binding FileSize, Converter={StaticResource BytesToStringConverter}}" />
                             </ui:TextBlock>
                         </ui:AutoGrid>
                     </ui:CardAction>

@@ -14,7 +14,5 @@ public partial class HydraLinksWindow
         DataContext = viewModel;
         
         InitializeComponent();
-        
-        Loaded += (_, _) => viewModel.OnLoaded();
     }
 }

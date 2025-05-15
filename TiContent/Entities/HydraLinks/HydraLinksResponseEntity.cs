@@ -32,7 +32,7 @@ public record HydraLinksResponseEntity
         public string? UploadDate { get; set; }
 
         [JsonPropertyName("fileSize")]
-        public string? FileSize { get; set; }
+        public string FileSize { get; set; } = string.Empty;
 
         [JsonPropertyName("uris")]
         public List<Uri>? Uris { get; set; }
