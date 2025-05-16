@@ -9,7 +9,7 @@ namespace TiContent.Entities.TMDB.Requests;
 
 public record TMDBTrendingRequestEntity
 {
-    public ContentType Content { get; init; }
+    public ContentType Content { get; set; }
     public PeriodType Period { get; set; }
 
     public long Page { get; set; } = 1;

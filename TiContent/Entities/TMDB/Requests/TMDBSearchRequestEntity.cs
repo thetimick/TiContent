@@ -11,7 +11,7 @@ public record TMDBSearchRequestEntity
 {
     public string Query { get; set; } = string.Empty;
     public ContentType Content { get; set; }
-    public int Page { get; set; }
+    public long Page { get; set; }
 
     public string RawContent {
         get

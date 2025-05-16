@@ -6,6 +6,7 @@
 // ⠀
 
 using System.Text.Json.Serialization;
+using TiContent.Components.Extensions;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CollectionNeverUpdated.Global
@@ -48,7 +49,7 @@ public record TMDBResponseEntity
 
         [JsonPropertyName("original_title")]
         public string? OriginalTitle { get; set; }
-
+        
         [JsonPropertyName("names")]
         public List<string>? Names { get; set; }
 
@@ -102,5 +103,11 @@ public record TMDBResponseEntity
         
         [JsonPropertyName("kp_rating")]
         public string? KpRating { get; set; }
+        
+        [JsonIgnore]
+        public string TitleOrName => Title ?? OriginalTitle ?? Name ?? OriginalName ?? "n/n";
+        
+        [JsonIgnore]
+        public string OriginalTitleOrOriginalName => OriginalTitle ?? OriginalName ?? "n/n";
     }
 }

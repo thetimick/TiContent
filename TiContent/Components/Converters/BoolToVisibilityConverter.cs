@@ -23,7 +23,7 @@ public class BoolToVisibilityConverter : IValueConverter
         return boolValue ? Visibility.Visible : Visibility.Hidden;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotImplementedException();
     }

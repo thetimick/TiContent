@@ -41,6 +41,8 @@ public partial class JacredWindowViewModel: ObservableRecipient, IRecipient<Jacr
     private readonly ILogger<JacredWindowViewModel> _logger;
     
     private string _globalQuery = string.Empty;
+
+    private CancellationTokenSource? _cancellationToken;
     
     // Lifecycle
     
@@ -57,8 +59,6 @@ public partial class JacredWindowViewModel: ObservableRecipient, IRecipient<Jacr
     public void Receive(RecipientModel message)
     {
         _globalQuery = message.Query;
-
-        Title = _globalQuery;
         ObtainItems();
     }
     
@@ -76,12 +76,20 @@ public partial class JacredWindowViewModel
 {
     private void ObtainItems()
     {
+        if (_cancellationToken != null)
+            return;
+        
+        Items = [];
+        Title = _globalQuery;
+        Description = string.Empty;
+
         Task.Run(
             async () =>
             {
                 try
                 {
-                    var entity = await _jacredService.ObtainTorrentsAsync(_globalQuery);
+                    _cancellationToken = new CancellationTokenSource();
+                    var entity = await _jacredService.ObtainTorrentsAsync(_globalQuery, _cancellationToken.Token);
                     DispatcherWrapper.InvokeOnMain(() => SetItems(entity));
                 }
                 catch (Exception ex)
@@ -89,6 +97,8 @@ public partial class JacredWindowViewModel
                     _logger.LogError("{ex}", ex);
                     DispatcherWrapper.InvokeOnMain(() => ExceptionReport.Show(ex));
                 }
+                
+                _cancellationToken = null;
             }
         );
     }

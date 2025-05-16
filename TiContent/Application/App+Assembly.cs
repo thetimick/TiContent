@@ -59,6 +59,7 @@ public partial class App
         // Internal Services
         services.AddSingleton<IHydraFiltersDataSource, HydraFiltersDataSource>();
         services.AddSingleton<IHydraLinksDataSource, HydraLinksDataSource>();
+        services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
         
         services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<IJacredService, JacredService>();
@@ -112,7 +113,7 @@ public partial class App
         services.AddScoped<HydraLinksWindowViewModel>();
 
         services.AddTransient<JacredWindow>();
-        services.AddTransient<JacredWindowViewModel>();
+        services.AddScoped<JacredWindowViewModel>();
 
         // Pages & ViewModels
         services.AddSingleton<HomePage>();

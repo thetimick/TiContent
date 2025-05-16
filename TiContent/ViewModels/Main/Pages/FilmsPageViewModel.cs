@@ -6,6 +6,7 @@
 // ⠀
 
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -14,11 +15,9 @@ using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
 using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
-using TiContent.Components.Pagination;
 using TiContent.Components.Wrappers;
+using TiContent.DataSources;
 using TiContent.Entities.TMDB;
-using TiContent.Entities.TMDB.Requests;
-using TiContent.Services.TMDB;
 using TiContent.ViewModels.Jacred;
 using TiContent.Windows.Jacred;
 using Wpf.Ui.Violeta.Controls;
@@ -35,42 +34,50 @@ public partial class FilmsPageViewModel : ObservableObject
     [ObservableProperty]
     public partial string Query { get; set; } = string.Empty;
 
+    [ObservableProperty] 
+    public partial int FilterByContentSelectedIndex { get; set; } = 0;
+
     [ObservableProperty]
     public partial ObservableCollection<TMDBResponseEntity.ItemEntity> Items { get; set; } = [];
     
     // Private Props
     
-    private readonly ITMDBService _tmdbService;
+    private readonly IFilmsPageContentDataSource _dataSource;
     private readonly ILogger<FilmsPageViewModel> _logger;
     private readonly IServiceProvider _provider;
     
     private readonly RateLimitedAction _debounceOnQueryChangedAction;
     
-    private CancellationTokenSource? _debounceCancellationToken;
-    private TMDBPagination _pagination = new();
-    
     // Lifecycle
     
-    public FilmsPageViewModel(ITMDBService tmdbService, ILogger<FilmsPageViewModel> logger, IServiceProvider provider)
+    public FilmsPageViewModel(IFilmsPageContentDataSource dataSource, ILogger<FilmsPageViewModel> logger, IServiceProvider provider)
     {
-        _tmdbService = tmdbService;
+        _dataSource = dataSource;
         _logger = logger;
         _provider = provider;
 
-        _debounceOnQueryChangedAction = Debouncer.Debounce(() => ObtainItems(true), TimeSpan.FromSeconds(1));
+        _debounceOnQueryChangedAction = Debouncer.Debounce(
+            () =>
+            {
+                _logger.LogInformationWithCaller(Query);
+                _dataSource.ClearCache();
+                ObtainItemsFromDataSource();
+            }, 
+            TimeSpan.FromSeconds(1)
+         );
     }
     
     // Public Methods
     
     public void OnLoaded()
     {
-        ObtainItems();
+        ObtainItemsFromDataSource();
     }
     
     public void OnScrollChanged(double offset, double height)
     {
-        if (height - offset < 100)
-            ObtainItemsWithPagination();
+        if (!_dataSource.InProgress && !Items.IsEmpty() && height - offset < 100)
+            ObtainItemsFromDataSource(pagination: true);
     }
     
     // Observable Methods
@@ -79,16 +86,26 @@ public partial class FilmsPageViewModel : ObservableObject
     {
         if (value.IsNullOrEmpty())
         {
-            ViewState = ViewStateEnum.Empty;
-            ObtainItems(true);
+            _dataSource.ClearCache();
+            ObtainItemsFromDataSource();
+            return;
         }
         
         _debounceOnQueryChangedAction.Invoke();
     }
-    
+
+    partial void OnFilterByContentSelectedIndexChanged(int value)
+    {
+        _logger.LogInformationWithCaller(value.ToString());
+        
+        _dataSource.ClearCache();
+        ObtainItemsFromDataSource();
+    }
+
     // Commands
 
     [RelayCommand]
+    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.String")]
     private void TapOnSearchButton(long id)
     {
         var title = Items.FirstOrDefault(item => item.Id == id)?.Title;
@@ -102,51 +119,27 @@ public partial class FilmsPageViewModel : ObservableObject
 
     // Private Methods
 
-    private void ObtainItems(bool forceRefresh = false)
+    private void ObtainItemsFromDataSource(bool pagination = false)
     {
-        if (!Items.IsEmpty() && !forceRefresh)
-            return;
+        if (!pagination)
+            ViewState = ViewStateEnum.InProgress;
         
-        _debounceCancellationToken?.Cancel();
-        _debounceCancellationToken = new CancellationTokenSource();
-
-        ViewState = ViewStateEnum.InProgress;
-        
-        LoadItems(false, _debounceCancellationToken.Token);
-    }
-
-    private void ObtainItemsWithPagination()
-    {
-        if (_pagination.InProgress || !_pagination.HasMorePage)
-            return;
-        
-        _pagination.NextPage();
-        
-        _debounceCancellationToken?.Cancel();
-        _debounceCancellationToken = new CancellationTokenSource();
-        
-        LoadItems(true, _debounceCancellationToken.Token);
-    }
-    
-    private void LoadItems(bool pagination = false, CancellationToken token = default)
-    {
         Task.Run(
             async () =>
             {
                 try
                 {
-                    var request = new TMDBTrendingRequestEntity
-                    {
-                        Content = TMDBTrendingRequestEntity.ContentType.Movies,
-                        Period = TMDBTrendingRequestEntity.PeriodType.Week,
-                        Page = _pagination.Page
-                    };
-                    var entity = await _tmdbService.ObtainTrendingAsync(request, token);
-                    DispatcherWrapper.InvokeOnMain(() => SetItems(entity, pagination));
-                    
-                    _pagination.LoadingCompleted();
-                    if (!pagination)
-                        _pagination.Init(entity.TotalPages);
+                    var items = await _dataSource.ObtainItemsAsync(FilterByContentSelectedIndex, Query);
+                    DispatcherWrapper.InvokeOnMain(
+                        () =>
+                        {
+                            if (Items == items.ToObservable())
+                                return;
+
+                            Items = items.ToObservable();
+                            ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.Content;
+                        }
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -154,30 +147,15 @@ public partial class FilmsPageViewModel : ObservableObject
                     DispatcherWrapper.InvokeOnMain(
                         () =>
                         {
-                            if (ViewState != ViewStateEnum.Content)
-                                ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.InProgress; 
-                            ExceptionReport.Show(ex);
+                            Toast.Error("Ошибка при попытке получения данных", ToastLocation.BottomRight);
+                            
+                            Items.Clear();
+                            ViewState = ViewStateEnum.Empty; 
+                            _dataSource.ClearCache();
                         }
                     );
                 }
-            }, 
-            token
+            }
         );
-    }
-    
-    private void SetItems(TMDBResponseEntity entity, bool pagination)
-    {
-        if (entity.Results.IsEmpty() || entity.Results is not { } results)
-        {
-            ViewState = ViewStateEnum.Empty;
-            return;
-        }
-
-        if (pagination)
-            Items.AddRange(results.ToObservable());
-        else 
-            Items = results.ToObservable();
-            
-        ViewState = ViewStateEnum.Content;
     }
 }
