@@ -6,7 +6,6 @@
 // ⠀
 
 using System.ComponentModel.DataAnnotations;
-using Humanizer.Bytes;
 
 namespace TiContent.Entities.HydraLinks;
 
@@ -19,7 +18,8 @@ public record HydraLinksEntity
     public string Owner { get; set; } = string.Empty;
     
     public string Title { get; init; } = string.Empty;
+    public string CleanTitle { get; init; } = string.Empty;
     public double FileSize { get; init; }
     public DateTime UploadDate { get; init; }
-    public IEnumerable<string> Links { get; init; } = [];
+    public IList<string> Links { get; init; } = [];
 }

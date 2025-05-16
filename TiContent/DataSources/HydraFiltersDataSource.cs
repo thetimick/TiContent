@@ -6,7 +6,6 @@
 // ⠀
 
 using TiContent.Entities.Hydra;
-using TiContent.Services.Hydra;
 using TiContent.Services.Hydra.V1;
 
 namespace TiContent.DataSources;

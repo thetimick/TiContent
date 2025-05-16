@@ -6,10 +6,11 @@
 // ⠀
 
 using AutoMapper;
-using FuzzySharp;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using TiContent.Application;
 using TiContent.Components.Extensions;
+using TiContent.Components.Helpers;
 using TiContent.Entities.HydraLinks;
 using TiContent.Services.HydraLinks;
 
@@ -22,64 +23,74 @@ public interface IHydraLinksDataSource
     Task<List<HydraLinksEntity>> AllLinksAsync();
 }
 
-public partial class HydraLinksDataSource(App.AppDataBaseContext db, IHydraLinksService service, IMapper mapper)
-{ }
+public partial class HydraLinksDataSource(
+    App.AppDataBaseContext db,
+    IHydraLinksService service,
+    IMapper mapper,
+    ILogger<HydraLinksDataSource> logger
+);
 
 public partial class HydraLinksDataSource: IHydraLinksDataSource
 {
     public async Task ObtainItemsIfNeededAsync()
     {
-        if (await IsEmptyOrExpiredDataBaseAsync())
-            await ObtainAllLinksAsync();
+        await ObtainAllLinksAsync();
     }
 
     public async Task<List<HydraLinksEntity>> SearchLinksAsync(string query)
     {
-        return await db.HydraLinksItems
+        var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
+        var items = await db.HydraLinksItems
             .AsNoTracking()
-            .Where(entity => EF.Functions.Like(entity.Title.ToLower(), $"%{query}%"))
-            .OrderByDescending(entity => entity.Title)
+            .Where(entity => EF.Functions.Like(entity.CleanTitle, $"%{cleanQuery}%"))
             .ToListAsync();
+        return items;
     }
 
     public async Task<List<HydraLinksEntity>> AllLinksAsync()
     {
         return await db.HydraLinksItems
             .AsNoTracking()
-            .OrderByDescending(entity => entity.Title)
             .ToListAsync();
     }
 }
 
 public partial class HydraLinksDataSource
 {
-    private async Task ObtainAllLinksAsync()
+    private async Task ObtainAllLinksAsync(bool forceRefresh = false)
     {
+        if (await IsEmptyOrExpiredDataBaseAsync() == false && !forceRefresh)
+        {
+            logger.LogInformationWithCaller("Links already updated!");
+            return;
+        }
+        
+        logger.LogInformationWithCaller("Start update links...");
+        
         db.HydraLinksItems.RemoveRange(db.HydraLinksItems);
-        
-        var entities = (await service.ObtainLinksAsync())
-            .OfType<HydraLinksResponseEntity>()
-            .Select(
+        var items = (await service.ObtainLinksAsync())
+            .SelectMany(
                 rawEntity =>
-                    rawEntity.Items?.Select(
-                        rawItemEntity =>
-                        {
-                            var item = mapper.Map<HydraLinksEntity>(rawItemEntity);
-                            item.Owner = rawEntity.Name ?? string.Empty;
-                            return item;
-                        }
-                    )
+                {
+                    return rawEntity?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
+                        .Select(
+                            rawItemEntity =>
+                            {
+                                var item = mapper.Map<HydraLinksEntity>(rawItemEntity);
+                                item.Owner = rawEntity.Name ?? string.Empty;
+                                return item;
+                            }
+                        ) ?? [];
+                }
             );
-        
-        foreach (var items in entities)
-            if (items != null)
-                db.HydraLinksItems.AddRange(items);
-
+        await db.HydraLinksItems.AddRangeAsync(items);
         await db.SaveChangesAsync();
+        
+        logger.LogInformationWithCaller("Links successful updated!");
     }
 
     private async Task<bool> IsEmptyOrExpiredDataBaseAsync()
     {
-        return db.HydraLinksItems.IsEmpty() || (await db.HydraLinksItems.FirstOrDefaultAsync())?.Timestamp < DateTime.Now.AddHours(-3);
+        return db.HydraLinksItems.AsNoTracking().IsEmpty() || (await db.HydraLinksItems.AsNoTracking().FirstOrDefaultAsync())?.Timestamp < DateTime.Now.AddHours(-3);
     }
 }

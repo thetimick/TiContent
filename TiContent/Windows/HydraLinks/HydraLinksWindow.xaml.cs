@@ -1,6 +1,4 @@
 ﻿using TiContent.ViewModels.HydraLinks;
-using Wpf.Ui.Controls;
-using Wpf.Ui.Extensions;
 
 namespace TiContent.Windows.HydraLinks;
 

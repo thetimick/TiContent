@@ -5,7 +5,6 @@
 // Created by the_timick on 14.05.2025.
 // ⠀
 
-using System.Globalization;
 using System.Text.Json.Serialization;
 
 // ReSharper disable CollectionNeverUpdated.Global
@@ -26,7 +25,7 @@ public record HydraLinksResponseEntity
     public record ItemsEntity
     {
         [JsonPropertyName("title")]
-        public string? Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [JsonPropertyName("uploadDate")]
         public string? UploadDate { get; set; }
@@ -35,7 +34,7 @@ public record HydraLinksResponseEntity
         public string FileSize { get; set; } = string.Empty;
 
         [JsonPropertyName("uris")]
-        public List<Uri>? Uris { get; set; }
+        public IList<string>? Links { get; set; }
     }
 }
 

@@ -10,7 +10,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Humanizer;
-using Humanizer.Bytes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
@@ -23,8 +22,6 @@ using TiContent.Entities.Hydra;
 using TiContent.Services.Hydra.V2;
 using TiContent.ViewModels.HydraLinks;
 using TiContent.Windows.HydraLinks;
-using Wpf.Ui.Controls;
-using Wpf.Ui.Extensions;
 using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.ViewModels.Main.Pages;

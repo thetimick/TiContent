@@ -19,7 +19,7 @@
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
 
-    <ui:AutoGrid Margin="16,0,16,16" RowDefinitions="Auto, Auto, *">
+    <ui:AutoGrid Margin="16,0,16,16" RowDefinitions="Auto, Auto, Auto, Auto, *">
         <ui:TitleBar
             Title="TiContent - HydraLinks"
             Grid.Row="0"
@@ -33,23 +33,32 @@
             </ui:TitleBar.Icon>
         </ui:TitleBar>
 
+        <ui:StackPanel Grid.Row="1">
+            <ui:TextBlock FontTypography="Title" Text="{Binding Title}" />
+            <ui:TextBlock
+                Appearance="Tertiary"
+                FontTypography="BodyStrong"
+                Text="{Binding Description}" />
+        </ui:StackPanel>
+
+        <Separator Grid.Row="2" Margin="0,4,0,0" />
+
         <ui:AutoGrid
-            Grid.Row="1"
-            Margin="0,0,0,4"
+            Grid.Row="3"
+            Margin="0,12,0,4"
             ColumnDefinitions="3*, Auto, Auto">
 
             <ui:TextBox
                 Grid.Column="0"
-                IsReadOnly="True"
-                IsReadOnlyCaretVisible="True"
                 PlaceholderText="Поиск..."
-                Text="{Binding Query}" />
+                Text="{Binding Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
             <ComboBox
                 Grid.Column="1"
                 Margin="8,0,0,0"
                 FontSize="14"
                 FontWeight="SemiBold"
+                IsEnabled="{Binding Sort.SortIsEnabled}"
                 ItemsSource="{Binding Sort.SortItems}"
                 SelectedIndex="{Binding Sort.SortItemsSelectedIndex}" />
 
@@ -58,12 +67,12 @@
                 Margin="8,0,0,0"
                 FontSize="14"
                 FontWeight="SemiBold"
-                IsEnabled="{Binding Filters.FilterOnOwnerIsEnabled}"
-                ItemsSource="{Binding Filters.FilterOnOwner, Mode=OneWay}"
-                SelectedIndex="{Binding Filters.FilterOnOwnerSelectedIndex, Mode=TwoWay}" />
+                IsEnabled="{Binding Filters.FilterIsEnabled}"
+                ItemsSource="{Binding Filters.FilterItems}"
+                SelectedIndex="{Binding Filters.FilterSelectedIndex}" />
         </ui:AutoGrid>
 
-        <ItemsControl Grid.Row="2" ItemsSource="{Binding Items}">
+        <ItemsControl Grid.Row="4" ItemsSource="{Binding Items}">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <VirtualizingStackPanel Orientation="Vertical" />
@@ -84,7 +93,11 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:CardAction Margin="0,4,0,0">
+                    <ui:CardAction
+                        Margin="0,4,0,0"
+                        Command="{Binding DataContext.TapOnCardCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                        CommandParameter="{Binding Id}">
+
                         <ui:AutoGrid RowCount="2">
                             <ui:TextBlock
                                 Grid.Row="0"

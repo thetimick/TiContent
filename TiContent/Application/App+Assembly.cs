@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+﻿using System.Text.RegularExpressions;
 using Humanizer.Bytes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -78,6 +78,10 @@ public partial class App
             {
                 configuration.CreateMap<HydraLinksResponseEntity.ItemsEntity, HydraLinksEntity>()
                     .ForMember(
+                        dest => dest.CleanTitle,
+                        opt => opt.MapFrom(src => Regex.Replace(src.Title.Trim().ToLower(), "[^a-zA-Z0-9]", ""))
+                    )
+                    .ForMember(
                         dest => dest.UploadDate, 
                         opt => opt.MapFrom(src => src.ParseDateTimeOrDefault())
                     )
@@ -91,7 +95,6 @@ public partial class App
                                     .Replace("ГБ", "GB")
                                     .Replace(".", ",")
                                     .Replace("+", "");
-                                
                                 return ByteSize.TryParse(raw, out var size) ? size.Bytes : 0;
                             }
                         )

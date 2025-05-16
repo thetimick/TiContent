@@ -1,7 +1,6 @@
 ﻿using TiContent.Services.Storage;
-using TiContent.Windows.Main.Pages;
+using TiContent.ViewModels.Main;
 using Wpf.Ui;
-using MainWindowViewModel = TiContent.ViewModels.Main.MainWindowViewModel;
 
 namespace TiContent.Windows.Main;
 

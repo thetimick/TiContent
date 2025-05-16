@@ -7,8 +7,10 @@
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Humanizer;
 using Microsoft.Extensions.Logging;
@@ -17,12 +19,19 @@ using TiContent.Components.Wrappers;
 using TiContent.DataSources;
 using TiContent.Entities.HydraLinks;
 using Wpf.Ui.Violeta.Controls;
+using Process = System.Diagnostics.Process;
 
 namespace TiContent.ViewModels.HydraLinks;
 
 public partial class HydraLinksWindowViewModel : ObservableRecipient, IRecipient<HydraLinksWindowViewModel.MessageEntity> {
     // Observable
-
+    
+    [ObservableProperty]
+    public partial string Title { get; set; } = string.Empty;
+    
+    [ObservableProperty]
+    public partial string Description { get; set; } = string.Empty;
+    
     [ObservableProperty]
     public partial SortModel Sort { get; set; } = new();
     
@@ -59,45 +68,57 @@ public partial class HydraLinksWindowViewModel : ObservableRecipient, IRecipient
     
     public void Receive(MessageEntity message)
     {
-        Query = message.Query.Trim().Humanize(LetterCasing.LowerCase);
+        Title = message.Query;
+        Description = string.Empty;
+        Sort.SortIsEnabled = false;
+        Filters.FilterIsEnabled = false;
+        Items = [];
+        
         ObtainItems();
+    }
+    
+    // Commands
+
+    [RelayCommand]
+    private void TapOnCard(Guid id)
+    {
+        var link = _items.FirstOrDefault(entity => entity.Id == id)?.Links.FirstOrDefault();
+        if  (link is null)
+            return;
+        
+        Process.Start(
+            new ProcessStartInfo
+            {
+                FileName = link, 
+                UseShellExecute = true
+            }
+        );
     }
     
     // Property Changed
     
     private void SortOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (_items.IsEmpty())
+            return;
+        
         Items = e.PropertyName switch
         {
-            nameof(SortModel.SortItemsSelectedIndex) => Sort.SortItemsSelectedIndex switch
-            {
-                0 => Items.OrderByDescending(entity => entity.Title).ToObservable(),
-                1 => Items.OrderByDescending(entity => entity.UploadDate).ToObservable(),
-                2 => Items.OrderByDescending(entity => entity.FileSize).ToObservable(),
-                _ => Items
-            },
+            nameof(Sort.SortItemsSelectedIndex) => SortAndFilterItems(_items).ToObservable(),
             _ => Items
         };
     }
     
     private void FiltersOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        switch (e.PropertyName)
-        {
-            case nameof(FiltersModel.FilterOnOwnerSelectedIndex):
-                if (_items.IsEmpty())
-                    return;
-                
-                if (Filters.FilterOnOwnerSelectedIndex < 2)
-                {
-                    Items = _items.ToObservable();
-                    return;
-                }
+        if (_items.IsEmpty())
+            return;
         
-                var owner = Filters.FilterOnOwner[Filters.FilterOnOwnerSelectedIndex].ToString();
-                Items = _items.Where(entity => entity.Owner == owner).ToObservable();
-                break;
-        }
+        Items = e.PropertyName switch
+        {
+            nameof(FiltersModel.FilterSelectedIndex) => SortAndFilterItems(_items).ToObservable(),
+            _ => Items
+        };
     }
 }
 
@@ -110,7 +131,8 @@ public partial class HydraLinksWindowViewModel
             {
                 try
                 {
-                    var items = await _hydraLinksDataSource.SearchLinksAsync(Query);
+                    var query = Title.Trim().Humanize(LetterCasing.LowerCase);
+                    var items = await _hydraLinksDataSource.SearchLinksAsync(query);
                     DispatcherWrapper.InvokeOnMain(() => SetItems(items));
                 }
                 catch (Exception ex)
@@ -126,32 +148,60 @@ public partial class HydraLinksWindowViewModel
     {
         _items = items;
         SetFilters();
+        
+        Items = SortAndFilterItems(items).ToObservable();
+        Description = items.IsEmpty() ? "ничего не найдено" : $"найдено {items.Count} элемент(-ов)";
     }
 
     private void SetFilters()
     {
-        var filterItems = new List<object> { new ComboBoxItem { Content = "Все" } };
+        var filterItems = new List<object> { "Все" };
+        
+        // Owners
         
         var owners = _items
             .Select(entity => entity.Owner)
             .Distinct()
             .OrderDescending()
             .ToList();
-        
-        Filters.FilterOnOwnerIsEnabled = !owners.IsEmpty();
-        
-        if (owners.IsEmpty())
+
+        if (!owners.IsEmpty())
         {
-            Filters.FilterOnOwner = filterItems.ToObservable();
-            Filters.FilterOnOwnerSelectedIndex = 0;
-            return;
+            filterItems.Add(new Separator());
+            filterItems.AddRange(owners);
         }
         
-        filterItems.Add(new Separator());
-        filterItems.AddRange(owners);
+        Filters.FilterItems = filterItems.ToObservable();
+        Filters.FilterIsEnabled = filterItems.Count > 3;
+        Filters.FilterSelectedIndex = 0;
+    }
+    
+    private List<HydraLinksEntity> SortAndFilterItems(IEnumerable<HydraLinksEntity> items)
+    {
+        var listItems = items as List<HydraLinksEntity> ?? items.ToList();
+        if (listItems.IsEmpty())
+            return [];
         
-        Filters.FilterOnOwner = filterItems.ToObservable();
-        Filters.FilterOnOwnerSelectedIndex = 0;
+        var filter = listItems.FirstOrDefault(entity => entity.Owner == Filters.FilterItems[Filters.FilterSelectedIndex].ToString())?.Owner;
+        var sort = Sort.SortItemsSelectedIndex;
+
+        // Фильтрация
+        if (filter != null)
+            listItems = listItems.Where(entity => entity.Owner == filter).ToList();
+
+        // Сортировка
+        listItems = sort switch
+        {
+            0 => listItems.OrderByDescending(entity => entity.Title).ToList(),
+            1 => listItems.OrderByDescending(entity => entity.UploadDate).ToList(),
+            2 => listItems.OrderByDescending(entity => entity.FileSize).ToList(),
+            _ => listItems.ToList()
+        };
+        
+        Sort.SortIsEnabled = listItems.Count > 1;
+        Filters.FilterIsEnabled = Filters.FilterItems.Count > 3;
+
+        return listItems;
     }
 }
 
@@ -169,27 +219,23 @@ public partial class HydraLinksWindowViewModel
             new ComboBoxItem { Content = "По Дате" },
             new ComboBoxItem { Content = "По Размеру" }
         ];
+
+        [ObservableProperty] 
+        public partial int SortItemsSelectedIndex { get; set; } = 1;
         
-        [ObservableProperty]
-        public partial int SortItemsSelectedIndex { get; set; }
+        [ObservableProperty] 
+        public partial bool SortIsEnabled { get; set; } = false;
     }
 
     public partial class FiltersModel : ObservableObject
     {
         [ObservableProperty]
-        public partial ObservableCollection<object> FilterOnOwner { get; set; } = [];
+        public partial ObservableCollection<object> FilterItems { get; set; } = [];
     
         [ObservableProperty]
-        public partial int FilterOnOwnerSelectedIndex { get; set; }
+        public partial int FilterSelectedIndex { get; set; }
 
         [ObservableProperty] 
-        public partial bool FilterOnOwnerIsEnabled { get; set; } = false;
-
-        public void Reset()
-        {
-            FilterOnOwner = [];
-            FilterOnOwnerSelectedIndex = 0;
-            FilterOnOwnerIsEnabled = false;
-        }
+        public partial bool FilterIsEnabled { get; set; } = false;
     }
 }
