@@ -177,6 +177,42 @@ namespace TiContent.Resources.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to empty.
+        /// </summary>
+        public static string HydraLinksWindow_Description_Empty {
+            get {
+                return ResourceManager.GetString("HydraLinksWindow.Description.Empty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to founded {0} items.
+        /// </summary>
+        public static string HydraLinksWindow_Description_WithContent {
+            get {
+                return ResourceManager.GetString("HydraLinksWindow.Description.WithContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Search....
+        /// </summary>
+        public static string HydraLinksWindow_Search {
+            get {
+                return ResourceManager.GetString("HydraLinksWindow.Search", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TiContent - HydraLinks.
+        /// </summary>
+        public static string HydraLinksWindow_Title {
+            get {
+                return ResourceManager.GetString("HydraLinksWindow.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Catalogue.
         /// </summary>
         public static string MainWindow_NavigationItemHeader {

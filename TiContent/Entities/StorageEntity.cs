@@ -2,6 +2,11 @@
 
 public record StorageEntity
 {
+    public record DataBaseTimestampEntity
+    {
+        public DateTime HydraLinks { get; set; } = DateTime.UnixEpoch;
+    }
+    
     public record UrlsEntity
     {
         public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
@@ -35,6 +40,7 @@ public record StorageEntity
         public int TypeIndex { get; set; }
     }
     
+    public DataBaseTimestampEntity DataBaseTimestamp { get; init; } = new();
     public UrlsEntity Urls { get; init; } = new();
     public KeysEntity Keys { get; init; } = new();
     public WindowEntity Window { get; init; } = new();

@@ -195,4 +195,16 @@
   <data name="GamesPage.Search.Placeholder" xml:space="preserve">
     <value>Поиск по каталогу...</value>
   </data>
+  <data name="HydraLinksWindow.Title" xml:space="preserve">
+    <value>TiContent - HydraLinks</value>
+  </data>
+  <data name="HydraLinksWindow.Search" xml:space="preserve">
+    <value>Поиск...</value>
+  </data>
+  <data name="HydraLinksWindow.Description.Empty" xml:space="preserve">
+    <value>ничего не найдено...</value>
+  </data>
+  <data name="HydraLinksWindow.Description.WithContent" xml:space="preserve">
+    <value>найдено {0} элемент(-ов)</value>
+  </data>
 </root>

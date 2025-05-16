@@ -44,18 +44,14 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate>
-                    <ui:CardAction Margin="0,0,0,4" IsChevronVisible="False">
-                        <ui:AutoGrid ColumnDefinitions="*, Auto, Auto" RowCount="2">
-                            <ui:AutoGrid
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                ColumnDefinitions="Auto, *">
-
+                    <ui:CardExpander Margin="0,0,0,4">
+                        <ui:CardExpander.Header>
+                            <ui:AutoGrid ColumnDefinitions="Auto, *">
                                 <ui:Image
                                     Grid.Column="0"
                                     Width="100"
                                     Height="142"
-                                    Margin="0,0,8,0"
+                                    Margin="0,0,12,0"
                                     CornerRadius="8"
                                     Source="{Binding PosterPath, Converter={StaticResource TMDBPosterPathConverter}}"
                                     Stretch="Fill" />
@@ -68,8 +64,8 @@
 
                                     <ui:TextBlock
                                         Grid.Row="1"
-                                        Appearance="Tertiary"
-                                        FontTypography="Caption"
+                                        Appearance="Secondary"
+                                        FontTypography="BodyStrong"
                                         Text="{Binding OriginalTitle}" />
 
                                     <ui:TextBlock
@@ -84,44 +80,17 @@
                                         ToolTip="{Binding Overview}" />
                                 </ui:AutoGrid>
                             </ui:AutoGrid>
+                        </ui:CardExpander.Header>
 
-                            <Separator Grid.Column="1" Margin="4,0,8,0" />
-
-                            <ui:StackPanel
-                                Grid.Column="2"
-                                Margin="0,8,0,0"
-                                VerticalAlignment="Center"
-                                Orientation="Vertical"
-                                Spacing="4">
-
-                                <ui:DropDownButton
-                                    Height="32"
-                                    CornerRadius="16"
-                                    Icon="{ui:SymbolIcon Share24}">
-
-                                    <ui:DropDownButton.Flyout>
-                                        <ContextMenu>
-                                            <MenuItem Header="Google" Icon="{ui:SymbolIcon Open24}" />
-                                            <MenuItem Header="The Movie Database" Icon="{ui:SymbolIcon Open24}" />
-                                            <MenuItem Header="iMDB" Icon="{ui:SymbolIcon Open24}" />
-                                        </ContextMenu>
-                                    </ui:DropDownButton.Flyout>
-                                </ui:DropDownButton>
-
-                                <ui:DropDownButton
-                                    Height="32"
-                                    CornerRadius="16"
-                                    Icon="{ui:SymbolIcon Merge24}">
-
-                                    <ui:DropDownButton.Flyout>
-                                        <ContextMenu>
-                                            <MenuItem Header="Jacred" Icon="{ui:SymbolIcon Open24}" />
-                                        </ContextMenu>
-                                    </ui:DropDownButton.Flyout>
-                                </ui:DropDownButton>
-                            </ui:StackPanel>
-                        </ui:AutoGrid>
-                    </ui:CardAction>
+                        <ui:StackPanel Orientation="Horizontal" Spacing="4">
+                            <ui:Button
+                                Height="32"
+                                Command="{Binding DataContext.TapOnSearchButtonCommand, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"
+                                CommandParameter="{Binding Id}"
+                                Content="Открыть источники"
+                                CornerRadius="16" />
+                        </ui:StackPanel>
+                    </ui:CardExpander>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

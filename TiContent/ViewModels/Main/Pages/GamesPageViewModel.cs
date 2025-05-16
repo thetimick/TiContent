@@ -147,7 +147,7 @@ public partial class GamesPageViewModel: ObservableObject
         );
     }
 
-    private void LoadItems(int take = 12, int skip = 0, bool pagination = false, CancellationToken token = default)
+    private void LoadItems(int take = 24, int skip = 0, bool pagination = false, CancellationToken token = default)
     {
         Task.Run(
             async () =>

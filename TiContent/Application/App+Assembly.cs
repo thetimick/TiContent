@@ -15,9 +15,11 @@ using TiContent.Services.Jacred;
 using TiContent.Services.Storage;
 using TiContent.Services.TMDB;
 using TiContent.ViewModels.HydraLinks;
+using TiContent.ViewModels.Jacred;
 using TiContent.ViewModels.Main;
 using TiContent.ViewModels.Main.Pages;
 using TiContent.Windows.HydraLinks;
+using TiContent.Windows.Jacred;
 using TiContent.Windows.Main;
 using TiContent.Windows.Main.Pages;
 using TiContent.Workers;
@@ -108,6 +110,9 @@ public partial class App
 
         services.AddTransient<HydraLinksWindow>();
         services.AddScoped<HydraLinksWindowViewModel>();
+
+        services.AddTransient<JacredWindow>();
+        services.AddTransient<JacredWindowViewModel>();
 
         // Pages & ViewModels
         services.AddSingleton<HomePage>();

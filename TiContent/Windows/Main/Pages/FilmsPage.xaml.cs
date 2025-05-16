@@ -12,7 +12,7 @@ namespace TiContent.Windows.Main.Pages;
 
 public partial class FilmsPage
 {
-    public FilmsPageViewModel ViewModel { get; }
+    private FilmsPageViewModel ViewModel { get; }
     
     public FilmsPage(FilmsPageViewModel viewModel)
     {

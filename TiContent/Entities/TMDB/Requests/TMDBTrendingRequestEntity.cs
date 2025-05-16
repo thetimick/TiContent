@@ -12,6 +12,8 @@ public record TMDBTrendingRequestEntity
     public ContentType Content { get; init; }
     public PeriodType Period { get; set; }
 
+    public long Page { get; set; } = 1;
+
     public string RawContent {
         get
         {

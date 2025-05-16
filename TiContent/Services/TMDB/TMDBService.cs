@@ -36,7 +36,8 @@ public partial class TMDBService : ITMDBService
 
     public async Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity requestEntity, CancellationToken token = default)
     {
-        var request = MakeRequest($"/3/trending/{requestEntity.RawContent}/{requestEntity.RawRange}");
+        var request = MakeRequest($"/3/trending/{requestEntity.RawContent}/{requestEntity.RawRange}")
+            .AddParameter("page", requestEntity.Page);
         var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
         
         if (response is { IsSuccessful: true, Data: { } data })

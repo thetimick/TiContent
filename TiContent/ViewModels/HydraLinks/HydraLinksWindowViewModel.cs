@@ -15,9 +15,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using TiContent.Components.Extensions;
+using TiContent.Components.Helpers;
 using TiContent.Components.Wrappers;
 using TiContent.DataSources;
 using TiContent.Entities.HydraLinks;
+using TiContent.Resources.Localization;
 using Wpf.Ui.Violeta.Controls;
 using Process = System.Diagnostics.Process;
 
@@ -53,11 +55,13 @@ public partial class HydraLinksWindowViewModel : ObservableRecipient, IRecipient
     
     // Lifecycle
     
-    public HydraLinksWindowViewModel(IHydraLinksDataSource hydraLinksDataSource, ILogger<HydraLinksWindowViewModel> logger)
-    {
+    public HydraLinksWindowViewModel(
+        IHydraLinksDataSource hydraLinksDataSource, 
+        ILogger<HydraLinksWindowViewModel> logger
+    ) {
         _hydraLinksDataSource = hydraLinksDataSource;
         _logger = logger;
-        
+
         WeakReferenceMessenger.Default.Register(this);
         
         Sort.PropertyChanged += SortOnPropertyChanged;
@@ -86,13 +90,7 @@ public partial class HydraLinksWindowViewModel : ObservableRecipient, IRecipient
         if  (link is null)
             return;
         
-        Process.Start(
-            new ProcessStartInfo
-            {
-                FileName = link, 
-                UseShellExecute = true
-            }
-        );
+        OpenHelper.OpenUrl(link);
     }
     
     // Property Changed
@@ -148,9 +146,8 @@ public partial class HydraLinksWindowViewModel
     {
         _items = items;
         SetFilters();
-        
         Items = SortAndFilterItems(items).ToObservable();
-        Description = items.IsEmpty() ? "ничего не найдено" : $"найдено {items.Count} элемент(-ов)";
+        Description = items.IsEmpty() ? Strings.HydraLinksWindow_Description_Empty : string.Format(Strings.HydraLinksWindow_Description_WithContent, items.Count);
     }
 
     private void SetFilters()

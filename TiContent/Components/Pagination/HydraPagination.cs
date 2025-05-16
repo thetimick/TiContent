@@ -9,14 +9,20 @@ namespace TiContent.Components.Pagination;
 
 public class HydraPagination(int allItemsCount)
 {
-    public const int ItemsOnPage = 12;
+    // Constants
+    
+    public const int ItemsOnPage = 24;
 
+    // Public Props
+    
     public int AllItemsCount { get; init; } = allItemsCount;
 
     public int CurrentTakeValue { get; private set; } = ItemsOnPage;
     public int CurrentSkipValue { get; private set; }
     
     public bool InProgress;
+    
+    // Public Methods
 
     public void Next()
     {

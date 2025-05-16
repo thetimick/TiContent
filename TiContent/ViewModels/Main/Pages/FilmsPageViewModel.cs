@@ -7,15 +7,20 @@
 
 using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
-using Humanizer;
+using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
 using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
+using TiContent.Components.Pagination;
 using TiContent.Components.Wrappers;
 using TiContent.Entities.TMDB;
 using TiContent.Entities.TMDB.Requests;
 using TiContent.Services.TMDB;
+using TiContent.ViewModels.Jacred;
+using TiContent.Windows.Jacred;
 using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.ViewModels.Main.Pages;
@@ -37,20 +42,21 @@ public partial class FilmsPageViewModel : ObservableObject
     
     private readonly ITMDBService _tmdbService;
     private readonly ILogger<FilmsPageViewModel> _logger;
+    private readonly IServiceProvider _provider;
     
     private readonly RateLimitedAction _debounceOnQueryChangedAction;
     
     private CancellationTokenSource? _debounceCancellationToken;
-    
-    private string PrQuery => Query.Trim().Humanize(LetterCasing.LowerCase);
+    private TMDBPagination _pagination = new();
     
     // Lifecycle
     
-    public FilmsPageViewModel(ITMDBService tmdbService, ILogger<FilmsPageViewModel> logger)
+    public FilmsPageViewModel(ITMDBService tmdbService, ILogger<FilmsPageViewModel> logger, IServiceProvider provider)
     {
         _tmdbService = tmdbService;
         _logger = logger;
-        
+        _provider = provider;
+
         _debounceOnQueryChangedAction = Debouncer.Debounce(() => ObtainItems(true), TimeSpan.FromSeconds(1));
     }
     
@@ -79,6 +85,20 @@ public partial class FilmsPageViewModel : ObservableObject
         
         _debounceOnQueryChangedAction.Invoke();
     }
+    
+    // Commands
+
+    [RelayCommand]
+    private void TapOnSearchButton(long id)
+    {
+        var title = Items.FirstOrDefault(item => item.Id == id)?.Title;
+        if (title.IsNullOrEmpty())
+            return;
+
+        var window = _provider.GetRequiredService<JacredWindow>();
+        WeakReferenceMessenger.Default.Send(new JacredWindowViewModel.RecipientModel(title));
+        window.ShowDialog();
+    }
 
     // Private Methods
 
@@ -92,13 +112,23 @@ public partial class FilmsPageViewModel : ObservableObject
 
         ViewState = ViewStateEnum.InProgress;
         
-        LoadItems(token: _debounceCancellationToken.Token);
+        LoadItems(false, _debounceCancellationToken.Token);
+    }
+
+    private void ObtainItemsWithPagination()
+    {
+        if (_pagination.InProgress || !_pagination.HasMorePage)
+            return;
+        
+        _pagination.NextPage();
+        
+        _debounceCancellationToken?.Cancel();
+        _debounceCancellationToken = new CancellationTokenSource();
+        
+        LoadItems(true, _debounceCancellationToken.Token);
     }
     
-    private void ObtainItemsWithPagination()
-    { }
-    
-    private void LoadItems(CancellationToken token = default)
+    private void LoadItems(bool pagination = false, CancellationToken token = default)
     {
         Task.Run(
             async () =>
@@ -108,10 +138,15 @@ public partial class FilmsPageViewModel : ObservableObject
                     var request = new TMDBTrendingRequestEntity
                     {
                         Content = TMDBTrendingRequestEntity.ContentType.Movies,
-                        Period = TMDBTrendingRequestEntity.PeriodType.Week
+                        Period = TMDBTrendingRequestEntity.PeriodType.Week,
+                        Page = _pagination.Page
                     };
                     var entity = await _tmdbService.ObtainTrendingAsync(request, token);
-                    DispatcherWrapper.InvokeOnMain(() => SetItems(entity));
+                    DispatcherWrapper.InvokeOnMain(() => SetItems(entity, pagination));
+                    
+                    _pagination.LoadingCompleted();
+                    if (!pagination)
+                        _pagination.Init(entity.TotalPages);
                 }
                 catch (Exception ex)
                 {
@@ -130,15 +165,19 @@ public partial class FilmsPageViewModel : ObservableObject
         );
     }
     
-    private void SetItems(TMDBResponseEntity responseEntity)
+    private void SetItems(TMDBResponseEntity entity, bool pagination)
     {
-        if (responseEntity.Results.IsEmpty())
+        if (entity.Results.IsEmpty() || entity.Results is not { } results)
         {
             ViewState = ViewStateEnum.Empty;
             return;
         }
-        
-        Items = responseEntity.Results?.ToObservable() ?? [];
+
+        if (pagination)
+            Items.AddRange(results.ToObservable());
+        else 
+            Items = results.ToObservable();
+            
         ViewState = ViewStateEnum.Content;
     }
 }
