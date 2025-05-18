@@ -18,7 +18,7 @@ using TiContent.Components.Extensions;
 using TiContent.Components.Pagination;
 using TiContent.Components.Wrappers;
 using TiContent.DataSources;
-using TiContent.Entities.Hydra;
+using TiContent.Entities.Legacy.Hydra;
 using TiContent.Services.Hydra.V2;
 using TiContent.ViewModels.HydraLinks;
 using TiContent.Windows.HydraLinks;

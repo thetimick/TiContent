@@ -8,7 +8,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
-namespace TiContent.Entities.Hydra;
+namespace TiContent.Entities.Legacy.Hydra;
 
 public record HydraApiSearchRequestParamsEntity
 {

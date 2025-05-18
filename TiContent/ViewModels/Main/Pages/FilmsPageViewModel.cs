@@ -6,7 +6,7 @@
 // ⠀
 
 using System.Collections.ObjectModel;
-using System.Diagnostics.CodeAnalysis;
+using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -17,7 +17,8 @@ using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
 using TiContent.Components.Wrappers;
 using TiContent.DataSources;
-using TiContent.Entities.TMDB;
+using TiContent.Entities.API.TMDB;
+using TiContent.Entities.ViewModel;
 using TiContent.ViewModels.Jacred;
 using TiContent.Windows.Jacred;
 using Wpf.Ui.Violeta.Controls;
@@ -38,23 +39,27 @@ public partial class FilmsPageViewModel : ObservableObject
     public partial int FilterByContentSelectedIndex { get; set; } = 0;
 
     [ObservableProperty]
-    public partial ObservableCollection<TMDBResponseEntity.ItemEntity> Items { get; set; } = [];
+    public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
     
     // Private Props
     
-    private readonly IFilmsPageContentDataSource _dataSource;
-    private readonly ILogger<FilmsPageViewModel> _logger;
     private readonly IServiceProvider _provider;
+
+    private readonly IFilmsPageContentDataSource _dataSource;
+    private readonly IMapper _mapper;
+    private readonly ILogger<FilmsPageViewModel> _logger;
     
     private readonly RateLimitedAction _debounceOnQueryChangedAction;
     
     // Lifecycle
     
-    public FilmsPageViewModel(IFilmsPageContentDataSource dataSource, ILogger<FilmsPageViewModel> logger, IServiceProvider provider)
+    public FilmsPageViewModel(IServiceProvider provider)
     {
-        _dataSource = dataSource;
-        _logger = logger;
         _provider = provider;
+
+        _dataSource = provider.GetRequiredService<IFilmsPageContentDataSource>();
+        _mapper = provider.GetRequiredService<IMapper>();
+        _logger = provider.GetRequiredService<ILogger<FilmsPageViewModel>>();
 
         _debounceOnQueryChangedAction = Debouncer.Debounce(
             () =>
@@ -106,7 +111,7 @@ public partial class FilmsPageViewModel : ObservableObject
     // Commands
 
     [RelayCommand]
-    private void TapOnSearchButton(long id)
+    private void TapOnSearchButton(string id)
     {
         var title = Items.FirstOrDefault(item => item.Id == id)?.Title;
         if (title.IsNullOrEmpty())
@@ -133,10 +138,10 @@ public partial class FilmsPageViewModel : ObservableObject
                     DispatcherWrapper.InvokeOnMain(
                         () =>
                         {
-                            if (Items == items.ToObservable())
+                            var preparedItems = _mapper.Map<List<TMDBResponseEntity.ItemEntity>, ObservableCollection<FilmsPageItemEntity>>(items);
+                            if (Items == preparedItems)
                                 return;
-
-                            Items = items.ToObservable();
+                            Items = preparedItems;
                             ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.Content;
                         }
                     );

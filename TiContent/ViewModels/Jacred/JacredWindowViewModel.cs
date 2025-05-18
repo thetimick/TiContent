@@ -14,6 +14,7 @@ using TiContent.Components.Extensions;
 using TiContent.Components.Helpers;
 using TiContent.Components.Wrappers;
 using TiContent.Entities;
+using TiContent.Entities.Legacy;
 using TiContent.Services.Jacred;
 using Wpf.Ui.Violeta.Controls;
 

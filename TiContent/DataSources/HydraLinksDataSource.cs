@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using TiContent.Application;
 using TiContent.Components.Extensions;
 using TiContent.Components.Helpers;
-using TiContent.Entities.HydraLinks;
+using TiContent.Entities.Legacy.HydraLinks;
 using TiContent.Services.HydraLinks;
 using TiContent.Services.Storage;
 

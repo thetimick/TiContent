@@ -11,7 +11,7 @@ using TiContent.Components.Extensions;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace TiContent.Entities;
+namespace TiContent.Entities.Legacy;
 
 public record JacredEntity
 {

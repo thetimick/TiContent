@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text.Json;
 using TiContent.Entities;
+using TiContent.Entities.Legacy;
 
 namespace TiContent.Services.Storage;
 

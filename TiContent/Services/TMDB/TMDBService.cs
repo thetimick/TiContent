@@ -7,8 +7,9 @@
 
 using RestSharp;
 using TiContent.Components.Helpers;
-using TiContent.Entities.TMDB;
-using TiContent.Entities.TMDB.Requests;
+using TiContent.Entities.API.TMDB;
+using TiContent.Entities.API.TMDB.Requests;
+using TiContent.Entities.API.TMDB.Requests.Shared;
 using TiContent.Services.Storage;
 
 namespace TiContent.Services.TMDB;
@@ -36,7 +37,7 @@ public partial class TMDBService : ITMDBService
 
     public async Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity requestEntity, CancellationToken token = default)
     {
-        var request = MakeRequest($"/3/trending/{requestEntity.RawContent}/{requestEntity.RawRange}")
+        var request = MakeRequest($"/3/trending/{requestEntity.Content.RawValue()}/{requestEntity.Period.RawValue()}")
             .AddParameter("page", requestEntity.Page);
         var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
         
@@ -49,7 +50,7 @@ public partial class TMDBService : ITMDBService
 
     public async Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity requestEntity, CancellationToken token = default)
     {
-        var request = MakeRequest($"/3/search/{requestEntity.RawContent}")
+        var request = MakeRequest($"/3/search/{requestEntity.Content.RawValue()}")
             .AddParameter("query", requestEntity.Query)
             .AddParameter("page", requestEntity.Page);
         var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);

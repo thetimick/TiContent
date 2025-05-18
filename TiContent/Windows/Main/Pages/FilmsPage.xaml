@@ -54,20 +54,20 @@
                                     Height="142"
                                     Margin="0,0,12,0"
                                     CornerRadius="8"
-                                    Source="{Binding PosterPath, Converter={StaticResource TMDBPosterPathConverter}}"
+                                    Source="{Binding ImageUrl, Converter={StaticResource TMDBPosterPathConverter}}"
                                     Stretch="Fill" />
 
                                 <ui:AutoGrid Grid.Column="1" RowCount="3">
                                     <ui:TextBlock
                                         Grid.Row="0"
                                         FontTypography="Subtitle"
-                                        Text="{Binding TitleOrName}" />
+                                        Text="{Binding Title}" />
 
                                     <ui:TextBlock
                                         Grid.Row="1"
                                         Appearance="Secondary"
                                         FontTypography="BodyStrong"
-                                        Text="{Binding OriginalTitleOrOriginalName}" />
+                                        Text="{Binding OriginalTitle}" />
 
                                     <ui:TextBlock
                                         Grid.Row="2"
@@ -75,10 +75,10 @@
                                         Margin="0,4,0,0"
                                         Appearance="Tertiary"
                                         FontTypography="Caption"
-                                        Text="{Binding Overview}"
+                                        Text="{Binding Description}"
                                         TextTrimming="WordEllipsis"
                                         TextWrapping="Wrap"
-                                        ToolTip="{Binding Overview}" />
+                                        ToolTip="{Binding Description}" />
                                 </ui:AutoGrid>
                             </ui:AutoGrid>
                         </ui:CardExpander.Header>

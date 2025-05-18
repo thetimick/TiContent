@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TiContent.Components.Wrappers;
 using TiContent.Entities;
+using TiContent.Entities.Legacy;
 using TiContent.Services.Storage;
 using TiContent.Windows.Main;
 

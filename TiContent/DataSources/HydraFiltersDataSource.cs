@@ -5,7 +5,7 @@
 // Created by the_timick on 12.05.2025.
 // ⠀
 
-using TiContent.Entities.Hydra;
+using TiContent.Entities.Legacy.Hydra;
 using TiContent.Services.Hydra.V1;
 
 namespace TiContent.DataSources;

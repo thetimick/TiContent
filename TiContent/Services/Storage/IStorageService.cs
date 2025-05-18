@@ -1,4 +1,5 @@
 ﻿using TiContent.Entities;
+using TiContent.Entities.Legacy;
 
 namespace TiContent.Services.Storage;
 

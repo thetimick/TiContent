@@ -7,7 +7,7 @@
 
 using RestSharp;
 using TiContent.Components.Helpers;
-using TiContent.Entities.Hydra;
+using TiContent.Entities.Legacy.Hydra;
 using TiContent.Services.Storage;
 
 namespace TiContent.Services.Hydra.V2;

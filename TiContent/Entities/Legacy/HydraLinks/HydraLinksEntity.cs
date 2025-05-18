@@ -7,7 +7,7 @@
 
 using System.ComponentModel.DataAnnotations;
 
-namespace TiContent.Entities.HydraLinks;
+namespace TiContent.Entities.Legacy.HydraLinks;
 
 public sealed record HydraLinksEntity
 {

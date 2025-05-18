@@ -18,7 +18,7 @@ using TiContent.Components.Extensions;
 using TiContent.Components.Helpers;
 using TiContent.Components.Wrappers;
 using TiContent.DataSources;
-using TiContent.Entities.HydraLinks;
+using TiContent.Entities.Legacy.HydraLinks;
 using TiContent.Resources.Localization;
 using Wpf.Ui.Violeta.Controls;
 using Process = System.Diagnostics.Process;

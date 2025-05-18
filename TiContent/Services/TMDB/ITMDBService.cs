@@ -5,8 +5,8 @@
 // Created by the_timick on 13.05.2025.
 // ⠀
 
-using TiContent.Entities.TMDB;
-using TiContent.Entities.TMDB.Requests;
+using TiContent.Entities.API.TMDB;
+using TiContent.Entities.API.TMDB.Requests;
 
 namespace TiContent.Services.TMDB;
 

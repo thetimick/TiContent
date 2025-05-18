@@ -1,11 +1,13 @@
 ﻿using System.Text.RegularExpressions;
+using AutoMapper.EquivalencyExpression;
 using Humanizer.Bytes;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using TiContent.Components.Interceptors;
 using TiContent.DataSources;
-using TiContent.Entities.HydraLinks;
+using TiContent.Entities.Legacy.HydraLinks;
+using TiContent.Entities.ViewModel;
 using TiContent.Providers;
 using TiContent.Services.Cub;
 using TiContent.Services.Hydra.V1;
@@ -79,6 +81,10 @@ public partial class App
         services.AddAutoMapper(
             configuration =>
             {
+                configuration.AddCollectionMappers();
+                
+                configuration.AddProfile<FilmsPageItemEntity.MapProfile>();
+                
                 configuration.CreateMap<HydraLinksResponseEntity.ItemsEntity, HydraLinksEntity>()
                     .ForMember(
                         dest => dest.CleanTitle,

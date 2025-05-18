@@ -5,7 +5,7 @@
 // Created by the_timick on 14.05.2025.
 // ⠀
 
-using TiContent.Entities.Hydra;
+using TiContent.Entities.Legacy.Hydra;
 
 namespace TiContent.Services.Hydra.V2;
 

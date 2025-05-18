@@ -1,5 +1,5 @@
 ﻿// ⠀
-// CubEntity.cs
+// TMDBEntity.cs
 // TiContent
 // 
 // Created by the_timick on 12.05.2025.
@@ -13,9 +13,9 @@ using System.Text.Json.Serialization;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace TiContent.Entities;
+namespace TiContent.Entities.API.TMDB;
 
-public record CubEntity
+public record TMDBResponseEntity
 {
     [JsonPropertyName("page")]
     public long? Page { get; set; }
@@ -48,7 +48,7 @@ public record CubEntity
 
         [JsonPropertyName("original_title")]
         public string? OriginalTitle { get; set; }
-
+        
         [JsonPropertyName("names")]
         public List<string>? Names { get; set; }
 

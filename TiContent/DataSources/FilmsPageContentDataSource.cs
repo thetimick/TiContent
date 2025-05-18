@@ -8,9 +8,9 @@
 using Humanizer;
 using TiContent.Components.Extensions;
 using TiContent.Components.Pagination;
-using TiContent.Entities.TMDB;
-using TiContent.Entities.TMDB.Requests;
-using TiContent.Providers;
+using TiContent.Entities.API.TMDB;
+using TiContent.Entities.API.TMDB.Requests;
+using TiContent.Entities.API.TMDB.Requests.Shared;
 using TiContent.Services.TMDB;
 
 namespace TiContent.DataSources;
@@ -61,7 +61,7 @@ public partial class FilmsPageContentDataSource
         var request = new TMDBTrendingRequestEntity
         {
             Period = TMDBTrendingRequestEntity.PeriodType.Week, 
-            Content = content.MapToTrendingContentType(),
+            Content = content.MapToContentType(),
             Page = _pagination.Page
         };
 
@@ -86,7 +86,7 @@ public partial class FilmsPageContentDataSource
         
         var request = new TMDBSearchRequestEntity
         {
-            Content = content.MapToSearchContentType(),
+            Content = content.MapToContentType(),
             Query = query,
             Page = _pagination.Page
         };
@@ -116,24 +116,13 @@ public partial class FilmsPageContentDataSource
 
 internal static class IntExtensions
 {
-    public static TMDBTrendingRequestEntity.ContentType MapToTrendingContentType(this int index)
+    public static TMDBRequestContentType MapToContentType(this int index)
     {
         return index switch
         {
-            0 => TMDBTrendingRequestEntity.ContentType.Movies,
-            1 => TMDBTrendingRequestEntity.ContentType.Serials,
-            2 => TMDBTrendingRequestEntity.ContentType.Anime,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
-        };
-    }
-    
-    public static TMDBSearchRequestEntity.ContentType MapToSearchContentType(this int index)
-    {
-        return index switch
-        {
-            0 => TMDBSearchRequestEntity.ContentType.Movies,
-            1 => TMDBSearchRequestEntity.ContentType.Serials,
-            2 => TMDBSearchRequestEntity.ContentType.Anime,
+            0 => TMDBRequestContentType.Movies,
+            1 => TMDBRequestContentType.Serials,
+            2 => TMDBRequestContentType.Anime,
             _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
         };
     }

@@ -1,12 +1,11 @@
 ﻿// ⠀
-// TMDBEntity.cs
+// CubEntity.cs
 // TiContent
 // 
 // Created by the_timick on 12.05.2025.
 // ⠀
 
 using System.Text.Json.Serialization;
-using TiContent.Components.Extensions;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CollectionNeverUpdated.Global
@@ -14,9 +13,9 @@ using TiContent.Components.Extensions;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace TiContent.Entities.TMDB;
+namespace TiContent.Entities.Legacy;
 
-public record TMDBResponseEntity
+public record CubEntity
 {
     [JsonPropertyName("page")]
     public long? Page { get; set; }
@@ -49,7 +48,7 @@ public record TMDBResponseEntity
 
         [JsonPropertyName("original_title")]
         public string? OriginalTitle { get; set; }
-        
+
         [JsonPropertyName("names")]
         public List<string>? Names { get; set; }
 
@@ -103,14 +102,5 @@ public record TMDBResponseEntity
         
         [JsonPropertyName("kp_rating")]
         public string? KpRating { get; set; }
-        
-        [JsonIgnore]
-        public byte[]? CacheImage { get; set; }
-        
-        [JsonIgnore]
-        public string TitleOrName => Title ?? OriginalTitle ?? Name ?? OriginalName ?? "n/n";
-        
-        [JsonIgnore]
-        public string OriginalTitleOrOriginalName => OriginalTitle ?? OriginalName ?? "n/n";
     }
 }

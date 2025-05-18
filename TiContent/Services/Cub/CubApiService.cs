@@ -8,6 +8,7 @@
 using RestSharp;
 using TiContent.Components.Helpers;
 using TiContent.Entities;
+using TiContent.Entities.Legacy;
 using TiContent.Services.Storage;
 
 namespace TiContent.Services.Cub;

@@ -17,6 +17,7 @@ using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
 using TiContent.Components.Wrappers;
 using TiContent.Entities;
+using TiContent.Entities.Legacy;
 using TiContent.Services.Jacred;
 using TiContent.Services.Storage;
 

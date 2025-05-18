@@ -7,7 +7,7 @@
 
 using RestSharp;
 using TiContent.Components.Helpers;
-using TiContent.Entities.HydraLinks;
+using TiContent.Entities.Legacy.HydraLinks;
 using TiContent.Services.Storage;
 
 namespace TiContent.Services.HydraLinks;

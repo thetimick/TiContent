@@ -10,7 +10,7 @@
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace TiContent.Entities.Hydra;
+namespace TiContent.Entities.Legacy.Hydra;
 
 public record HydraApiCatalogueRequestParamsEntity
 {

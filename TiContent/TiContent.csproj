@@ -54,7 +54,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+      <PackageReference Include="AutoMapper" Version="14.0.0" />
+      <PackageReference Include="AutoMapper.Collection" Version="11.0.0" />
       <PackageReference Include="CommunityToolkit.Common" Version="8.4.0" />
       <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
       <PackageReference Include="EFCore.BulkExtensions.Sqlite" Version="9.0.1" />
@@ -83,5 +84,10 @@
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Strings.Designer.cs</LastGenOutput>
         </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Entities\API\" />
+      <Folder Include="Entities\DB\" />
     </ItemGroup>
 </Project>

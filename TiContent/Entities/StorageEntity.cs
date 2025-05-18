@@ -1,4 +1,11 @@
-﻿namespace TiContent.Entities;
+﻿// ⠀
+// StorageEntity.cs
+// TiContent
+// 
+// Created by the_timick on 18.05.2025.
+//
+
+namespace TiContent.Entities;
 
 public record StorageEntity
 {

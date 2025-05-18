@@ -7,7 +7,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TiContent.Entities;
-using TiContent.Entities.HydraLinks;
+using TiContent.Entities.Legacy.HydraLinks;
 
 namespace TiContent.Application;
 
@@ -28,12 +28,6 @@ public partial class App
             optionsBuilder.UseSqlite($"Data Source={AppConstants.FileNames.DataBaseFileName}");
             optionsBuilder.EnableSensitiveDataLogging();
             base.OnConfiguring(optionsBuilder);
-        }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<HydraLinksEntity>();
-            base.OnModelCreating(modelBuilder);
         }
     }
 }
