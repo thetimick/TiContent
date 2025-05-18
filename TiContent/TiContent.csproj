@@ -34,9 +34,6 @@
       <Page Update="Windows\Main\Pages\AboutPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </Page>
-      <Page Update="Windows\Main\Pages\HomePage.xaml">
-        <Generator>MSBuild:Compile</Generator>
-      </Page>
       <Page Update="Windows\Main\Pages\SettingsPage.xaml">
         <Generator>MSBuild:Compile</Generator>
       </Page>
@@ -62,7 +59,7 @@
       <PackageReference Include="Humanizer.Core" Version="2.14.1" />
       <PackageReference Include="JetBrains.Annotations" Version="2024.3.0" />
       <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.5" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.4" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5" />
       <PackageReference Include="RestSharp" Version="112.1.0" />
       <PackageReference Include="ThrottleDebounce" Version="2.0.1" />
       <PackageReference Include="WPF-UI" Version="4.0.2" />

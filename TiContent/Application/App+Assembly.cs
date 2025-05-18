@@ -126,9 +126,6 @@ public partial class App
         services.AddScoped<JacredWindowViewModel>();
 
         // Pages & ViewModels
-        services.AddSingleton<HomePage>();
-        services.AddSingleton<HomePageViewModel>();
-
         services.AddSingleton<FilmsPage>();
         services.AddSingleton<FilmsPageViewModel>();
         
