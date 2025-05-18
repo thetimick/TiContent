@@ -6,6 +6,7 @@
 // ⠀
 
 using Microsoft.EntityFrameworkCore;
+using TiContent.Entities;
 using TiContent.Entities.HydraLinks;
 
 namespace TiContent.Application;
@@ -17,7 +18,7 @@ public partial class App
         // Data
         
         public DbSet<HydraLinksEntity> HydraLinksItems => Set<HydraLinksEntity>();
-
+        
         // LifeCycle
         
         public AppDataBaseContext() => Database.EnsureCreated();
@@ -25,6 +26,7 @@ public partial class App
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Data Source={AppConstants.FileNames.DataBaseFileName}");
+            optionsBuilder.EnableSensitiveDataLogging();
             base.OnConfiguring(optionsBuilder);
         }
 

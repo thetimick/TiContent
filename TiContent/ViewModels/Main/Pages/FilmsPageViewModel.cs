@@ -71,7 +71,8 @@ public partial class FilmsPageViewModel : ObservableObject
     
     public void OnLoaded()
     {
-        ObtainItemsFromDataSource();
+        if (Items.IsEmpty())
+            ObtainItemsFromDataSource();
     }
     
     public void OnScrollChanged(double offset, double height)
@@ -105,7 +106,6 @@ public partial class FilmsPageViewModel : ObservableObject
     // Commands
 
     [RelayCommand]
-    [SuppressMessage("ReSharper.DPA", "DPA0002: Excessive memory allocations in SOH", MessageId = "type: System.String")]
     private void TapOnSearchButton(long id)
     {
         var title = Items.FirstOrDefault(item => item.Id == id)?.Title;

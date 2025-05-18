@@ -105,6 +105,9 @@ public record TMDBResponseEntity
         public string? KpRating { get; set; }
         
         [JsonIgnore]
+        public byte[]? CacheImage { get; set; }
+        
+        [JsonIgnore]
         public string TitleOrName => Title ?? OriginalTitle ?? Name ?? OriginalName ?? "n/n";
         
         [JsonIgnore]

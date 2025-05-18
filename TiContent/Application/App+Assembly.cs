@@ -101,6 +101,10 @@ public partial class App
                                 return ByteSize.TryParse(raw, out var size) ? size.Bytes : 0;
                             }
                         )
+                    )
+                    .ForMember(
+                        dest => dest.Link, 
+                        opt => opt.MapFrom((src, _) => src.Links?.FirstOrDefault() ?? string.Empty)
                     );
             }
         );

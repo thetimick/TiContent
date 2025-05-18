@@ -13,9 +13,13 @@ public partial class App
     private class WindowService(
         IServiceProvider provider
     ) : IHostedService, IDisposable {
+        // Private Props
         
+        private readonly AppDataBaseContext _db = provider.GetRequiredService<AppDataBaseContext>();
         private readonly IStorageService _storageService = provider.GetRequiredService<IStorageService>();
         private readonly MainWindow _mainWindow = provider.GetRequiredService<MainWindow>();
+        
+        // IHostedService
         
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -54,10 +58,10 @@ public partial class App
             return Task.CompletedTask;
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
+            await _db.SaveChangesAsync(cancellationToken);
             _storageService.Save();
-            return Task.CompletedTask;
         }
 
         public void Dispose()

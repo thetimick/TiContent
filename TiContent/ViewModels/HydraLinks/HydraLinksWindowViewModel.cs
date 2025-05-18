@@ -84,9 +84,9 @@ public partial class HydraLinksWindowViewModel : ObservableRecipient, IRecipient
     // Commands
 
     [RelayCommand]
-    private void TapOnCard(Guid id)
+    private void TapOnCard(string title)
     {
-        var link = _items.FirstOrDefault(entity => entity.Id == id)?.Links.FirstOrDefault();
+        var link = _items.FirstOrDefault(entity => entity.Title == title)?.Link;
         if  (link is null)
             return;
         

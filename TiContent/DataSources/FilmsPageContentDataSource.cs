@@ -10,6 +10,7 @@ using TiContent.Components.Extensions;
 using TiContent.Components.Pagination;
 using TiContent.Entities.TMDB;
 using TiContent.Entities.TMDB.Requests;
+using TiContent.Providers;
 using TiContent.Services.TMDB;
 
 namespace TiContent.DataSources;
@@ -68,7 +69,7 @@ public partial class FilmsPageContentDataSource
         
         if (_pagination?.HasBeenInit == false)
             _pagination.Init(response.TotalPages);
-
+        
         ApplyChangedToLocalCache(response.Results);
         return _items;
     }

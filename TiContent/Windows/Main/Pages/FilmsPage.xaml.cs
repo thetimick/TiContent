@@ -5,6 +5,7 @@
 // Created by the_timick on 06.05.2025.
 // ⠀
 
+using System.Windows;
 using System.Windows.Controls;
 using TiContent.ViewModels.Main.Pages;
 

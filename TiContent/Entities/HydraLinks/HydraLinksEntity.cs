@@ -9,17 +9,14 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TiContent.Entities.HydraLinks;
 
-public record HydraLinksEntity
+public sealed record HydraLinksEntity
 {
-    [Key]
-    public Guid Id { get; init; }
-    
-    public DateTime Timestamp { get; init; } = DateTime.Now;
     public string Owner { get; set; } = string.Empty;
     
+    [Key]
     public string Title { get; init; } = string.Empty;
     public string CleanTitle { get; init; } = string.Empty;
-    public double FileSize { get; init; }
-    public DateTime UploadDate { get; init; }
-    public IList<string> Links { get; init; } = [];
+    public double FileSize { get; init; } = -1;
+    public DateTime UploadDate { get; init; } = DateTime.UnixEpoch;
+    public string Link { get; init; } = string.Empty;
 }

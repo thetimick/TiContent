@@ -6,6 +6,7 @@
 // ⠀
 
 using AutoMapper;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TiContent.Application;
@@ -13,6 +14,7 @@ using TiContent.Components.Extensions;
 using TiContent.Components.Helpers;
 using TiContent.Entities.HydraLinks;
 using TiContent.Services.HydraLinks;
+using TiContent.Services.Storage;
 
 namespace TiContent.DataSources;
 
@@ -25,6 +27,7 @@ public interface IHydraLinksDataSource
 
 public partial class HydraLinksDataSource(
     App.AppDataBaseContext db,
+    IStorageService storage,
     IHydraLinksService service,
     IMapper mapper,
     ILogger<HydraLinksDataSource> logger
@@ -59,7 +62,7 @@ public partial class HydraLinksDataSource
 {
     private async Task ObtainAllLinksAsync(bool forceRefresh = false)
     {
-        if (await IsEmptyOrExpiredDataBaseAsync() == false && !forceRefresh)
+        if (!IsEmptyOrExpiredDataBaseAsync() && !forceRefresh)
         {
             logger.LogInformationWithCaller("Links already updated!");
             return;
@@ -67,7 +70,6 @@ public partial class HydraLinksDataSource
         
         logger.LogInformationWithCaller("Start update links...");
         
-        db.HydraLinksItems.RemoveRange(db.HydraLinksItems);
         var items = (await service.ObtainLinksAsync())
             .SelectMany(
                 rawEntity =>
@@ -82,15 +84,20 @@ public partial class HydraLinksDataSource
                             }
                         ) ?? [];
                 }
-            );
-        await db.HydraLinksItems.AddRangeAsync(items);
-        await db.SaveChangesAsync();
+            )
+            .ToList();
+
+        await db.BulkInsertOrUpdateAsync(items);
+        await db.BulkSaveChangesAsync();
+        
+        if (storage.Cached != null)
+            storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;;
         
         logger.LogInformationWithCaller("Links successful updated!");
     }
-
-    private async Task<bool> IsEmptyOrExpiredDataBaseAsync()
+    
+    private bool IsEmptyOrExpiredDataBaseAsync()
     {
-        return db.HydraLinksItems.AsNoTracking().IsEmpty() || (await db.HydraLinksItems.AsNoTracking().FirstOrDefaultAsync())?.Timestamp < DateTime.Now.AddHours(-3);
+        return db.HydraLinksItems.AsNoTracking().IsEmpty() || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
     }
 }
