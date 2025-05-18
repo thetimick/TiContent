@@ -13,12 +13,14 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
+using TiContent.Application;
 using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
 using TiContent.Components.Wrappers;
 using TiContent.DataSources;
 using TiContent.Entities.API.TMDB;
 using TiContent.Entities.ViewModel;
+using TiContent.Providers;
 using TiContent.ViewModels.Jacred;
 using TiContent.Windows.Jacred;
 using Wpf.Ui.Violeta.Controls;
@@ -56,7 +58,7 @@ public partial class FilmsPageViewModel : ObservableObject
     public FilmsPageViewModel(IServiceProvider provider)
     {
         _provider = provider;
-
+        
         _dataSource = provider.GetRequiredService<IFilmsPageContentDataSource>();
         _mapper = provider.GetRequiredService<IMapper>();
         _logger = provider.GetRequiredService<ILogger<FilmsPageViewModel>>();

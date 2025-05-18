@@ -85,6 +85,5 @@
 
     <ItemGroup>
       <Folder Include="Entities\API\" />
-      <Folder Include="Entities\DB\" />
     </ItemGroup>
 </Project>

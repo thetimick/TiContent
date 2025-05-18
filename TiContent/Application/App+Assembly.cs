@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Net.Http;
+using System.Text.RegularExpressions;
 using AutoMapper.EquivalencyExpression;
 using Humanizer.Bytes;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,8 +41,9 @@ public partial class App
         // Workers
         services.AddHostedService<HydraLinksBackgroundWorker>();
 
-        // External Services
         services.AddSingleton<INavigationService, NavigationService>();
+
+        services.AddSingleton<HttpClient>();
         services.AddSingleton<IRestClient, RestClient>(
             provider =>
             {
@@ -51,17 +53,19 @@ public partial class App
                 var options = new RestClientOptions
                 {
                     Interceptors = [interceptor], 
-                    Timeout = new TimeSpan(0,0,0,10)
+                    Timeout = new TimeSpan(0,0,0,10),
                 };
                 
                 return new RestClient(options);
             }
         );
-
-        // Internal Services
+        
         services.AddSingleton<IHydraFiltersDataSource, HydraFiltersDataSource>();
         services.AddSingleton<IHydraLinksDataSource, HydraLinksDataSource>();
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
+        
+        services.AddSingleton<INavigationViewPageProvider, NavigationViewPageProvider>();
+        services.AddSingleton<IImageCacheProvider, ImageCacheProvider>();
         
         services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<IJacredService, JacredService>();
@@ -70,9 +74,6 @@ public partial class App
         services.AddSingleton<ITMDBService, TMDBService>();
         services.AddSingleton<ICubApiService, CubApiService>();
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
-
-        // Providers
-        services.AddSingleton<INavigationViewPageProvider, NavigationViewPageProvider>();
         
         // DataBase
         services.AddDbContext<AppDataBaseContext>();

@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Wpf.Ui.Violeta.Controls;
 
@@ -12,10 +13,12 @@ public partial class App
         .ConfigureAppConfiguration(b => b.SetBasePath(Environment.CurrentDirectory))
         .ConfigureServices(ConfigureServices)
         .Build();
+    
+    // Lifecycle
 
     public App()
     {
-        Current.HandleOnUnhandledException();
+        DispatcherUnhandledException += (_, args) => ExceptionReport.Show(args.Exception);
     }
     
     protected override async void OnStartup(StartupEventArgs e)
@@ -33,8 +36,27 @@ public partial class App
     
     protected override async void OnExit(ExitEventArgs e)
     {
-        await AppHost.StopAsync();
-        AppHost.Dispose();
-        base.OnExit(e);
+        try
+        {
+            await AppHost.StopAsync();
+            AppHost.Dispose();
+            base.OnExit(e);
+        }
+        catch
+        {
+            // Empty
+        }
+    }
+    
+    // Public Methods
+    
+    /// <summary>
+    /// Gets registered service.
+    /// </summary>
+    /// <typeparam name="T">Type of the service to get.</typeparam>
+    /// <returns>Instance of the service or <see langword="null"/>.</returns>
+    public static T GetRequiredService<T>() where T : class
+    {
+        return AppHost.Services.GetRequiredService<T>();
     }
 }

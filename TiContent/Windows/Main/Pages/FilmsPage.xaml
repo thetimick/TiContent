@@ -54,7 +54,7 @@
                                     Height="142"
                                     Margin="0,0,12,0"
                                     CornerRadius="8"
-                                    Source="{Binding ImageUrl, Converter={StaticResource TMDBPosterPathConverter}}"
+                                    Source="{Binding ImageUrl}"
                                     Stretch="Fill" />
 
                                 <ui:AutoGrid Grid.Column="1" RowCount="3">

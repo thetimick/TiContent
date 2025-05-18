@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TiContent.Components.Converters;
 using TiContent.Components.Wrappers;
 using TiContent.Entities;
 using TiContent.Entities.Legacy;
@@ -52,6 +53,9 @@ public partial class App
                     _mainWindow.Top = storage.Window.Y ?? 0;
                 }
             }
+            
+            // Добавляем динамические ресурсы
+            _mainWindow.Resources["StringToImageCacheConverter"] = new StringToImageCacheConverter();
 
             // Показываем окно
             _mainWindow.Show();

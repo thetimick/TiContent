@@ -7,6 +7,7 @@
 
 using Microsoft.EntityFrameworkCore;
 using TiContent.Entities;
+using TiContent.Entities.DB;
 using TiContent.Entities.Legacy.HydraLinks;
 
 namespace TiContent.Application;
@@ -18,6 +19,8 @@ public partial class App
         // Data
         
         public DbSet<HydraLinksEntity> HydraLinksItems => Set<HydraLinksEntity>();
+        
+        public DbSet<ImageEntity> Images => Set<ImageEntity>();
         
         // LifeCycle
         
