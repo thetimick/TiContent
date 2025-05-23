@@ -1,0 +1,18 @@
+﻿<UserControl
+    x:Class="TiContent.Avalonia.Windows.Main.Pages.AboutPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <Grid Margin="32,32,16,16" RowDefinitions="Auto, *">
+        <TextBlock
+            Grid.Row="0"
+            FontSize="28"
+            FontWeight="SemiBold"
+            Text="О Программе" />
+    </Grid>
+</UserControl>

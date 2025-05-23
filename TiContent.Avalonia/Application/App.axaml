@@ -1,0 +1,11 @@
+<Application
+    x:Class="TiContent.Avalonia.Application.App"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:fa="clr-namespace:FluentAvalonia.Styling;assembly=FluentAvalonia"
+    RequestedThemeVariant="Default">
+
+    <Application.Styles>
+        <fa:FluentAvaloniaTheme PreferSystemTheme="True" PreferUserAccentColor="True" />
+    </Application.Styles>
+</Application>

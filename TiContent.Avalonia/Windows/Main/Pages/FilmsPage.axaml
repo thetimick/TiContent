@@ -1,0 +1,85 @@
+﻿<UserControl
+    x:Class="TiContent.Avalonia.Windows.Main.Pages.FilmsPage"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:ail="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="clr-namespace:FluentAvalonia.UI.Controls;assembly=FluentAvalonia"
+    xmlns:vm="clr-namespace:TiContent.Avalonia.ViewModels.MainWindow.Pages"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    x:DataType="vm:FilmsPageViewModel"
+    mc:Ignorable="d">
+
+    <Grid Margin="16,16,16,16" RowDefinitions="Auto, *">
+        <TextBlock
+            Grid.Row="0"
+            Margin="16,16,0,0"
+            FontSize="28"
+            FontWeight="SemiBold"
+            Text="Фильмы &amp; Сериалы" />
+
+        <ItemsControl
+            Grid.Row="1"
+            Margin="0,16,0,0"
+            ItemsSource="{Binding Items}">
+
+            <ItemsControl.Template>
+                <ControlTemplate>
+                    <ScrollViewer
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalScrollBarVisibility="Disabled"
+                        VerticalScrollBarVisibility="Auto">
+
+                        <ItemsPresenter />
+                    </ScrollViewer>
+                </ControlTemplate>
+            </ItemsControl.Template>
+
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Orientation="Vertical" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ui:SettingsExpander>
+                        <ui:SettingsExpander.Header>
+                            <Grid ColumnDefinitions="Auto, *">
+                                <Border
+                                    Grid.Column="0"
+                                    ClipToBounds="True"
+                                    CornerRadius="8">
+
+                                    <Image
+                                        Width="100"
+                                        Height="142"
+                                        ail:ImageLoader.Source="{Binding ImageUrl}"
+                                        Source="{Binding ImageUrl}"
+                                        Stretch="Fill" />
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                                    <TextBlock
+                                        FontSize="15"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding Title}" />
+
+                                    <TextBlock Text="{Binding OriginalTitle}" />
+
+                                    <TextBlock
+                                        MaxLines="4"
+                                        Text="{Binding Description}"
+                                        TextTrimming="WordEllipsis"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Grid>
+                        </ui:SettingsExpander.Header>
+                    </ui:SettingsExpander>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>
