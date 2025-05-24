@@ -66,16 +66,22 @@ public partial class FilmsPageViewModel: ObservableObject
             ObtainItemsFromDataSource();
     }
     
+    public void OnScrollChanged(double offset, double height)
+    {
+        if (!_dataSource.InProgress && !Items.IsEmpty() && height - offset < 100)
+            ObtainItemsFromDataSource(pagination: true);
+    }
+    
     // Private Methods
     
     private void ObtainItemsFromDataSource(bool pagination = false)
     {
         if (!pagination)
             ViewState = ViewStateEnum.InProgress;
-        Task.Run(async () => await ObtainItemsTask());
+        Task.Run(async () => await ObtainItemsTaskAsync());
     }
     
-    private async Task ObtainItemsTask()
+    private async Task ObtainItemsTaskAsync()
     {
         try
         {

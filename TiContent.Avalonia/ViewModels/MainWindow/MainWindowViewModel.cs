@@ -21,7 +21,7 @@ public partial class MainWindowViewModel: ObservableObject
     public partial ObservableCollection<object> MenuItems { get; set; } = [
         new NavigationViewItemHeader { Content = "Каталог" },
         new NavigationViewItem { IconSource = new SymbolIconSource { Symbol = Symbol.Library }, Content = "Фильмы & Сериалы", Tag = Items.Films },
-        new NavigationViewItem { IconSource = new SymbolIconSource { Symbol = Symbol.Library }, Content = "Игры", Tag = Items.Games }
+        new NavigationViewItem { IconSource = new SymbolIconSource { Symbol = Symbol.Library }, Content = "Игры", Tag = Items.Games, IsEnabled = false }
     ];
     
     [ObservableProperty]

@@ -41,7 +41,7 @@
             Name="NavigationView"
             Grid.Row="1"
             FooterMenuItemsSource="{Binding FooterItems}"
-            IsPaneToggleButtonVisible="False"
+            IsPaneToggleButtonVisible="True"
             IsSettingsVisible="False"
             MenuItemsSource="{Binding MenuItems}"
             SelectedItem="{Binding SelectedItem}">
