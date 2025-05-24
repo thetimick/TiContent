@@ -12,7 +12,7 @@ public static class Static
     public static class FileNames
     {
         public const string DataBaseFileName = "TiContent.db";
-        public const string StorageFileName = "TiContent.Avalonia.storage.json";
+        public const string StorageFileName = "TiContent.storage.json";
     }
     
     public static class Urls

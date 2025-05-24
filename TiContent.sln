@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35931.197 d17.13
+VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent", "TiContent\TiContent.csproj", "{DD90FD85-9046-46FD-96D9-A01EA1E3633E}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Constants", "TiContent.Constants\TiContent.Constants.csproj", "{5BDE8AE2-C7EE-47FE-8D6C-849EDE53727E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Components", "TiContent.Components\TiContent.Components.csproj", "{415423D7-D7A4-4830-9E57-58EAADC4131E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.WinUI", "TiContent.WinUI\TiContent.WinUI.csproj", "{9B923B1E-7D8E-48EE-B041-14A2E54BECFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{415423D7-D7A4-4830-9E57-58EAADC4131E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{415423D7-D7A4-4830-9E57-58EAADC4131E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{415423D7-D7A4-4830-9E57-58EAADC4131E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B923B1E-7D8E-48EE-B041-14A2E54BECFE}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{9B923B1E-7D8E-48EE-B041-14A2E54BECFE}.Debug|Any CPU.Build.0 = Debug|x64
+		{9B923B1E-7D8E-48EE-B041-14A2E54BECFE}.Release|Any CPU.ActiveCfg = Release|x64
+		{9B923B1E-7D8E-48EE-B041-14A2E54BECFE}.Release|Any CPU.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
