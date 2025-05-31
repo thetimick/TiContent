@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Humanizer;
+using Microsoft.Extensions.Logging;
 using TiContent.Avalonia.Services.Api.TMDB;
 using TiContent.Components.Extensions;
 using TiContent.Components.Pagination;
@@ -26,8 +27,9 @@ public interface IFilmsPageContentDataSource
     void ClearCache();
 }
 
-public partial class FilmsPageContentDataSource(ITMDBService contentService)
-{
+public partial class FilmsPageContentDataSource(
+    ITMDBService contentService
+) {
     public bool InProgress => _pagination?.InProgress ?? false;
     
     private List<TMDBResponseEntity.ItemEntity> _items = [];

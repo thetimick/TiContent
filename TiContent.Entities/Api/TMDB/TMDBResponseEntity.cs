@@ -60,6 +60,9 @@ public record TMDBResponseEntity
 
         [JsonPropertyName("release_date")]
         public DateTimeOffset? ReleaseDate { get; set; }
+        
+        [JsonPropertyName("first_air_date")]
+        public DateTimeOffset? FirstAirDate { get; set; }
 
         [JsonPropertyName("video")]
         public bool Video { get; set; }

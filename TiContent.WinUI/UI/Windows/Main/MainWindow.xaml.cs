@@ -2,6 +2,9 @@ using Humanizer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Collections.Generic;
+using Windows.Graphics;
+using TiContent.WinUI.Services.Navigation;
 using TiContent.WinUI.UI.Pages.Games;
 using TiContent.WinUI.UI.Pages.Settings;
 using WinUIEx;
@@ -14,56 +17,30 @@ public sealed partial class MainWindow
 {
     public MainWindowViewModel ViewModel { get; }
 
-    private readonly IServiceProvider _provider;
+    private readonly INavigationService _navigationService;
 
-    public MainWindow(MainWindowViewModel viewModel, IServiceProvider provider)
+    public MainWindow(IServiceProvider provider)
     {
-        ViewModel = viewModel;
-        _provider = provider;
-
+        ViewModel = provider.GetRequiredService<MainWindowViewModel>();
+        _navigationService = provider.GetRequiredService<INavigationService>();
+        
         InitializeComponent();
+        
+        AppWindow.Resize(new SizeInt32(1280, 720));
         this.CenterOnScreen();
 
         ExtendsContentIntoTitleBar = true;
-        ViewModel.LoadedCommand.Execute(null);
+        ViewModel.OnLoaded();
+        
+        _navigationService.Setup(NavigationView);
+        _navigationService.NavigateTo(NavigationPath.Films);
     }
 
     private void OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
         if (args.IsSettingsSelected)
-            Navigate(MainWindowViewModel.Tag.Settings, sender);
-        if (args.SelectedItem is NavigationViewItem { Tag: MainWindowViewModel.Tag tag })
-            Navigate(tag, sender);
+            _navigationService.NavigateTo(NavigationPath.Settings);
+        if (args.SelectedItem is NavigationViewItem { Tag: NavigationPath tag })
+            _navigationService.NavigateTo(tag);
     }
-
-    #region Helpers
-
-    private void Navigate(MainWindowViewModel.Tag tag, NavigationView sender)
-    {
-        switch (tag)
-        {
-            case MainWindowViewModel.Tag.Films:
-                sender.Header = MainWindowViewModel.Tag.Films.Humanize();
-                var homePageViewModel = _provider.GetRequiredService<FilmsPageViewModel>();
-                ContentFrame.Navigate(typeof(FilmsPage), homePageViewModel);
-                break;
-            
-            case MainWindowViewModel.Tag.Games:
-                sender.Header = MainWindowViewModel.Tag.Games.Humanize();
-                var gamesPageViewModel = _provider.GetRequiredService<GamesPageViewModel>();
-                ContentFrame.Navigate(typeof(GamesPage), gamesPageViewModel);
-                break;
-
-            case MainWindowViewModel.Tag.Settings:
-                sender.Header = MainWindowViewModel.Tag.Settings.Humanize();
-                var settingsPageViewModel = _provider.GetRequiredService<SettingsPageViewModel>();
-                ContentFrame.Navigate(typeof(SettingsPage), settingsPageViewModel);
-                break;
-
-            default:
-                throw new ArgumentOutOfRangeException(nameof(tag), tag, null);
-        }
-    }
-
-    #endregion
 }

@@ -6,7 +6,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Margin="36,0,36,36">
-        <TextBlock Style="{StaticResource TitleTextBlockStyle}" />
+    <Grid
+        Margin="16"
+        ColumnDefinitions="*,0.35*"
+        ColumnSpacing="8"
+        RowDefinitions="Auto, *">
+
+        <TextBlock
+            Margin="32,8,0,24"
+            FontWeight="Bold"
+            Style="{ThemeResource TitleTextBlockStyle}"
+            Text="Игры" />
     </Grid>
 </Page>

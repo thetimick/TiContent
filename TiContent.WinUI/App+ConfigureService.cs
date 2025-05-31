@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
 using TiContent.WinUI.Services.Storage;
@@ -18,7 +19,7 @@ namespace TiContent.WinUI;
 
 public partial class App
 {
-    private class AppHostService(IServiceProvider provider) : IHostedService
+    private class AppConfigureService(IServiceProvider provider) : IHostedService
     {
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -41,6 +42,9 @@ public partial class App
 
         private static void ConfigureWindow(Window window)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("ru-RU");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("ru-RU");
+            
             window.Activate();
             window.Closed += async (_, _) => await AppHost.StopAsync();
         }
