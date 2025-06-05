@@ -2,13 +2,22 @@
 <Application
     x:Class="TiContent.WinUI.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:TiContent.WinUI.Components.Converters">
 
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <ResourceDictionary Source="Components/UI/Styles/CardStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:SidPirToStringConverter x:Key="SidPirToStringConverter" />
+            <converters:ViewStateToVisibilityConverter x:Key="ViewStateToVisibilityConverter" />
+            <converters:VoteToColorConverter x:Key="VoteToColorConverter" />
+            <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

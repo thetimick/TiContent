@@ -2,11 +2,74 @@
     x:Class="TiContent.WinUI.UI.Pages.Settings.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:converters="using:CommunityToolkit.WinUI.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
 
-    <Grid>
-        <TextBlock Text="12345" />
+    <Page.Resources>
+        <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
+    </Page.Resources>
+
+    <Grid Margin="16" RowDefinitions="Auto, *">
+        <TextBlock
+            Grid.Row="0"
+            Margin="32,8,0,24"
+            FontWeight="Bold"
+            Style="{ThemeResource TitleTextBlockStyle}"
+            Text="Параметры" />
+
+        <ScrollView Grid.Row="1">
+            <Grid RowDefinitions="Auto, Auto, *" RowSpacing="16">
+                <StackPanel Grid.Row="0">
+                    <TextBlock
+                        Margin="16,0,0,8"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="Персонализация" />
+
+                    <controls:SettingsCard Description="Настройка темы оформления" Header="Оформление">
+                        <controls:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE790;" />
+                        </controls:SettingsCard.HeaderIcon>
+
+                        <ComboBox SelectedIndex="{x:Bind ViewModel.ThemeIndex, Mode=TwoWay}">
+                            <ComboBoxItem Content="Системная" />
+                            <ComboBoxItem Content="Светлая" />
+                            <ComboBoxItem Content="Темная" />
+                        </ComboBox>
+                    </controls:SettingsCard>
+
+                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущий размер окна" Header="Запоминать размер окна">
+                        <controls:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE78B;" />
+                        </controls:SettingsCard.HeaderIcon>
+
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowSizePersistent, Mode=TwoWay}" />
+                    </controls:SettingsCard>
+
+                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущую позицию окна" Header="Запоминать позицию окна">
+                        <controls:SettingsCard.HeaderIcon>
+                            <FontIcon Glyph="&#xE78B;" />
+                        </controls:SettingsCard.HeaderIcon>
+
+                        <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowOnCenterScreen, Converter={StaticResource BoolNegationConverter}, Mode=TwoWay}" />
+                    </controls:SettingsCard>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1">
+                    <TextBlock
+                        Margin="16,0,0,8"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="О Программе" />
+
+                    <controls:SettingsCard
+                        Description="Агрегатор TMDB &amp; Jacred &amp; Hydra &amp; Hydra Links"
+                        Header="TiContent (v.1.0) by the_timick"
+                        HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}" />
+                </StackPanel>
+            </Grid>
+        </ScrollView>
     </Grid>
 </Page>

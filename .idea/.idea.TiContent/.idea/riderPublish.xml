@@ -5,6 +5,7 @@
       <list>
         <option value="$PROJECT_DIR$/TiContent/bin/Release/net9.0-windows/win-x64/publish" />
         <option value="$PROJECT_DIR$/TiContent.Avalonia/bin/Release/net9.0/win-x64/publish" />
+        <option value="$PROJECT_DIR$/TiContent.WinUI/bin/Release/net9.0-windows10.0.19041.0/win-x64/publish" />
       </list>
     </option>
   </component>

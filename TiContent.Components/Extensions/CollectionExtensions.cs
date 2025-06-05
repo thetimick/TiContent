@@ -15,6 +15,11 @@ public static class CollectionExtensions
     {
         return source == null || !source.Any();
     }
+    
+    public static string ToStringPretty<T>(this IEnumerable<T> collection)
+    {
+        return "[" + string.Join(", ", collection.Select(item => item?.ToString() ?? "null")) + "]";
+    }
 }
 
 public static class ObservableCollectionExtensions

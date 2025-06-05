@@ -18,11 +18,17 @@ using TiContent.WinUI.Services.Storage;
 
 namespace TiContent.WinUI.Services.Api.TMDB;
 
-public partial class TMDBService(IRestClient client, IStorageService storage) {
-    private string TMDBApiBaseUrl => storage.Cached?.Urls.TMDBApiBaseUrl ?? Static.Urls.TMDBApiBaseUrl;
+public interface ITMDBService
+{
+    public Task<TMDBResponseEntity> ObtainNowPlayingAsync(int page, CancellationToken token = default);
+    public Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity requestEntity, CancellationToken token = default);
+    
+    public Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity requestEntity, CancellationToken token = default);
 }
 
-// ITMDBService
+public partial class TMDBService(IRestClient client, IStorageService storage) {
+    private string TMDBApiBaseUrl => storage.Cached?.Urls.TMDBApiBaseUrl ?? AppConstants.Urls.TMDBApiBaseUrl;
+}
 
 public partial class TMDBService : ITMDBService
 {

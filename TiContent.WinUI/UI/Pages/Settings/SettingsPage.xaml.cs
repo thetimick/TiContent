@@ -16,6 +16,7 @@ public partial class SettingsPage
     public SettingsPage()
     {
         InitializeComponent();
+        Loaded += (_, _) => ViewModel.OnLoaded();
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)

@@ -18,13 +18,13 @@ public record StorageEntity
     
     public record UrlsEntity
     {
-        public string JacredApiBaseUrl { get; init; } = Static.Urls.JacredApi;
-        public string HydraApiBaseUrl { get; init; } = Static.Urls.HydraApi;
-        public string HydraAssetsApiBaseUrl { get; init; } = Static.Urls.HydraAssetsApi;
-        public string CubApiBaseUrl { get; init; } = Static.Urls.CubApiBaseUrl;
-        public string TMDBApiBaseUrl { get; init; } = Static.Urls.TMDBApiBaseUrl;
-        public string TMDBAssetsApiBaseUrl { get; init; } = Static.Urls.TMDBAssetsApi;
-        public string HydraLinksBaseUrl { get; init; } = Static.Urls.HydraLinksBaseUrl;
+        public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
+        public string HydraApiBaseUrl { get; init; } = AppConstants.Urls.HydraApi;
+        public string HydraAssetsApiBaseUrl { get; init; } = AppConstants.Urls.HydraAssetsApi;
+        public string CubApiBaseUrl { get; init; } = AppConstants.Urls.CubApiBaseUrl;
+        public string TMDBApiBaseUrl { get; init; } = AppConstants.Urls.TMDBApiBaseUrl;
+        public string TMDBAssetsApiBaseUrl { get; init; } = AppConstants.Urls.TMDBAssetsApi;
+        public string HydraLinksSources { get; init; } = AppConstants.Urls.HydraLinksSources;
     }
 
     public record KeysEntity
@@ -34,26 +34,19 @@ public record StorageEntity
     
     public record WindowEntity
     {
-        public int ThemeIndex { get; set; } = 2;
-        public double? Width { get; set; }
-        public double? Height { get; set; }
+        public int ThemeIndex { get; set; }
+        public double? Width { get; set; } = 1280;
+        public double? Height { get; set; } = 720;
         public double? X { get; set; }
         public double? Y { get; set; }
-        public bool IsWindowSizePersistent { get; set; } = true;
-        public bool IsWindowOnCenterScreen { get; set; }
-    }
-
-    public record HomePageEntity
-    {
-        public string Query { get; set; } = string.Empty;
-        public int TypeIndex { get; set; }
+        public bool IsWindowSizePersistent { get; set; }
+        public bool IsWindowOnCenterScreen { get; set; } = true;
     }
     
     public DataBaseTimestampEntity DataBaseTimestamp { get; init; } = new();
     public UrlsEntity Urls { get; init; } = new();
     public KeysEntity Keys { get; init; } = new();
     public WindowEntity Window { get; init; } = new();
-    public HomePageEntity HomePage { get; init; } = new();
 }
 
 // Helpers

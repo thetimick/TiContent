@@ -5,7 +5,9 @@
 // Created by the_timick on 12.05.2025.
 // ⠀
 
+using System.ComponentModel;
 using System.Text.Json.Serialization;
+using TiContent.Entities.Api.Converters;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable CollectionNeverUpdated.Global
@@ -59,7 +61,12 @@ public record TMDBResponseEntity
         public string? PosterPath { get; set; }
 
         [JsonPropertyName("release_date")]
+        [JsonConverter(typeof(CustomDateTimeOffsetConverter))]
         public DateTimeOffset? ReleaseDate { get; set; }
+        
+        [JsonPropertyName("first_air_date")]
+        [JsonConverter(typeof(CustomDateTimeOffsetConverter))]
+        public DateTimeOffset? FirstAirDate { get; set; }
 
         [JsonPropertyName("video")]
         public bool Video { get; set; }

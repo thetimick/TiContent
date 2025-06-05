@@ -6,48 +6,40 @@
 // ㅤ
 
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 using Humanizer;
 using Microsoft.UI.Xaml.Controls;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
+using TiContent.WinUI.Services.Navigation;
 
 namespace TiContent.WinUI.UI.Windows.Main;
 
-public partial class MainWindowViewModel : ObservableObject
+public partial class MainWindowViewModel(INavigationService navService) : ObservableObject
 {
-    public enum Tag
-    {
-        [Description("Фильмы & Сериалы")]
-        Films,
-        [Description("Игры")]
-        Games,
-        [Description("Параметры")]
-        Settings
-    }
-
     [ObservableProperty]
     public partial ObservableCollection<object> MenuItems { get; set; } = [
+        new NavigationViewItemHeader { Content = "Каталог" },
         new NavigationViewItem
         {
-            Icon = new SymbolIcon(Symbol.Video),
-            Content = Tag.Films.Humanize(),
-            Tag = Tag.Films
+            Icon = new FontIcon { Glyph = "\uE8B2" },
+            Content = NavigationPath.Films.Humanize(),
+            Tag = NavigationPath.Films
         },
         new NavigationViewItem
         {
-            Icon = new SymbolIcon(Symbol.Library),
-            Content = Tag.Games.Humanize(),
-            Tag = Tag.Games
+            Icon = new FontIcon { Glyph = "\uE7FC" },
+            Content = NavigationPath.Games.Humanize(),
+            Tag = NavigationPath.Games
         }
     ];
-        
+    
     [ObservableProperty]
     public partial object? NavigationViewSelectedItem { get; set; }
 
-    [RelayCommand]
-    private void OnLoaded()
+    // Public Methods
+    
+    public void OnLoaded()
     {
-        NavigationViewSelectedItem = MenuItems[0];
+        NavigationViewSelectedItem = MenuItems[1];
+        navService.NavigateTo(NavigationPath.Films);
     }
 }
