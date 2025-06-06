@@ -1,3 +1,4 @@
+using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -31,9 +32,9 @@ public sealed partial class GamesSourcePage
     
     // Private Methods
     
-    private void MenuFlyoutItem_OnClick(object sender, RoutedEventArgs e)
+    private void SettingsCard_OnClick(object sender, RoutedEventArgs e)
     {
-        if (sender is MenuFlyoutItem { CommandParameter: string link })
+        if (sender is SettingsCard { CommandParameter: string link })
             ViewModel.TapOnItem(link);
     }
 }

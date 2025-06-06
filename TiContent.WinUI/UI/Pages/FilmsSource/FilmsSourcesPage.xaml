@@ -3,6 +3,8 @@
     x:Class="TiContent.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cControls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:controls="using:TiContent.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:entities="using:TiContent.Entities.ViewModel"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -59,12 +61,16 @@
             ColumnSpacing="8"
             Row="1">
 
-            <ItemsControl Grid.Column="0" ItemsSource="{x:Bind ViewModel.Items, Mode=TwoWay}">
+            <ItemsControl
+                Grid.Column="0"
+                ItemsSource="{x:Bind ViewModel.Items, Mode=TwoWay}"
+                Visibility="{x:Bind ViewModel.State, Converter={StaticResource ViewStateToVisibilityConverter}, Mode=OneWay}">
+
                 <ItemsControl.Template>
                     <ControlTemplate>
-                        <ScrollViewer>
+                        <ScrollView>
                             <ItemsPresenter />
-                        </ScrollViewer>
+                        </ScrollView>
                     </ControlTemplate>
                 </ItemsControl.Template>
 
@@ -76,32 +82,31 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="entities:FilmsSourcePageItemEntity">
-                        <Grid
-                            Margin="0,0,0,8"
-                            ColumnDefinitions="*, Auto"
-                            ColumnSpacing="16"
-                            Style="{StaticResource CustomGridCardStyle}">
+                        <cControls:SettingsCard
+                            Margin="0,0,0,4"
+                            Click="MenuFlyoutItem_OnClick"
+                            CommandParameter="{x:Bind Title}"
+                            IsClickEnabled="True"
+                            Tag="1">
 
-                            <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
+                            <cControls:SettingsCard.Header>
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
 
-                                <TextBlock
-                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                    Style="{ThemeResource CaptionTextBlockStyle}"
-                                    Text="{x:Bind Description}" />
+                                    <TextBlock
+                                        Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                        Style="{ThemeResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind Description}" />
 
-                                <TextBlock
-                                    Margin="0,2,0,0"
-                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                    Style="{ThemeResource CaptionTextBlockStyle}"
-                                    Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
-                            </StackPanel>
+                                    <TextBlock
+                                        Margin="0,2,0,0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{ThemeResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
+                                </StackPanel>
+                            </cControls:SettingsCard.Header>
 
-                            <StackPanel
-                                Grid.Column="1"
-                                VerticalAlignment="Center"
-                                Spacing="4">
-
+                            <StackPanel VerticalAlignment="Center" Spacing="4">
                                 <DropDownButton Content="Открыть">
                                     <DropDownButton.Flyout>
                                         <MenuFlyout Placement="Bottom">
@@ -163,10 +168,12 @@
                                     </StackPanel>
                                 </Border>
                             </StackPanel>
-                        </Grid>
+                        </cControls:SettingsCard>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
+
+            <controls:PlaceholderUserControl Grid.Column="0" State="{x:Bind ViewModel.State, Mode=OneWay}" />
 
             <Grid
                 Column="1"

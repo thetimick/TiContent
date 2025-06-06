@@ -23,6 +23,9 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
     [ObservableProperty]
     public partial bool IsWindowOnCenterScreen { get; set; }
     
+    [ObservableProperty]
+    public partial string TMDBApiKey { get; set; } = string.Empty;
+    
     partial void OnThemeIndexChanged(int value)
     {
         if (storageService.Cached == null || storageService.Cached.Window.ThemeIndex == value) 
@@ -45,6 +48,12 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
         storageService.Cached.Window.IsWindowOnCenterScreen = value;
     }
 
+    partial void OnTMDBApiKeyChanged(string value)
+    {
+        if (storageService.Cached != null && value != storageService.Cached.Keys.TMDBApiKey)
+            storageService.Cached.Keys.TMDBApiKey = value;
+    }
+
     public void OnLoaded()
     {
         if (storageService.Cached is not { } cached) 
@@ -53,5 +62,6 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
         ThemeIndex = cached.Window.ThemeIndex;
         IsWindowSizePersistent = cached.Window.IsWindowSizePersistent;
         IsWindowOnCenterScreen = cached.Window.IsWindowOnCenterScreen;
+        TMDBApiKey = cached.Keys.TMDBApiKey ?? string.Empty;
     }
 }

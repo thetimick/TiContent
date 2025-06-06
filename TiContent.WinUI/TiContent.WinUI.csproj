@@ -16,8 +16,8 @@
     
     <Company>the_timick</Company>
     <Product>TiContent</Product>
-    <AssemblyVersion>1.0</AssemblyVersion>
-    <FileVersion>1.0</FileVersion>
+    <AssemblyVersion>1.1</AssemblyVersion>
+    <FileVersion>1.1</FileVersion>
     <ApplicationIcon>Resources\Assets\wpfui.ico</ApplicationIcon>
   </PropertyGroup>
   
@@ -73,6 +73,10 @@
     <Page Update="Components\UI\PlaceholderUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Reference Include="PresentationFramework" />
   </ItemGroup>
   
   <PropertyGroup Condition="'$(DisableHasPackageAndPublishMenuAddedByProject)'!='true' and '$(EnableMsixTooling)'=='true'">

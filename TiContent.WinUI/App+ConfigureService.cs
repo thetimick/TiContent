@@ -13,8 +13,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Windows.Graphics;
 using Microsoft.Extensions.Logging;
-using Microsoft.UI.Windowing;
-using Serilog;
 using TiContent.WinUI.Services.DB;
 using TiContent.WinUI.Services.Storage;
 using TiContent.WinUI.Services.Theme;

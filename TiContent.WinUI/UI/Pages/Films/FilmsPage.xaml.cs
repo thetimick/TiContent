@@ -5,13 +5,12 @@
 // Created by Timick on 16.12.2024.
 // ㅤ
 
-using System;
 using System.ComponentModel;
+using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
-using TiContent.Components.Helpers;
 using TiContent.WinUI.Components.Helpers;
 
 namespace TiContent.WinUI.UI.Pages.Films;
@@ -58,17 +57,11 @@ public partial class FilmsPage
     {
         ViewModel.OnScrollChanged(sender.VerticalOffset, sender.ScrollableHeight);
     }
-
-    private void MenuFlyoutItem_OnClick(object sender, RoutedEventArgs e)
+    
+    private void SettingsCard_OnClick(object sender, RoutedEventArgs e)
     {
-        if (sender is MenuFlyoutItem item)
-            ViewModel.TapOnOpenButton(((string)item.CommandParameter, Enum.Parse<OpenHelper.Type>((string)item.Tag)));
-    }
-
-    private void JacredButton_OnClick(object sender, RoutedEventArgs e)
-    {
-        if (sender is Button button)
-            ViewModel.TapOnOpenFilmsSourceButton((string)button.CommandParameter);
+        if (sender is SettingsCard card)
+            ViewModel.TapOnOpenFilmsSourceButton((string)card.CommandParameter);
     }
 
     // AutoSuggestBox

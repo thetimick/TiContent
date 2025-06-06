@@ -19,6 +19,7 @@ namespace TiContent.WinUI.DataSources;
 public interface IGamesPageContentDataSource
 {
     public bool InProgress { get; }
+    public bool IsCompleted { get; }
     
     public Task<List<GamesPageItemEntity>> ObtainAsync(string query, int type);
     public void ClearCache();
@@ -27,6 +28,7 @@ public interface IGamesPageContentDataSource
 public partial class GamesPageContentDataSource(IHydraApiService hydraApiService, IMapper mapper)
 {
     public bool InProgress { get; private set; }
+    public bool IsCompleted { get; private set; }
     
     private List<GamesPageItemEntity> _items = [];
     private HydraPagination? _pagination;
@@ -36,7 +38,7 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
 {
     public async Task<List<GamesPageItemEntity>> ObtainAsync(string query, int type)
     {
-        if (InProgress)
+        if (InProgress || _pagination?.HasMoreItems == false)
             return _items;
         
         _pagination ??= new HydraPagination();
@@ -49,6 +51,7 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
         
         InProgress = false;
         _pagination.Next();
+        IsCompleted = !_pagination.HasMoreItems;
         
         return _items;
     }

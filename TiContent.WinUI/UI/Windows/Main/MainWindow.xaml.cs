@@ -1,15 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
 using System;
-using Windows.Graphics;
-using ABI.Microsoft.UI.Xaml.Media.Animation;
-using CommunityToolkit.WinUI.Helpers;
-using Microsoft.UI.System;
-using Microsoft.UI.Windowing;
-using Microsoft.UI.Xaml;
 using TiContent.WinUI.Services.Navigation;
-using TiContent.WinUI.Services.Storage;
-using WinUIEx;
 
 namespace TiContent.WinUI.UI.Windows.Main;
 

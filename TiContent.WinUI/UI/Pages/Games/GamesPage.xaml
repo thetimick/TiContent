@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:controls1="using:TiContent.WinUI.Components.UI.Controls"
-    xmlns:customControls="using:TiContent.WinUI.Components.UI"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:ets="using:TiContent.Entities.ViewModel"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -46,14 +45,19 @@
 
             <ItemsControl.ItemTemplate>
                 <DataTemplate x:DataType="ets:GamesPageItemEntity">
-                    <Expander HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
-                        <Expander.Header>
-                            <Grid
-                                Margin="0,16,0,16"
-                                ColumnDefinitions="Auto, *"
-                                ColumnSpacing="16">
+                    <controls:SettingsCard
+                        Margin="0,0,0,4"
+                        Click="SettingsCard_OnClick"
+                        CommandParameter="{x:Bind Id}"
+                        IsClickEnabled="True">
 
-                                <Border Grid.Column="0" CornerRadius="8">
+                        <controls:SettingsCard.Header>
+                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
+                                <Border
+                                    Grid.Column="0"
+                                    Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
+                                    CornerRadius="8">
+
                                     <Image
                                         Width="230"
                                         Height="108"
@@ -62,7 +66,11 @@
                                 </Border>
 
                                 <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind Title}" />
+                                    <TextBlock
+                                        MaxLines="2"
+                                        Style="{StaticResource SubtitleTextBlockStyle}"
+                                        Text="{x:Bind Title}" />
+
                                     <StackPanel>
                                         <TextBlock
                                             Foreground="{ThemeResource TextFillColorTertiaryBrush}"
@@ -86,41 +94,8 @@
                                     </StackPanel>
                                 </StackPanel>
                             </Grid>
-                        </Expander.Header>
-
-                        <StackPanel Orientation="Horizontal" Spacing="8">
-                            <DropDownButton Content="Открыть" CornerRadius="16">
-                                <DropDownButton.Flyout>
-                                    <MenuFlyout Placement="Bottom">
-                                        <MenuFlyoutItem
-                                            Click="MenuFlyoutItem_OnClick"
-                                            CommandParameter="{x:Bind Id}"
-                                            Tag="0"
-                                            Text="Google" />
-                                        <MenuFlyoutSeparator />
-
-                                        <MenuFlyoutItem
-                                            Click="MenuFlyoutItem_OnClick"
-                                            CommandParameter="{x:Bind Id}"
-                                            Tag="1"
-                                            Text="RuTracker" />
-
-                                        <MenuFlyoutItem
-                                            Click="MenuFlyoutItem_OnClick"
-                                            CommandParameter="{x:Bind Id}"
-                                            Tag="2"
-                                            Text="Rutor" />
-                                    </MenuFlyout>
-                                </DropDownButton.Flyout>
-                            </DropDownButton>
-
-                            <Button
-                                Click="HydraLinksButton_OnClick"
-                                CommandParameter="{x:Bind Id}"
-                                Content="Источники"
-                                CornerRadius="16" />
-                        </StackPanel>
-                    </Expander>
+                        </controls:SettingsCard.Header>
+                    </controls:SettingsCard>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

@@ -22,7 +22,7 @@
             Text="Параметры" />
 
         <ScrollView Grid.Row="1">
-            <Grid RowDefinitions="Auto, Auto, *" RowSpacing="16">
+            <Grid RowDefinitions="Auto, Auto, Auto, *" RowSpacing="16">
                 <StackPanel Grid.Row="0">
                     <TextBlock
                         Margin="16,0,0,8"
@@ -62,12 +62,30 @@
                     <TextBlock
                         Margin="16,0,0,8"
                         Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="Ключи" />
+
+                    <controls:SettingsCard
+                        Description="Токен доступа для TMDB"
+                        Header="TMDB"
+                        HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
+
+                        <TextBox PlaceholderText="Токен" Text="{x:Bind ViewModel.TMDBApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    </controls:SettingsCard>
+                </StackPanel>
+
+                <StackPanel Grid.Row="2">
+                    <TextBlock
+                        Margin="16,0,0,8"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
                         Text="О Программе" />
 
                     <controls:SettingsCard
                         Description="Агрегатор TMDB &amp; Jacred &amp; Hydra &amp; Hydra Links"
-                        Header="TiContent (v.1.0) by the_timick"
-                        HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}" />
+                        Header="TiContent by the_timick"
+                        HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
+
+                        <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.1" />
+                    </controls:SettingsCard>
                 </StackPanel>
             </Grid>
         </ScrollView>

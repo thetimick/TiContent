@@ -11,6 +11,6 @@ namespace TiContent.Components.Helpers;
 
 public static partial class RegexHelper
 {
-    [GeneratedRegex("[^a-zA-Z0-9]")]
+    [GeneratedRegex("[^a-zA-Z0-9\u0400-\u04FF]")]
     public static partial Regex Clean();
 }

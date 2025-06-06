@@ -59,7 +59,7 @@ public partial record DataBaseHydraLinksEntity
                 );
         }
 
-        [GeneratedRegex("[^a-zA-Z0-9]")]
+        [GeneratedRegex("[^a-zA-Z0-9\u0400-\u04FF]")]
         private static partial Regex CleanRegex();
     }
 }

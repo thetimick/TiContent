@@ -29,7 +29,7 @@ public record StorageEntity
 
     public record KeysEntity
     {
-        public string? TMDBApiKey { get; init; }
+        public string? TMDBApiKey { get; set; }
     }
     
     public record WindowEntity

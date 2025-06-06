@@ -44,6 +44,8 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
     public async Task<List<DataBaseHydraLinksEntity>> SearchAsync(string query)
     {
         var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
+        if (cleanQuery.IsNullOrEmpty())
+            return [];
         var items = await db.HydraLinksItems
             .AsNoTracking()
             .Where(entity => EF.Functions.Like(entity.CleanTitle, $"%{cleanQuery}%"))

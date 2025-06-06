@@ -16,6 +16,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
+using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
 using TiContent.Components.Helpers;
 using TiContent.Entities.Api.Jacred;
@@ -28,6 +29,9 @@ namespace TiContent.WinUI.UI.Pages.FilmsSource;
 public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<FilmsSourcesPageViewModel.InitialDataEntity>
 {
     // Observable
+
+    [ObservableProperty] 
+    public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
     
     [ObservableProperty]
     public partial string Title { get; set; } = string.Empty;
@@ -134,6 +138,8 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
     {
         if (_dataSource.InProgress)
             return;
+
+        State = ViewStateEnum.InProgress;
         
         Task.Run(
             async () =>
@@ -214,6 +220,11 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
         };
         
         ApplyDescription();
+        
+        State = Items.Count > 0 
+            ? ViewStateEnum.Content 
+            : ViewStateEnum.Empty;
+
     }
 
     private void ApplyDescription()

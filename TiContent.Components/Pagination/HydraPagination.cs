@@ -20,10 +20,15 @@ public class HydraPagination(int allItemsCount = 192)
     public int CurrentTakeValue { get; private set; } = ItemsOnPage;
     public int CurrentSkipValue { get; private set; }
     
+    public bool HasMoreItems => CurrentTakeValue < AllItemsCount;
+    
     // Public Methods
 
     public void Next()
     {
+        if (!HasMoreItems)
+            return;
+        
         if (CurrentTakeValue + ItemsOnPage > AllItemsCount)
         {
             CurrentTakeValue = AllItemsCount;

@@ -88,17 +88,10 @@ public partial class GamesPageViewModel : ObservableObject
     public void OnScrollChanged(double offset, double height)
     {
         ScrollViewOffset = offset;
-        if (!_dataSource.InProgress && Items.Count >= 20 && height - offset < 1)
+        if (_dataSource is { InProgress: false, IsCompleted: false } && Items.Count >= 20 && height - offset < 1)
             ObtainItemsFromDataSource(pagination: true);
     }
     
-    public void TapOnOpenButton((string, OpenHelper.Type) tuple)
-    {
-        if (Items.FirstOrDefault(entity => entity.Id == tuple.Item1) is not { } item)
-            return;
-        OpenHelper.OpenUrlForSearch($"{item.Title}", tuple.Item2);
-    }
-
     public void TapOnOpenGamesSource(string id)
     {
         if (Items.FirstOrDefault(entity => entity.Id == id) is not { } item)

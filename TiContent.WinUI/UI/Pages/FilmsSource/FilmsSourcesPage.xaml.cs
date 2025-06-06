@@ -5,6 +5,7 @@
 // Created by the_timick on 26.05.2025.
 // ⠀
 
+using CommunityToolkit.WinUI.Controls;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -34,6 +35,9 @@ public sealed partial class FilmsSourcesPage
 
     private void MenuFlyoutItem_OnClick(object sender, RoutedEventArgs e)
     {
+        if (sender is SettingsCard { CommandParameter: string sParameter })
+            ViewModel.TapOnTorrentButton(sParameter);
+        
         if (sender is not MenuFlyoutItem { CommandParameter: string parameter, Tag: string tag }) 
             return;
 

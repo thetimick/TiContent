@@ -20,18 +20,18 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Orientation="Horizontal"
-            Spacing="8"
+            Spacing="16"
             Visibility="{x:Bind State, Converter={StaticResource ViewStateToVisibilityConverter}, ConverterParameter='progress', Mode=OneWay}">
 
             <ProgressRing IsIndeterminate="True" />
-            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Пожалуйста, подождите..." />
+            <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Загрузка..." />
         </StackPanel>
 
         <TextBlock
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Style="{ThemeResource SubtitleTextBlockStyle}"
-            Text="Нет данных..."
+            Text="Ничего не найдено"
             Visibility="{x:Bind State, Converter={StaticResource ViewStateToVisibilityConverter}, ConverterParameter='empty', Mode=OneWay}" />
     </Grid>
 </UserControl>
