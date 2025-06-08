@@ -58,7 +58,6 @@ public partial class FilmsPageViewModel : ObservableObject
     // Private Props
 
     private readonly IFilmsPageContentDataSource _dataSource;
-    private readonly IMapper _mapper;
     private readonly ILogger<FilmsPageViewModel> _logger;
     private readonly INavigationService _navigationService;
     private readonly IDataBaseQueryHistoryService _queryHistoryService;
@@ -71,13 +70,11 @@ public partial class FilmsPageViewModel : ObservableObject
     
     public FilmsPageViewModel(
         IFilmsPageContentDataSource dataSource, 
-        IMapper mapper, 
         ILogger<FilmsPageViewModel> logger, 
         IDataBaseQueryHistoryService queryHistoryService, 
         INavigationService navigationService
     ) {
         _dataSource = dataSource;
-        _mapper = mapper;
         _logger = logger;
         _queryHistoryService = queryHistoryService;
         _navigationService = navigationService;
@@ -126,13 +123,6 @@ public partial class FilmsPageViewModel : ObservableObject
             ObtainItemsFromDataSource(pagination: true);
     }
     
-    public void TapOnOpenButton((string, OpenHelper.Type) tuple)
-    {
-        if (Items.FirstOrDefault(entity => entity.Id == tuple.Item1) is not { } item)
-            return;
-        OpenHelper.OpenUrlForSearch($"{item.Title} {item.OriginalTitle} {item.Year}", tuple.Item2);
-    }
-
     public void TapOnOpenFilmsSourceButton(string id)
     {
         if (Items.FirstOrDefault(entity => entity.Id == id) is not { } item)
@@ -155,24 +145,26 @@ public partial class FilmsPageViewModel : ObservableObject
     {
         if (!pagination)
         {
-            _dataSource.ClearCache();
-            
             State = ViewStateEnum.InProgress;
             ScrollViewOffset = 0;
         }
 
         Task.WhenAll(
-            ObtainItemsTaskAsync(), 
+            ObtainItemsTaskAsync(pagination), 
             ObtainHistoryAsync(),
             AddQueryToHistoryAsync()
         );
     }
     
-    private async Task ObtainItemsTaskAsync()
+    private async Task ObtainItemsTaskAsync(bool pagination)
     {
         try
         {
-            var items = await _dataSource.ObtainItemsAsync(ContentType, Query);
+            var items = await _dataSource.ObtainAsync(
+                new IFilmsPageContentDataSource.ParamsEntity(Query, ContentType), 
+                pagination
+            );
+            
             _dispatcherQueue.TryEnqueue(() => ApplyItems(items));
         }
         catch (Exception ex)
@@ -202,13 +194,9 @@ public partial class FilmsPageViewModel : ObservableObject
         await ObtainHistoryAsync();
     }
 
-    private void ApplyItems(List<TMDBResponseEntity.ItemEntity> items)
+    private void ApplyItems(List<FilmsPageItemEntity> items)
     {
-        var preparedItems = _mapper.Map<List<TMDBResponseEntity.ItemEntity>, ObservableCollection<FilmsPageItemEntity>>(items);
-        if (Items == preparedItems)
-            return;
-        
-        Items = preparedItems;
+        Items = items.ToObservable();
         State = Items.IsEmpty() 
             ? ViewStateEnum.Empty 
             : ViewStateEnum.Content;

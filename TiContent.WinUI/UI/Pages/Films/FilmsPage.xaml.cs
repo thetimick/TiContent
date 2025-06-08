@@ -5,25 +5,33 @@
 // Created by Timick on 16.12.2024.
 // ㅤ
 
+using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using CommunityToolkit.WinUI.Controls;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
+using TiContent.WinUI.Components.Extensions;
 using TiContent.WinUI.Components.Helpers;
+using TiContent.WinUI.Providers;
 
 namespace TiContent.WinUI.UI.Pages.Films;
 
 public partial class FilmsPage
 {
-    // Public Props
-    public FilmsPageViewModel ViewModel { get; private set; } = null!;
+    private FilmsPageViewModel ViewModel { get; set; } = null!;
+    private IImageProvider ImageProvider { get; set; } = null!;
+    private ILogger<FilmsPage> Logger { get; set; } = null!;
     
-    // Private Props
     private ScrollView? _scrollView;
 
     // LifeCycle
+    
     public FilmsPage()
     {
         InitializeComponent();
@@ -39,7 +47,16 @@ public partial class FilmsPage
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
-        ViewModel = (FilmsPageViewModel)e.Parameter;
+        if (e.Parameter is not Dependencies dependencies)
+        {
+            base.OnNavigatedTo(e);
+            return;
+        }
+        
+        ViewModel = dependencies.ViewModel;
+        ImageProvider = dependencies.ImageProvider;
+        Logger = dependencies.Logger;
+        
         ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         DataContext = ViewModel;
         
@@ -47,10 +64,14 @@ public partial class FilmsPage
     }
 
     // Private Methods
+    
     private void ViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ViewModel.ContentType))
-            _scrollView?.ScrollTo(0, 0);
+        if (e.PropertyName != nameof(ViewModel.ScrollViewOffset) || ViewModel.ScrollViewOffset != 0) 
+            return;
+        
+        _scrollView ??= DependencyObjectHelper.FindVisualChild<ScrollView>(ItemsControl);
+        _scrollView?.ScrollTo(0, 0, new ScrollingScrollOptions(ScrollingAnimationMode.Disabled));
     }
 
     private void ScrollView_OnViewChanged(ScrollView sender, object args)
@@ -63,7 +84,36 @@ public partial class FilmsPage
         if (sender is SettingsCard card)
             ViewModel.TapOnOpenFilmsSourceButton((string)card.CommandParameter);
     }
-
+    
+    private void Image_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is Image { Tag: string url } image)
+        {
+            Task.Run(
+                async () =>
+                {
+                    try
+                    {
+                        var entity = await ImageProvider.ObtainImageAsync(url);
+                        var stream = await entity.Data.ToRandomAccessStreamAsync();
+                        DispatcherQueue.TryEnqueue(
+                            () =>
+                            {
+                                var bitmap = CreateBitmapAsync(stream);
+                                image.Source = bitmap;
+                            }
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "{msg}", ex.Message);
+                        throw;
+                    }
+                }
+            );
+        }
+    }
+    
     // AutoSuggestBox
     
     private void AutoSuggestBox_OnGettingFocus(UIElement sender, GettingFocusEventArgs args)
@@ -101,4 +151,23 @@ public partial class FilmsPage
         if (sender is Button button)
             ViewModel.TapOnClearHistoryItem((string)button.CommandParameter);
     }
+}
+
+public partial class FilmsPage
+{
+    private static BitmapImage CreateBitmapAsync(IRandomAccessStream stream)
+    {
+        var bitmap = new BitmapImage();
+        bitmap.SetSource(stream);
+        return bitmap;
+    }
+}
+
+public partial class FilmsPage
+{
+    public record Dependencies(
+        FilmsPageViewModel ViewModel,
+        IImageProvider ImageProvider,
+        ILogger<FilmsPage> Logger
+    );
 }

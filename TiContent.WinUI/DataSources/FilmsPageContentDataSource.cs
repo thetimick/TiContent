@@ -1,138 +1,168 @@
 ﻿// ⠀
-// FilmsPageContentDataSource.cs
-// TiContent
+// FilmsPageContentDataSourceV2.cs
+// TiContent.WinUI
 // 
-// Created by the_timick on 16.05.2025.
+// Created by the_timick on 08.06.2025.
 // ⠀
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using AutoMapper;
 using Humanizer;
 using TiContent.Components.Extensions;
-using TiContent.Components.Pagination;
 using TiContent.Entities.API.TMDB;
 using TiContent.Entities.API.TMDB.Requests;
 using TiContent.Entities.API.TMDB.Requests.Shared;
+using TiContent.Entities.ViewModel;
+using TiContent.WinUI.DataSources.Abstraction;
 using TiContent.WinUI.Services.Api.TMDB;
 
 namespace TiContent.WinUI.DataSources;
 
-public interface IFilmsPageContentDataSource
+public interface IFilmsPageContentDataSource: IDataSource<FilmsPageItemEntity, IFilmsPageContentDataSource.ParamsEntity>
 {
-    public bool InProgress { get; }
-    
-    public bool IsCompleted { get; }
-    
-    Task<List<TMDBResponseEntity.ItemEntity>> ObtainItemsAsync(int content, string query);
-    void ClearCache();
+    public record ParamsEntity(
+        string Query,
+        int Content
+    );
 }
 
-public partial class FilmsPageContentDataSource(ITMDBService contentService)
+public partial class FilmsPageContentDataSource(ITMDBService api, IMapper mapper)
 {
-    public bool InProgress => _pagination?.InProgress ?? false;
-    public bool IsCompleted => _pagination?.HasMorePage == false;
+    // Public Props
+
+    public bool InProgress => _tokenSource != null;
+    public bool IsCompleted => _pagination.IsCompleted;
+    public List<FilmsPageItemEntity> Cache { get; } = [];
     
-    private List<TMDBResponseEntity.ItemEntity> _items = [];
-    private TMDBPagination? _pagination;
+    // Private Props
+    
+    private readonly Pagination _pagination = new();
+    private CancellationTokenSource? _tokenSource;
 }
 
 public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 {
-    public async Task<List<TMDBResponseEntity.ItemEntity>> ObtainItemsAsync(int content, string query)
+    public async Task<List<FilmsPageItemEntity>> ObtainAsync(IFilmsPageContentDataSource.ParamsEntity @params, bool pagination)
     {
-        try
-        {
-            if (query.IsNullOrEmpty())
-                return await ObtainTrendingAsync(content);
+        if (InProgress || (pagination && IsCompleted))
+            return Cache;
 
-            return await ObtainSearchAsync(query);
-        }
-        catch
-        {
-            _pagination = null;
-            return _items;
-        }
-    }
-
-    public void ClearCache()
-    {
-        _items = [];
-        _pagination = null;
+        if (!pagination)
+            _pagination.Reset();
+        _tokenSource = new CancellationTokenSource();
+        
+        if (@params.Query.IsNullOrEmpty())
+            await ObtainTrendingAsync(@params.Content, pagination, _tokenSource.Token);
+        else 
+            await ObtainSearchAsync(@params.Query, pagination, _tokenSource.Token);
+        
+        _pagination.NextPage();
+        _tokenSource = null;
+        
+        return Cache;
     }
 }
 
 public partial class FilmsPageContentDataSource
 {
-    private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainTrendingAsync(int content)
+    private async Task ObtainTrendingAsync(int content, bool pagination, CancellationToken token)
     {
-        if (_pagination?.InProgress == true || _pagination is { HasMorePage: false, HasBeenInit: true })
-            return _items;
-        
-        _pagination ??= new TMDBPagination();
-        _pagination.NextPage();
-        
         var request = new TMDBTrendingRequestEntity
         {
             Period = TMDBTrendingRequestEntity.PeriodType.Week, 
             Content = content.MapToContentType(),
             Page = _pagination.Page
         };
-
-        var response = await contentService.ObtainTrendingAsync(request);
         
-        if (_pagination?.HasBeenInit == false)
-            _pagination.Init(response.TotalPages);
+        var response = await api.ObtainTrendingAsync(request, token);
+        ApplyItems(response.Results, pagination);
         
-        ApplyChangedToLocalCache(response.Results);
-        return _items;
+        _pagination.SetTotalPages(response.TotalPages);
     }
     
-    private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainSearchAsync(string query)
+    private async Task ObtainSearchAsync(string query, bool pagination, CancellationToken token)
     {
-        if (_pagination?.InProgress == true || _pagination is { HasMorePage: false, HasBeenInit: true })
-            return _items;
-        
         query = query.Trim().Humanize(LetterCasing.LowerCase);
         
-        _pagination ??= new TMDBPagination();
-        _pagination.NextPage();
+        var requestForMovies = new TMDBSearchRequestEntity
+        {
+            Content = TMDBRequestContentType.Movies, 
+            Query = query, 
+            Page = _pagination.Page
+        };
         
-        var requestForMovies = new TMDBSearchRequestEntity { Content = TMDBRequestContentType.Movies, Query = query, Page = _pagination.Page };
-        var requestForSerials = new TMDBSearchRequestEntity { Content = TMDBRequestContentType.Serials, Query = query, Page = _pagination.Page };
+        var requestForSerials = new TMDBSearchRequestEntity
+        {
+            Content = TMDBRequestContentType.Serials, 
+            Query = query,
+            Page = _pagination.Page
+        };
         
-        var responseForMovies = contentService.ObtainSearchAsync(requestForMovies);
-        var responseForSerials = contentService.ObtainSearchAsync(requestForSerials);
+        var responseForMovies = api.ObtainSearchAsync(requestForMovies, token);
+        var responseForSerials = api.ObtainSearchAsync(requestForSerials, token);
         
         await Task.WhenAll(responseForMovies, responseForSerials);
 
-        if (responseForMovies.Result.Results is not { } movies || responseForSerials.Result.Results is not { } serials || responseForMovies.Result.TotalPages is not { } moviesTotalPages || responseForSerials.Result.TotalPages is not { } serialTotalPages)
-            return _items;
-
-        var totalPages = long.Max(moviesTotalPages, serialTotalPages);
-        var items = movies.Concat(serials)
-            .OrderByDescending(entity => entity.Popularity)
-            .ToList();
-        
-        if (_pagination?.HasBeenInit == false)
-            _pagination.Init(totalPages);
-        ApplyChangedToLocalCache(items);
-        
-        return _items;
-    }
-    
-    private void ApplyChangedToLocalCache(List<TMDBResponseEntity.ItemEntity>? items)
-    {
-        if (items != null)
-        {
-            _pagination?.LoadingCompleted();
-            _items.AddRange(items);
+        if (
+            responseForMovies.Result.Results is not { } movies ||
+            responseForSerials.Result.Results is not { } serials ||
+            responseForMovies.Result.TotalPages is not { } moviesTotalPages ||
+            responseForSerials.Result.TotalPages is not { } serialTotalPages
+        ) {
             return;
         }
         
-        _pagination = null;
-        _items = [];
+        var items = movies.Concat(serials)
+            .OrderByDescending(entity => entity.Popularity)
+            .ToList();
+        ApplyItems(items, pagination);
+        
+        _pagination.SetTotalPages(int.Max(moviesTotalPages, serialTotalPages));
+    }
+
+    private void ApplyItems(List<TMDBResponseEntity.ItemEntity>? items, bool pagination)
+    {
+        if (items == null)
+            return;
+        
+        var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(items);
+        
+        if (!pagination)
+            Cache.Clear();
+        Cache.AddRange(mapped);
+    }
+}
+
+public partial class FilmsPageContentDataSource
+{
+    private class Pagination
+    {
+        public bool IsCompleted => Page == TotalPages;
+        public int Page { get; private set; }
+
+        private int TotalPages { get; set; } = -1;
+        
+        public void SetTotalPages(int? totalPages)
+        {
+            if (totalPages is { } pages)
+                TotalPages = pages;
+        }
+        
+        public void NextPage()
+        {
+            if (Page < TotalPages)
+                Page += 1;
+        }
+        
+        public void Reset()
+        {
+            Page = 1;
+            TotalPages = -1;
+        }
     }
 }
 

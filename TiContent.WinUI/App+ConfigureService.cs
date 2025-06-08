@@ -32,6 +32,7 @@ public partial class App
         private readonly ILogger<ConfigureService> _logger = provider.GetRequiredService<ILogger<ConfigureService>>();
         private readonly IThemeService _themeService = provider.GetRequiredService<IThemeService>();
         private readonly MainWindow _window = provider.GetRequiredService<MainWindow>();
+        private readonly AppDataBaseContext _db = provider.GetRequiredService<AppDataBaseContext>();
         
         // IHostedService
         
@@ -67,7 +68,8 @@ public partial class App
                 _storageService.Cached.Window.X = _window.AppWindow.Position.X;
                 _storageService.Cached.Window.Y = _window.AppWindow.Position.Y;
             }
-            
+
+            _db.SaveChanges();
             _storageService.Save();
             
             return Task.CompletedTask;

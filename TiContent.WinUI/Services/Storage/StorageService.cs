@@ -3,7 +3,7 @@ using System.IO;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using TiContent.Constants;
-using TiContent.Entities;
+using TiContent.Entities.Storage;
 
 namespace TiContent.WinUI.Services.Storage;
 
@@ -59,6 +59,11 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService {
     public StorageEntity Save()
     {
         var path = Path.Combine(AppContext.BaseDirectory, AppConstants.FileNames.StorageFileName);
+        
+        var directory = Path.GetDirectoryName(path);
+        if (directory != null && !Directory.Exists(directory))
+            Directory.CreateDirectory(directory); 
+        
         Cached ??= new StorageEntity();
         
         try

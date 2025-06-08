@@ -7,7 +7,9 @@
 
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
+using TiContent.WinUI.Providers;
 using TiContent.WinUI.UI.Pages.Films;
 using TiContent.WinUI.UI.Pages.Games;
 using TiContent.WinUI.UI.Pages.GamesSource;
@@ -46,14 +48,28 @@ public class NavigationService(IServiceProvider provider): INavigationService
         switch (path)
         {
             case NavigationPath.Films:
-                _frame.Navigate(typeof(FilmsPage), provider.GetRequiredService<FilmsPageViewModel>());
+                _frame.Navigate(
+                    typeof(FilmsPage), 
+                    new FilmsPage.Dependencies(
+                        provider.GetRequiredService<FilmsPageViewModel>(),
+                        provider.GetRequiredService<IImageProvider>(),
+                        provider.GetRequiredService<ILogger<FilmsPage>>()
+                    )
+                );
                 break;
             case NavigationPath.FilmsSource:
                 _frame.Navigate(typeof(FilmsSourcesPage), provider.GetRequiredService<FilmsSourcesPageViewModel>());
                 break;
             
             case NavigationPath.Games:
-                _frame.Navigate(typeof(GamesPage), provider.GetRequiredService<GamesPageViewModel>());
+                _frame.Navigate(
+                    typeof(GamesPage), 
+                    new GamesPage.Dependencies(
+                        provider.GetRequiredService<GamesPageViewModel>(),
+                        provider.GetRequiredService<IImageProvider>(),
+                        provider.GetRequiredService<ILogger<GamesPage>>()
+                    )
+                );
                 break;
             
             case NavigationPath.GamesSource:

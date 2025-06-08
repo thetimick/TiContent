@@ -16,6 +16,7 @@ using TiContent.Constants;
 using TiContent.Entities.DB;
 using TiContent.Entities.ViewModel;
 using TiContent.WinUI.DataSources;
+using TiContent.WinUI.Providers;
 using TiContent.WinUI.Services.Api.Hydra;
 using TiContent.WinUI.Services.Api.HydraLinks;
 using TiContent.WinUI.Services.Api.Jacred;
@@ -80,6 +81,8 @@ public partial class App
         
         services.AddHostedService<ConfigureService>();
 
+        services.AddSingleton<IImageProvider, ImageProvider>();
+
         services.AddSingleton<IStorageService, StorageService>();
         services.AddSingleton<ITMDBService, TMDBService>();
         services.AddSingleton<IJacredService, JacredService>();
@@ -87,6 +90,7 @@ public partial class App
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
         services.AddSingleton<IThemeService, ThemeService>();
 
+        services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
         services.AddSingleton<IFilmsSourcePageContentDataSource, FilmsSourcePageContentDataSource>();
         services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();

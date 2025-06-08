@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -17,7 +18,6 @@ using Microsoft.UI.Dispatching;
 using ThrottleDebounce;
 using TiContent.Components.Abstractions;
 using TiContent.Components.Extensions;
-using TiContent.Components.Helpers;
 using TiContent.Entities.DB;
 using TiContent.Entities.ViewModel;
 using TiContent.WinUI.DataSources;
@@ -89,7 +89,7 @@ public partial class GamesPageViewModel : ObservableObject
     {
         ScrollViewOffset = offset;
         if (_dataSource is { InProgress: false, IsCompleted: false } && Items.Count >= 20 && height - offset < 1)
-            ObtainItemsFromDataSource(pagination: true);
+            ObtainItemsFromDataSource(true);
     }
     
     public void TapOnOpenGamesSource(string id)
@@ -123,9 +123,9 @@ public partial class GamesPageViewModel : ObservableObject
         _debounceOnQueryChangedAction.Invoke();
     }
 
+    [SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")]
     partial void OnContentTypeIndexChanged(int value)
     {
-        _logger.LogInformation(@"GamesPage \ OnContentTypeIndexChanged \ {value}", value);
         ObtainItemsFromDataSource();
     }
     
@@ -133,23 +133,32 @@ public partial class GamesPageViewModel : ObservableObject
     {
         if (!pagination)
         {
-            _dataSource.ClearCache();
-
             State = ViewStateEnum.InProgress;
             Items = [];
             ScrollViewOffset = 0;
         }
 
         Task.WhenAll(
-            ObtainItemsTaskAsync(), 
+            ObtainItemsTaskAsync(pagination), 
             ObtainHistoryAsync(),
             AddQueryToHistoryAsync()
         );
     }
     
-    private async Task ObtainItemsTaskAsync()
+    private async Task ObtainItemsTaskAsync(bool pagination)
     {
-        var items = await _dataSource.ObtainAsync(Query, ContentTypeIndex);
+        var type = Query.IsNullOrEmpty() && ContentTypeIndex == 1
+            ? IGamesPageContentDataSource.ContentTypeEnum.Popularity
+            : IGamesPageContentDataSource.ContentTypeEnum.Catalogue;
+        
+        var items = await _dataSource.ObtainAsync(
+            new IGamesPageContentDataSource.ParamsEntity(
+                Query, 
+                type
+            ),
+            pagination
+        );
+        
         _dispatcherQueue.TryEnqueue(
             () =>
             {

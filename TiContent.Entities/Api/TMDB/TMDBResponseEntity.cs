@@ -20,16 +20,16 @@ namespace TiContent.Entities.API.TMDB;
 public record TMDBResponseEntity
 {
     [JsonPropertyName("page")]
-    public long? Page { get; set; }
+    public int? Page { get; set; }
 
     [JsonPropertyName("results")]
     public List<ItemEntity>? Results { get; set; }
 
     [JsonPropertyName("total_pages")]
-    public long? TotalPages { get; set; }
+    public int? TotalPages { get; set; }
 
     [JsonPropertyName("total_results")]
-    public long? TotalResults { get; set; }
+    public int? TotalResults { get; set; }
     
     public record ItemEntity
     {

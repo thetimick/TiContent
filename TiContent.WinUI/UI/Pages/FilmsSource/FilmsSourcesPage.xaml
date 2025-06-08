@@ -8,6 +8,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:entities="using:TiContent.Entities.ViewModel"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:wUI="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
 
     <Grid
@@ -68,15 +69,15 @@
 
                 <ItemsControl.Template>
                     <ControlTemplate>
-                        <ScrollView>
+                        <ScrollViewer>
                             <ItemsPresenter />
-                        </ScrollView>
+                        </ScrollViewer>
                     </ControlTemplate>
                 </ItemsControl.Template>
 
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Orientation="Vertical" />
+                        <VirtualizingStackPanel Orientation="Vertical" VirtualizationMode="Recycling" />
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -91,7 +92,10 @@
 
                             <cControls:SettingsCard.Header>
                                 <StackPanel Grid.Column="0" VerticalAlignment="Center">
-                                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
+                                    <TextBlock
+                                        MaxLines="3"
+                                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                        Text="{x:Bind Title}" />
 
                                     <TextBlock
                                         Foreground="{ThemeResource TextFillColorTertiaryBrush}"
@@ -101,26 +105,35 @@
                                     <TextBlock
                                         Margin="0,2,0,0"
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                        Style="{ThemeResource CaptionTextBlockStyle}"
-                                        Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
+                                        Style="{ThemeResource CaptionTextBlockStyle}">
+
+                                        <Run Text="{x:Bind Quality}" />
+                                        <Run Text="•" />
+                                        <Run Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
+                                        <Run Text="•" />
+                                        <Run Text="{x:Bind Size, Converter={StaticResource ByteSizeToStringConverter}}" />
+                                    </TextBlock>
+
                                 </StackPanel>
                             </cControls:SettingsCard.Header>
 
                             <StackPanel VerticalAlignment="Center" Spacing="4">
-                                <DropDownButton Content="Открыть">
+                                <DropDownButton HorizontalAlignment="Stretch" Content="Опции">
                                     <DropDownButton.Flyout>
                                         <MenuFlyout Placement="Bottom">
                                             <MenuFlyoutItem
                                                 Click="MenuFlyoutItem_OnClick"
                                                 CommandParameter="{x:Bind Title}"
+                                                Icon="{wUI:FontIcon Glyph='&#xE71B;'}"
                                                 Tag="0"
-                                                Text="Трекер" />
+                                                Text="Открыть Трекер" />
 
                                             <MenuFlyoutItem
                                                 Click="MenuFlyoutItem_OnClick"
                                                 CommandParameter="{x:Bind Title}"
+                                                Icon="{wUI:FontIcon Glyph='&#xE71B;'}"
                                                 Tag="1"
-                                                Text="Торрент" />
+                                                Text="Открыть Торрент" />
                                         </MenuFlyout>
                                     </DropDownButton.Flyout>
                                 </DropDownButton>
@@ -150,7 +163,7 @@
                                                 HorizontalAlignment="Center"
                                                 Foreground="{ThemeResource SystemFillColorSuccessBrush}"
                                                 Style="{ThemeResource BodyStrongTextBlockStyle}"
-                                                Text="{x:Bind SidPir.Item1}" />
+                                                Text="{x:Bind SidPir.Item1, Converter={StaticResource IntLimitToStringConverter}}" />
                                         </StackPanel>
 
                                         <StackPanel
@@ -163,7 +176,7 @@
                                             <TextBlock
                                                 HorizontalAlignment="Center"
                                                 Style="{ThemeResource BodyStrongTextBlockStyle}"
-                                                Text="{x:Bind SidPir.Item2}" />
+                                                Text="{x:Bind SidPir.Item2, Converter={StaticResource IntLimitToStringConverter}}" />
                                         </StackPanel>
                                     </StackPanel>
                                 </Border>
@@ -193,6 +206,7 @@
                             <ComboBoxItem Content="Название" />
                             <ComboBoxItem Content="Сиды" />
                             <ComboBoxItem Content="Пиры" />
+                            <ComboBoxItem Content="Размер" />
                         </ComboBox>
                     </StackPanel>
                 </Border>
@@ -212,14 +226,16 @@
                             <ComboBox
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
-                                Header="Тип Видео"
-                                Visibility="Collapsed" />
+                                Header="Тип Контента"
+                                ItemsSource="{x:Bind ViewModel.Filters.ContentType, Mode=TwoWay}"
+                                SelectedIndex="{x:Bind ViewModel.Filters.ContentTypeIndex, Mode=TwoWay}" />
 
                             <ComboBox
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
                                 Header="Озвучка"
-                                Visibility="Collapsed" />
+                                ItemsSource="{x:Bind ViewModel.Filters.Voices, Mode=TwoWay}"
+                                SelectedIndex="{x:Bind ViewModel.Filters.VoicesIndex, Mode=TwoWay}" />
 
                             <ComboBox
                                 HorizontalAlignment="Stretch"

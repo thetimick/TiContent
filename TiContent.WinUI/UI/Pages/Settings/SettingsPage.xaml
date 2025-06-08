@@ -67,7 +67,7 @@
                     <controls:SettingsCard
                         Description="Токен доступа для TMDB"
                         Header="TMDB"
-                        HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
+                        HeaderIcon="{ui:FontIcon Glyph='&#xE8D7;'}">
 
                         <TextBox PlaceholderText="Токен" Text="{x:Bind ViewModel.TMDBApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </controls:SettingsCard>
@@ -84,7 +84,7 @@
                         Header="TiContent by the_timick"
                         HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
 
-                        <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.1" />
+                        <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.2" />
                     </controls:SettingsCard>
                 </StackPanel>
             </Grid>

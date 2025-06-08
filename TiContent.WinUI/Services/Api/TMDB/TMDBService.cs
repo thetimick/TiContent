@@ -5,9 +5,11 @@
 // Created by the_timick on 12.05.2025.
 // ⠀
 
-using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using RestSharp;
 using TiContent.Components.Helpers;
 using TiContent.Constants;
@@ -20,56 +22,54 @@ namespace TiContent.WinUI.Services.Api.TMDB;
 
 public interface ITMDBService
 {
-    public Task<TMDBResponseEntity> ObtainNowPlayingAsync(int page, CancellationToken token = default);
-    public Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity requestEntity, CancellationToken token = default);
-    
-    public Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity requestEntity, CancellationToken token = default);
+    public Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity entity, CancellationToken token = default);
+    public Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity entity, CancellationToken token = default);
 }
 
-public partial class TMDBService(IRestClient client, IStorageService storage) {
-    private string TMDBApiBaseUrl => storage.Cached?.Urls.TMDBApiBaseUrl ?? AppConstants.Urls.TMDBApiBaseUrl;
-}
+public partial class TMDBService(
+    IRestClient client, 
+    IStorageService storage,
+    ILogger<TMDBService> logger
+);
 
 public partial class TMDBService : ITMDBService
 {
-    public async Task<TMDBResponseEntity> ObtainNowPlayingAsync(int page, CancellationToken token = default)
+    public async Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity entity, CancellationToken token = default)
     {
-        var request = MakeRequest("/3/movie/now_playing")
-            .AddParameter("page", page);
-        var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
+        var path = new StringBuilder()
+            .Append("/trending")
+            .Append($"/{entity.Content.RawValue()}")
+            .Append($"/{entity.Period.RawValue()}")
+            .ToString();
         
+        var request = MakeRequest(path)
+            .AddParameter("page", entity.Page);
+        
+        var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
         if (response is { IsSuccessful: true, Data: { } data })
             return data;
-        
-        response.ThrowIfError();
-        throw new Exception();
+
+        logger.LogError(response.ErrorException, "{msg}", response.ErrorMessage);
+        return new TMDBResponseEntity();
     }
 
-    public async Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity requestEntity, CancellationToken token = default)
+    public async Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity entity, CancellationToken token = default)
     {
-        var request = MakeRequest($"/3/trending/{requestEntity.Content.RawValue()}/{requestEntity.Period.RawValue()}")
-            .AddParameter("page", requestEntity.Page);
-        var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
+        var path = new StringBuilder()
+            .Append("/search")
+            .Append($"/{entity.Content.RawValue()}")
+            .ToString();
         
+        var request = MakeRequest(path)
+            .AddParameter("query", entity.Query)
+            .AddParameter("page", entity.Page);
+        
+        var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
         if (response is { IsSuccessful: true, Data: { } data })
             return data;
         
-        response.ThrowIfError();
-        throw new Exception();
-    }
-
-    public async Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity requestEntity, CancellationToken token = default)
-    {
-        var request = MakeRequest($"/3/search/{requestEntity.Content.RawValue()}")
-            .AddParameter("query", requestEntity.Query)
-            .AddParameter("page", requestEntity.Page);
-        var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
-        
-        if (response is { IsSuccessful: true, Data: { } data })
-            return data;
-        
-        response.ThrowIfError();
-        throw new Exception();
+        logger.LogError(response.ErrorException, "{msg}", response.ErrorMessage);
+        return new TMDBResponseEntity();
     }
 }
 
@@ -79,7 +79,10 @@ public partial class TMDBService
 {
     private RestRequest MakeRequest(string path)
     {
-        var url = UrlHelper.Combine(TMDBApiBaseUrl, path);
+        var url = UrlHelper.Combine(
+            storage.Cached?.Urls.TMDBApiBaseUrl ?? AppConstants.Urls.TMDBApiBaseUrl, 
+            path
+        );
         return new RestRequest(url)
             .AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey)
             .AddParameter("language", "ru");

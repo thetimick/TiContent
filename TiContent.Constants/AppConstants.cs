@@ -11,9 +11,9 @@ public static class AppConstants
 {
     public static class FileNames
     {
-        public const string DataBaseFileName = "TiContent.db";
-        public const string StorageFileName = "TiContent.storage.json";
-        public const string LogFileName = "TiContent.log";
+        public const string DataBaseFileName = "_storage\\TiContent.db";
+        public const string StorageFileName = "_storage\\TiContent.storage.json";
+        public const string LogFileName = "_storage\\TiContent.log";
     }
     
     public static class Urls
@@ -25,7 +25,7 @@ public static class AppConstants
         
         public const string CubApiBaseUrl = "https://tmdb.cub.rip";
         
-        public const string TMDBApiBaseUrl = "https://apitmdb.cub.rip";
+        public const string TMDBApiBaseUrl = "https://apitmdb.cub.rip/3";
         public const string TMDBAssetsApi = "https://imagetmdb.com/t/p/w200";
 
         public const string HydraLinksSources = "https://library.hydra.wiki/data/resources.json";

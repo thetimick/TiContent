@@ -61,8 +61,9 @@
                                     <Image
                                         Width="230"
                                         Height="108"
-                                        Source="{x:Bind ImageUrl}"
-                                        Stretch="Fill" />
+                                        Loaded="Image_OnLoaded"
+                                        Stretch="Fill"
+                                        Tag="{x:Bind ImageUrl}" />
                                 </Border>
 
                                 <StackPanel Grid.Column="1" Spacing="4">

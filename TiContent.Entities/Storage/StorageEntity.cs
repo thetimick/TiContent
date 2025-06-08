@@ -7,7 +7,7 @@
 
 using TiContent.Constants;
 
-namespace TiContent.Entities;
+namespace TiContent.Entities.Storage;
 
 public record StorageEntity
 {
@@ -20,16 +20,13 @@ public record StorageEntity
     {
         public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
         public string HydraApiBaseUrl { get; init; } = AppConstants.Urls.HydraApi;
-        public string HydraAssetsApiBaseUrl { get; init; } = AppConstants.Urls.HydraAssetsApi;
-        public string CubApiBaseUrl { get; init; } = AppConstants.Urls.CubApiBaseUrl;
         public string TMDBApiBaseUrl { get; init; } = AppConstants.Urls.TMDBApiBaseUrl;
-        public string TMDBAssetsApiBaseUrl { get; init; } = AppConstants.Urls.TMDBAssetsApi;
         public string HydraLinksSources { get; init; } = AppConstants.Urls.HydraLinksSources;
     }
 
     public record KeysEntity
     {
-        public string? TMDBApiKey { get; set; }
+        public string TMDBApiKey { get; set; } = string.Empty;
     }
     
     public record WindowEntity

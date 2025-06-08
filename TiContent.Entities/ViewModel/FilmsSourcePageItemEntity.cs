@@ -5,14 +5,23 @@
 // Created by the_timick on 28.05.2025.
 // ⠀
 
+using System.ComponentModel;
 using AutoMapper;
 using Humanizer;
+using Humanizer.Bytes;
 using TiContent.Entities.Api.Jacred;
 
 namespace TiContent.Entities.ViewModel;
 
 public partial record FilmsSourcePageItemEntity
 {
+    public enum ContentTypeEnum
+    {
+        Any,
+        Movie,
+        Serial
+    }
+    
     public string Title { get; init; } = string.Empty;
     public string Description { get; init; } = string.Empty;
     public string TrackerUrl { get; init; } = string.Empty;
@@ -21,6 +30,9 @@ public partial record FilmsSourcePageItemEntity
     public DateTime Date { get; init; }
     public string Quality { get; init; } = string.Empty;
     public string Tracker { get; init; } = string.Empty;
+    public ByteSize Size { get; init; } = ByteSize.MinValue;
+    public List<string> Voices { get; init; } = [];
+    public ContentTypeEnum ContentType { get; init; } = ContentTypeEnum.Any;
 }
 
 public partial record FilmsSourcePageItemEntity
@@ -66,6 +78,28 @@ public partial record FilmsSourcePageItemEntity
                 .ForMember(
                     dest => dest.Tracker,
                     opt => opt.MapFrom(src => src.Tracker.Humanize())
+                )
+                .ForMember(
+                    dest => dest.Size,
+                    opt => opt.MapFrom(src => src.Size)
+                )
+                .ForMember(
+                    dest => dest.Voices,
+                    opt => opt.MapFrom(src => src.Voices)
+                )
+                .ForMember(
+                    dest => dest.ContentType,
+                    opt => opt.MapFrom(
+                        (src, _) =>
+                        {
+                            if (src.Types?.Contains("movie") == true)
+                                return ContentTypeEnum.Movie;
+                            if (src.Types?.Contains("serial") == true)
+                                return ContentTypeEnum.Serial;
+                            
+                            return ContentTypeEnum.Any;
+                        }
+                    )
                 );
         }
     }

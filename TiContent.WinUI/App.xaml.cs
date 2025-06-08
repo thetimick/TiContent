@@ -22,6 +22,8 @@ public partial class App
         AppHost.StartAsync();
     }
     
+    public static T GetRequiredService<T>() where T : notnull => AppHost.Services.GetRequiredService<T>();
+    
     /// <summary>
     /// Prevents the app from crashing when a exception gets thrown and notifies the user.
     /// </summary>
@@ -30,7 +32,6 @@ public partial class App
     private static void HandleExceptions(object sender, UnhandledExceptionEventArgs e)
     {
         e.Handled = true;
-        
         AppHost.Services.GetRequiredService<ILogger<App>>()
             .LogError("{message}", e.Message);
     }

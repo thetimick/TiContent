@@ -14,10 +14,10 @@
 
             <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
             <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
-            <converters:SidPirToStringConverter x:Key="SidPirToStringConverter" />
             <converters:ViewStateToVisibilityConverter x:Key="ViewStateToVisibilityConverter" />
             <converters:VoteToColorConverter x:Key="VoteToColorConverter" />
             <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
+            <converters:IntLimitToStringConverter x:Key="IntLimitToStringConverter" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

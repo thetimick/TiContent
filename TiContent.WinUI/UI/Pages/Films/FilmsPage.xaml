@@ -56,12 +56,17 @@
 
                         <controls:SettingsCard.Header>
                             <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
-                                <Border Grid.Column="0" CornerRadius="8">
+                                <Border
+                                    Grid.Column="0"
+                                    Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
+                                    CornerRadius="8">
+
                                     <Image
                                         Width="100"
                                         Height="142"
-                                        Source="{x:Bind ImageUrl}"
-                                        Stretch="Fill" />
+                                        Loaded="Image_OnLoaded"
+                                        Stretch="Fill"
+                                        Tag="{x:Bind ImageUrl}" />
                                 </Border>
 
                                 <StackPanel Grid.Column="1" Orientation="Vertical">

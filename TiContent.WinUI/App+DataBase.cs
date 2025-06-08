@@ -19,6 +19,7 @@ public partial class App
         
         public DbSet<DataBaseHistoryEntity> QueryHistoryItems => Set<DataBaseHistoryEntity>();
         public DbSet<DataBaseHydraLinksEntity> HydraLinksItems => Set<DataBaseHydraLinksEntity>();
+        public DbSet<DataBaseImageEntity> ImageItems => Set<DataBaseImageEntity>();
         
         // LifeCycle
         

@@ -5,19 +5,28 @@
 // Created by Timick on 16.12.2024.
 // ㅤ
 
+using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using CommunityToolkit.WinUI.Controls;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
+using TiContent.WinUI.Components.Extensions;
 using TiContent.WinUI.Components.Helpers;
+using TiContent.WinUI.Providers;
 
 namespace TiContent.WinUI.UI.Pages.Games;
 
 public partial class GamesPage
 {
-    public GamesPageViewModel ViewModel { get; private set; } = null!;
+    private GamesPageViewModel ViewModel { get; set; } = null!;
+    private IImageProvider ImageProvider { get; set; } = null!;
+    private ILogger<GamesPage> Logger { get; set; } = null!;
 
     private ScrollView? _scrollView;
     
@@ -36,7 +45,16 @@ public partial class GamesPage
 
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
-        ViewModel = (GamesPageViewModel)e.Parameter;
+        if (e.Parameter is not Dependencies dependencies)
+        {
+            base.OnNavigatedTo(e);
+            return;
+        }
+        
+        ViewModel = dependencies.ViewModel;
+        ImageProvider = dependencies.ImageProvider;
+        Logger = dependencies.Logger;
+        
         ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         DataContext = ViewModel;
         
@@ -63,6 +81,35 @@ public partial class GamesPage
     {
         if (sender is SettingsCard card)
             ViewModel.TapOnOpenGamesSource((string)card.CommandParameter);
+    }
+    
+    private void Image_OnLoaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is Image { Tag: string url } image)
+        {
+            Task.Run(
+                async () =>
+                {
+                    try
+                    {
+                        var entity = await ImageProvider.ObtainImageAsync(url);
+                        var stream = await entity.Data.ToRandomAccessStreamAsync();
+                        DispatcherQueue.TryEnqueue(
+                            () =>
+                            {
+                                var bitmap = CreateBitmapAsync(stream);
+                                image.Source = bitmap;
+                            }
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "{msg}", ex.Message);
+                        throw;
+                    }
+                }
+            );
+        }
     }
     
     // AutoSuggestBox
@@ -100,4 +147,23 @@ public partial class GamesPage
             // ignored
         }
     }
+}
+
+public partial class GamesPage
+{
+    private static BitmapImage CreateBitmapAsync(IRandomAccessStream stream)
+    {
+        var bitmap = new BitmapImage();
+        bitmap.SetSource(stream);
+        return bitmap;
+    }
+}
+
+public partial class GamesPage
+{
+    public record Dependencies(
+        GamesPageViewModel ViewModel,
+        IImageProvider ImageProvider,
+        ILogger<GamesPage> Logger
+    );
 }

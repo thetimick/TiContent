@@ -50,8 +50,9 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
 
     partial void OnTMDBApiKeyChanged(string value)
     {
-        if (storageService.Cached != null && value != storageService.Cached.Keys.TMDBApiKey)
-            storageService.Cached.Keys.TMDBApiKey = value;
+        if (storageService.Cached == null || storageService.Cached.Keys.TMDBApiKey == value)
+            return;
+        storageService.Cached.Keys.TMDBApiKey = value;
     }
 
     public void OnLoaded()
@@ -62,6 +63,6 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
         ThemeIndex = cached.Window.ThemeIndex;
         IsWindowSizePersistent = cached.Window.IsWindowSizePersistent;
         IsWindowOnCenterScreen = cached.Window.IsWindowOnCenterScreen;
-        TMDBApiKey = cached.Keys.TMDBApiKey ?? string.Empty;
+        TMDBApiKey = cached.Keys.TMDBApiKey;
     }
 }

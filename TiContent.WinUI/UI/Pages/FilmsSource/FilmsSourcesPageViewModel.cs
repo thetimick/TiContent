@@ -5,15 +5,18 @@
 // Created by the_timick on 26.05.2025.
 // ⠀
 
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
 using TiContent.Components.Abstractions;
@@ -78,6 +81,8 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
         switch (e.PropertyName)
         {
             case nameof(Filters.YearsIndex):
+            case nameof(Filters.ContentTypeIndex):
+            case nameof(Filters.VoicesIndex):
             case nameof(Filters.TrackerIndex):
             case nameof(Filters.QualitiesIndex):
                 ApplySortAndFilters(_allItems);
@@ -87,9 +92,9 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
 
     // Props Changed
 
+    [SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")]
     partial void OnSortOrderChanged(int value)
     {
-        _logger.LogInformation("OnSortOrderChanged {value}", value);
         ApplySortAndFilters(_allItems);
     }
 
@@ -166,24 +171,42 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
             .Select(entity => entity.Quality)
             .Distinct()
             .OrderBy(s => s)
+            .Prepend("Не задано")
             .ToObservable();
-        Filters.Qualities.Insert(0, "Не задано");
-        Filters.QualitiesIndex = 0;
+        
+        Filters.ContentType = source
+            .Where(entity => entity.ContentType != FilmsSourcePageItemEntity.ContentTypeEnum.Any)
+            .Select(entity => entity.ContentType.Humanize())
+            .Distinct()
+            .OrderBy(s => s)
+            .Prepend("Не задано")
+            .ToObservable();
+        
+        Filters.Voices = source
+            .SelectMany(entity => entity.Voices)
+            .Distinct()
+            .OrderBy(s => s)
+            .Prepend("Не задано")
+            .ToObservable();
         
         Filters.Trackers = source
             .Select(entity => entity.Tracker)
             .Distinct()
             .OrderBy(s => s)
+            .Prepend("Не задано")
             .ToObservable();
-        Filters.Trackers.Insert(0, "Не задано");
-        Filters.TrackerIndex = 0;
         
         Filters.Years = source
             .Select(entity => entity.Date.Year.ToString())
             .Distinct()
             .OrderBy(s => s)
+            .Prepend("Не задано")
             .ToObservable();
-        Filters.Years.Insert(0, "Не задано");
+        
+        Filters.QualitiesIndex = 0;
+        Filters.ContentTypeIndex = 0;
+        Filters.VoicesIndex = 0;
+        Filters.TrackerIndex = 0;
         Filters.YearsIndex = 0;
     }
 
@@ -198,6 +221,12 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
                     
                     if (Filters.QualitiesIndex > 0)
                         passed &= entity.Quality == Filters.Qualities[Filters.QualitiesIndex];
+                    
+                    if (Filters.ContentTypeIndex > 0)
+                        passed &= entity.ContentType == Enum.Parse<FilmsSourcePageItemEntity.ContentTypeEnum>(Filters.ContentType[Filters.ContentTypeIndex]);
+                    
+                    if (Filters.VoicesIndex > 0)
+                        passed &= entity.Voices.Contains(Filters.Voices[Filters.VoicesIndex]);
                     
                     if (Filters.TrackerIndex > 0)
                         passed &= entity.Tracker == Filters.Trackers[Filters.TrackerIndex];
@@ -216,6 +245,7 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
             1 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.Title)),
             2 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.SidPir.Item1)),
             3 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.SidPir.Item2)),
+            4 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.Size)),
             _ => Items
         };
         
@@ -248,6 +278,16 @@ public partial class FilmsSourcesPageViewModel
         public partial ObservableCollection<string> Qualities { get; set; } = [];
         [ObservableProperty]
         public partial int QualitiesIndex { get; set; }
+        
+        [ObservableProperty] 
+        public partial ObservableCollection<string> ContentType { get; set; } = [];
+        [ObservableProperty]
+        public partial int ContentTypeIndex { get; set; }
+        
+        [ObservableProperty]
+        public partial ObservableCollection<string> Voices { get; set; } = [];
+        [ObservableProperty]
+        public partial int VoicesIndex { get; set; }
         
         [ObservableProperty] 
         public partial ObservableCollection<string> Trackers { get; set; } = [];
