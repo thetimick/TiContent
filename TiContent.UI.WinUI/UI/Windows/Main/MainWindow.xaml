@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Window
+    x:Class="TiContent.UI.WinUI.UI.Windows.Main.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="TiContent.UI.WPF"
+    mc:Ignorable="d">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <NavigationView
+        x:Name="NavigationView"
+        Margin="0,30,0,0"
+        IsBackButtonVisible="Collapsed"
+        MenuItemsSource="{x:Bind ViewModel.MenuItems, Mode=TwoWay}"
+        OpenPaneLength="256"
+        PaneTitle="TiContent.UI.WPF"
+        SelectedItem="{x:Bind ViewModel.NavigationViewSelectedItem, Mode=TwoWay}"
+        SelectionChanged="OnSelectionChanged">
+
+        <Frame IsNavigationStackEnabled="True" />
+    </NavigationView>
+</Window>

@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.13.35931.197
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent", "TiContent\TiContent.csproj", "{DD90FD85-9046-46FD-96D9-A01EA1E3633E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.UI.WPF", "TiContent.UI.WPF\TiContent.UI.WPF.csproj", "{DD90FD85-9046-46FD-96D9-A01EA1E3633E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Entities", "TiContent.Entities\TiContent.Entities.csproj", "{CDFB3365-22B8-474A-8369-42F179B42DAC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.Entities", "TiContent.Foundation.Entities\TiContent.Foundation.Entities.csproj", "{CDFB3365-22B8-474A-8369-42F179B42DAC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Constants", "TiContent.Constants\TiContent.Constants.csproj", "{5BDE8AE2-C7EE-47FE-8D6C-849EDE53727E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.Constants", "TiContent.Foundation.Constants\TiContent.Foundation.Constants.csproj", "{5BDE8AE2-C7EE-47FE-8D6C-849EDE53727E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Components", "TiContent.Components\TiContent.Components.csproj", "{415423D7-D7A4-4830-9E57-58EAADC4131E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.Components", "TiContent.Foundation.Components\TiContent.Foundation.Components.csproj", "{415423D7-D7A4-4830-9E57-58EAADC4131E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.WinUI", "TiContent.WinUI\TiContent.WinUI.csproj", "{9B923B1E-7D8E-48EE-B041-14A2E54BECFE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.UI.WinUI", "TiContent.UI.WinUI\TiContent.UI.WinUI.csproj", "{9B923B1E-7D8E-48EE-B041-14A2E54BECFE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

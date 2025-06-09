@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="TiContent.UI.WinUI.UI.Pages.GamesSource.GamesSourcePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:entities="using:TiContent.Foundation.Entities.ViewModel"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid
+        Margin="16"
+        RowDefinitions="Auto, *"
+        RowSpacing="8">
+
+        <Grid
+            Padding="16,12,16,16"
+            ColumnDefinitions="Auto, *, 0.35*"
+            Row="0"
+            Style="{StaticResource CustomGridCardStyle}">
+
+            <Button
+                Grid.Column="0"
+                Margin="0,4,8,0"
+                Padding="16"
+                Command="{x:Bind ViewModel.TapOnBackButtonCommand}"
+                Style="{ThemeResource EllipsisButton}">
+
+                <SymbolIcon Symbol="Back" />
+            </Button>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock
+                    FontWeight="Bold"
+                    MaxLines="1"
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Text="{x:Bind ViewModel.Title, Mode=TwoWay}" />
+
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                    Text="{x:Bind ViewModel.Description, Mode=TwoWay}" />
+            </StackPanel>
+
+            <StackPanel
+                Grid.Column="2"
+                Margin="16,0,0,0"
+                VerticalAlignment="Center">
+
+                <TextBox
+                    Margin="0,2,0,0"
+                    PlaceholderText="Поиск"
+                    Visibility="Collapsed" />
+            </StackPanel>
+        </Grid>
+
+        <Grid
+            ColumnDefinitions="*, 0.35*"
+            ColumnSpacing="8"
+            Row="1">
+
+            <ItemsControl Grid.Column="0" ItemsSource="{x:Bind ViewModel.Items, Mode=TwoWay}">
+                <ItemsControl.Template>
+                    <ControlTemplate>
+                        <ScrollViewer>
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </ControlTemplate>
+                </ItemsControl.Template>
+
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Vertical" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="entities:GamesSourcePageItemEntity">
+                        <controls:SettingsCard
+                            Margin="0,0,0,8"
+                            Click="SettingsCard_OnClick"
+                            CommandParameter="{x:Bind Link}"
+                            IsClickEnabled="True">
+
+                            <controls:SettingsCard.Header>
+                                <StackPanel
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Spacing="4">
+
+                                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
+
+                                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}" Style="{ThemeResource CaptionTextBlockStyle}">
+                                        <Run Text="{x:Bind Owner}" />
+                                        <Run Text="•" />
+                                        <Run Text="{x:Bind Size, Converter={StaticResource ByteSizeToStringConverter}}" />
+                                    </TextBlock>
+
+                                    <TextBlock
+                                        Margin="0,2,0,0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Style="{ThemeResource CaptionTextBlockStyle}"
+                                        Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
+                                </StackPanel>
+                            </controls:SettingsCard.Header>
+                        </controls:SettingsCard>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid
+                Column="1"
+                RowDefinitions="Auto, *"
+                RowSpacing="8">
+
+                <Border Grid.Row="0" Style="{StaticResource CustomBorderCardStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="Сортировка" />
+
+                        <ComboBox
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"
+                            SelectedIndex="{x:Bind ViewModel.SortOrder, Mode=TwoWay}">
+
+                            <ComboBoxItem Content="Дата" />
+                            <ComboBoxItem Content="Название" />
+                            <ComboBoxItem Content="Источник" />
+                            <ComboBoxItem Content="Размер" />
+                        </ComboBox>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Row="1" Style="{StaticResource CustomBorderCardStyle}">
+                    <ScrollView>
+                        <StackPanel Spacing="4">
+                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="Фильтрация" />
+
+                            <ComboBox
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                Header="Источник"
+                                ItemsSource="{x:Bind ViewModel.Filters.Owners, Mode=TwoWay}"
+                                SelectedIndex="{x:Bind ViewModel.Filters.OwnersIndex, Mode=TwoWay}" />
+
+                            <ComboBox
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                Header="Тип Ссылки"
+                                SelectedIndex="{x:Bind ViewModel.Filters.LinksIndex, Mode=TwoWay}">
+
+                                <ComboBoxItem Content="Не задано" />
+                                <ComboBoxItem Content="Торрент" />
+                                <ComboBoxItem Content="Прямая ссылка" />
+                            </ComboBox>
+                        </StackPanel>
+                    </ScrollView>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Page>

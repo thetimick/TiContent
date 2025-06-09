@@ -1,0 +1,7 @@
+{
+  "profiles": {
+    "TiContent.UI.WinUI": {
+      "commandName": "Project"
+    }
+  }
+}
