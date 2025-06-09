@@ -143,13 +143,13 @@ public partial class FilmsPage
     private void AutoSuggestBox_OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
     {
         if (args.SelectedItem is string item)
-            ViewModel.Query = item;
+            ViewModel.TapOnHistoryItem(item);
     }
     
     private void ClearHistoryItemButton_OnClick(object sender, RoutedEventArgs e)
     {
         if (sender is Button button)
-            ViewModel.TapOnClearHistoryItem((string)button.CommandParameter);
+            ViewModel.TapOnClearButtonInHistoryItem((string)button.CommandParameter);
     }
 }
 

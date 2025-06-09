@@ -48,12 +48,15 @@ public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 {
     public async Task<List<FilmsPageItemEntity>> ObtainAsync(IFilmsPageContentDataSource.ParamsEntity @params, bool pagination)
     {
-        if (InProgress || (pagination && IsCompleted))
+        if (pagination && IsCompleted)
             return Cache;
 
+        if (_tokenSource != null)
+            await _tokenSource.CancelAsync();
+        _tokenSource = new CancellationTokenSource();
+        
         if (!pagination)
             _pagination.Reset();
-        _tokenSource = new CancellationTokenSource();
         
         if (@params.Query.IsNullOrEmpty())
             await ObtainTrendingAsync(@params.Content, pagination, _tokenSource.Token);

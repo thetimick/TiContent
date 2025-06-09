@@ -153,7 +153,7 @@
                 HorizontalAlignment="Stretch"
                 HorizontalContentAlignment="Stretch"
                 Header="Популярно"
-                IsEnabled="{x:Bind ViewModel.ContentTypeIsEnabled}"
+                IsEnabled="{x:Bind ViewModel.ContentTypeIsEnabled, Mode=OneWay}"
                 SelectedIndex="{x:Bind ViewModel.ContentTypeIndex, Mode=TwoWay}">
 
                 <controls:SegmentedItem

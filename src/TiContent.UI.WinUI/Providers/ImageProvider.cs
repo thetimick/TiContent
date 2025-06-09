@@ -50,6 +50,8 @@ public partial class ImageProvider : IImageProvider
     }
 }
 
+// Private Methods
+
 public partial class ImageProvider
 {
     private async Task<byte[]> LoadImageAsync(string url)

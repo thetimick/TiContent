@@ -13,9 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Microsoft.Extensions.Logging;
+using CommunityToolkit.WinUI;
 using Microsoft.UI.Dispatching;
-using ThrottleDebounce;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.DB;
@@ -30,6 +29,7 @@ namespace TiContent.UI.WinUI.UI.Pages.Games;
 public partial class GamesPageViewModel : ObservableObject
 {
     // Observable
+    
     [ObservableProperty] 
     public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
     
@@ -52,33 +52,75 @@ public partial class GamesPageViewModel : ObservableObject
     public partial double ScrollViewOffset { get; set; }
 
     // Private Props
+    
     private readonly IGamesPageContentDataSource _dataSource;
-    private readonly ILogger<GamesPageViewModel> _logger;
     private readonly INavigationService _navigationService;
     private readonly IDataBaseQueryHistoryService _queryHistoryService;
-
-    private readonly RateLimitedAction _debounceOnQueryChangedAction;
-    private readonly DispatcherQueue _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+    
+    private readonly DispatcherQueue _dispatcherQueue;
+    private readonly DispatcherQueueTimer _dispatcherQueueTimer;
+    private (bool clearQuery, bool tapOnHistory) _debounceFlags = (false, false);
     
     // LifeCycle
+    
     public GamesPageViewModel(
         IGamesPageContentDataSource dataSource, 
-        ILogger<GamesPageViewModel> logger, 
         INavigationService navigationService, 
         IDataBaseQueryHistoryService queryHistoryService
     ) {
         _dataSource = dataSource;
-        _logger = logger;
         _navigationService = navigationService;
         _queryHistoryService = queryHistoryService;
 
-        _debounceOnQueryChangedAction = Debouncer.Debounce(
-            () => { _dispatcherQueue.TryEnqueue(() => ObtainItemsFromDataSource()); }, 
+        _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+        _dispatcherQueueTimer = _dispatcherQueue.CreateTimer();
+    }
+    
+    // Observable
+    
+    partial void OnQueryChanged(string value)
+    {
+        ContentTypeIsEnabled = value.IsNullOrEmpty();
+        
+        if (value.IsNullOrEmpty())
+        {
+            _debounceFlags.clearQuery = true;
+            ObtainItemsFromDataSource();
+            return;
+        }
+        
+        _dispatcherQueueTimer.Debounce(
+            () =>
+            {
+                if (_debounceFlags.clearQuery)
+                {
+                    _debounceFlags.clearQuery = false;
+                    return;
+                }
+
+                if (_debounceFlags.tapOnHistory)
+                {
+                    _debounceFlags.tapOnHistory = false;
+                    return;
+                }
+                
+                ObtainItemsFromDataSource();
+            },
             TimeSpan.FromSeconds(1)
         );
     }
-    
-    // Public Methods
+
+    [SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")]
+    partial void OnContentTypeIndexChanged(int value)
+    {
+        ObtainItemsFromDataSource();
+    }
+}
+
+// Public Methods
+
+public partial class GamesPageViewModel
+{
     public void OnLoaded()
     {
         if (Items.IsEmpty()) 
@@ -102,33 +144,25 @@ public partial class GamesPageViewModel : ObservableObject
             new GamesSourcePageViewModel.InitialDataEntity(item.Title)
         );
     }
-    
-    public void TapOnClearHistoryItem(string query)
-    {
-        Task.Run(async () => await ClearQueryInHistoryAsync(query));
-    }
-    
-    // Private Methods
-    
-    partial void OnQueryChanged(string value)
-    {
-        // Если пользователь очистил строку поиска - сразу загружаем данные
-        if (value.IsNullOrEmpty())
-        {
-            ObtainItemsFromDataSource();
-            return;
-        }
-        
-        // Загружаем данные с задержкой
-        _debounceOnQueryChangedAction.Invoke();
-    }
 
-    [SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")]
-    partial void OnContentTypeIndexChanged(int value)
+    public void TapOnHistoryItem(string query)
     {
+        _debounceFlags.tapOnHistory = true;
+        
+        Query = query;
         ObtainItemsFromDataSource();
     }
     
+    public void TapOnClearButtonInHistoryItem(string query)
+    {
+        Task.Run(async () => await ClearQueryInHistoryAsync(query));
+    }
+}
+
+// Private Methods
+
+public partial class GamesPageViewModel
+{
     private void ObtainItemsFromDataSource(bool pagination = false)
     {
         if (!pagination)
@@ -145,6 +179,16 @@ public partial class GamesPageViewModel : ObservableObject
         );
     }
     
+    private void ApplyQueryHistoryItems(IEnumerable<string> items)
+    {
+        QueryHistoryItems = items.ToObservable();
+    }
+}
+
+// Private Methods (Tasks)
+
+public partial class GamesPageViewModel
+{
     private async Task ObtainItemsTaskAsync(bool pagination)
     {
         var type = Query.IsNullOrEmpty() && ContentTypeIndex == 1
@@ -186,10 +230,5 @@ public partial class GamesPageViewModel : ObservableObject
     {
         await _queryHistoryService.ClearItemAsync(DataBaseHistoryEntity.HistoryType.Games, query);
         await ObtainHistoryAsync();
-    }
-    
-    private void ApplyQueryHistoryItems(IEnumerable<string> items)
-    {
-        QueryHistoryItems = items.ToObservable();
     }
 }

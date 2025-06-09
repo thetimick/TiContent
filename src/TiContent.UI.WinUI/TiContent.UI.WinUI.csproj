@@ -46,7 +46,6 @@
     <PackageReference Include="RestSharp" Version="112.1.0" />
     <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.File" Version="7.0.0" />
-    <PackageReference Include="ThrottleDebounce" Version="2.0.1" />
     <PackageReference Include="WinUIEx" Version="2.5.1" />
   </ItemGroup>
   

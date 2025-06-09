@@ -11,11 +11,11 @@ using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.WinUI;
 using Microsoft.Extensions.Logging;
-using ThrottleDebounce;
+using Microsoft.UI.Dispatching;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.DB;
@@ -58,10 +58,10 @@ public partial class FilmsPageViewModel : ObservableObject
     private readonly ILogger<FilmsPageViewModel> _logger;
     private readonly INavigationService _navigationService;
     private readonly IDataBaseQueryHistoryService _queryHistoryService;
-
-    private readonly RateLimitedAction _debounceOnQueryChangedAction;
     
-    private readonly DispatcherQueue _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+    private readonly DispatcherQueue _dispatcherQueue;
+    private readonly DispatcherQueueTimer _dispatcherQueueTimer;
+    private (bool clearQuery, bool tapOnHistory) _debounceFlags = (false, false);
     
     // LifeCycle
     
@@ -76,10 +76,8 @@ public partial class FilmsPageViewModel : ObservableObject
         _queryHistoryService = queryHistoryService;
         _navigationService = navigationService;
 
-        _debounceOnQueryChangedAction = Debouncer.Debounce(
-            () => { _dispatcherQueue.TryEnqueue(() => ObtainItemsFromDataSource()); }, 
-            TimeSpan.FromSeconds(1)
-        );
+        _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
+        _dispatcherQueueTimer = _dispatcherQueue.CreateTimer();
     }
     
     // Observable
@@ -87,15 +85,34 @@ public partial class FilmsPageViewModel : ObservableObject
     partial void OnQueryChanged(string value)
     {
         ContentTypeIsEnabled = value.IsNullOrEmpty();
-        Task.Run(ObtainHistoryAsync);
         
         if (value.IsNullOrEmpty())
         {
+            _debounceFlags.clearQuery = true;
             ObtainItemsFromDataSource();
             return;
         }
-        
-        _debounceOnQueryChangedAction.Invoke();
+
+        _debounceFlags.clearQuery = false;
+        _dispatcherQueueTimer.Debounce(
+            () =>
+            {
+                if (_debounceFlags.clearQuery)
+                {
+                    _debounceFlags.clearQuery = false;
+                    return;
+                }
+
+                if (_debounceFlags.tapOnHistory)
+                {
+                    _debounceFlags.tapOnHistory = false;
+                    return;
+                }
+
+                ObtainItemsFromDataSource();
+            },
+            TimeSpan.FromSeconds(1)
+        );
     }
 
     [SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")]
@@ -103,9 +120,12 @@ public partial class FilmsPageViewModel : ObservableObject
     {
         ObtainItemsFromDataSource();
     }
-    
-    // Public Methods
+}
 
+// Public Methods
+
+public partial class FilmsPageViewModel
+{
     public void OnLoaded()
     {
         if (!Items.IsEmpty()) 
@@ -131,13 +151,24 @@ public partial class FilmsPageViewModel : ObservableObject
         );
     }
     
-    public void TapOnClearHistoryItem(string query)
+    public void TapOnHistoryItem(string query)
+    {
+        _debounceFlags.tapOnHistory = true;
+        
+        Query = query;
+        ObtainItemsFromDataSource();
+    }
+    
+    public void TapOnClearButtonInHistoryItem(string query)
     {
         Task.Run(async () => await ClearQueryInHistoryAsync(query));
     }
-    
-    // Private Methods
-    
+}
+
+// Private Methods
+
+public partial class FilmsPageViewModel
+{
     private void ObtainItemsFromDataSource(bool pagination = false)
     {
         if (!pagination)
@@ -153,6 +184,24 @@ public partial class FilmsPageViewModel : ObservableObject
         );
     }
     
+    private void ApplyItems(List<FilmsPageItemEntity> items)
+    {
+        Items = items.ToObservable();
+        State = Items.IsEmpty() 
+            ? ViewStateEnum.Empty 
+            : ViewStateEnum.Content;
+    }
+    
+    private void ApplyQueryHistoryItems(IEnumerable<string> items)
+    {
+        QueryHistoryItems = items.ToObservable();
+    } 
+}
+
+// Private Methods (Tasks)
+
+public partial class FilmsPageViewModel
+{
     private async Task ObtainItemsTaskAsync(bool pagination)
     {
         try
@@ -189,18 +238,5 @@ public partial class FilmsPageViewModel : ObservableObject
     {
         await _queryHistoryService.ClearItemAsync(DataBaseHistoryEntity.HistoryType.Films, query);
         await ObtainHistoryAsync();
-    }
-
-    private void ApplyItems(List<FilmsPageItemEntity> items)
-    {
-        Items = items.ToObservable();
-        State = Items.IsEmpty() 
-            ? ViewStateEnum.Empty 
-            : ViewStateEnum.Content;
-    }
-    
-    private void ApplyQueryHistoryItems(IEnumerable<string> items)
-    {
-        QueryHistoryItems = items.ToObservable();
     }
 }

@@ -21,8 +21,15 @@ namespace TiContent.UI.WinUI.Services.Api.TMDB;
 
 public interface ITMDBService
 {
-    public Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity entity, CancellationToken token = default);
-    public Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity entity, CancellationToken token = default);
+    public Task<TMDBResponseEntity> ObtainTrendingAsync(
+        TMDBTrendingRequestEntity entity, 
+        CancellationToken token = default
+    );
+    
+    public Task<TMDBResponseEntity> ObtainSearchAsync(
+        TMDBSearchRequestEntity entity,
+        CancellationToken token = default
+    );
 }
 
 public partial class TMDBService(

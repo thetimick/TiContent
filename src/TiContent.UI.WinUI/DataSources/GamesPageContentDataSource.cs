@@ -54,12 +54,15 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
         IGamesPageContentDataSource.ParamsEntity @params, 
         bool pagination
     ) {
-        if (InProgress || IsCompleted)
+        if (pagination && IsCompleted)
             return Cache;
+
+        if (_tokenSource != null)
+            await _tokenSource.CancelAsync();
+        _tokenSource = new CancellationTokenSource();
         
         if (!pagination)
             _pagination.Reset();
-        _tokenSource = new CancellationTokenSource();
         
         switch (@params.ContentType)
         {

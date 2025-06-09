@@ -81,7 +81,7 @@
 
                     <controls:SettingsCard
                         Description="Агрегатор TMDB &amp; Jacred &amp; Hydra &amp; Hydra Links"
-                        Header="TiContent.UI.WPF by the_timick"
+                        Header="TiContent by the_timick"
                         HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
 
                         <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.2" />
