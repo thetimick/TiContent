@@ -1,6 +1,6 @@
 ﻿// ㅤ
-// App.HostService.cs
-// TiContent.UI.WPF.UI.WinUI
+// App.ConfigureService.cs
+// TiContent.UI.WinUI
 // ㅤ
 // Created by Timick on 16.12.2024.
 // ㅤ

@@ -1,6 +1,6 @@
 ﻿// ⠀
 // GamesSourceViewModel.cs
-// TiContent.UI.WPF.UI.WinUI
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 02.06.2025.
 // ⠀
@@ -108,7 +108,7 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
 
     public void TapOnItem(string link)
     {
-        OpenHelper.OpenUrl(link);
+        OpenLinkHelper.OpenUrl(link);
     }
     
     // Private Methods

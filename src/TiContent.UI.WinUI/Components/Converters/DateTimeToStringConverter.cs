@@ -1,6 +1,6 @@
 ﻿// ⠀
 // DateTimeToStringConverter.cs
-// TiContent.UI.WPF
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 05.05.2025.
 // ⠀

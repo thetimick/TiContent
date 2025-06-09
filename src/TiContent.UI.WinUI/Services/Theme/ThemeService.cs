@@ -1,6 +1,6 @@
 ﻿// ⠀
 // ThemeService.cs
-// TiContent.UI.WPF.UI.WinUI
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 06.06.2025.
 // ⠀

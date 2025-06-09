@@ -1,6 +1,6 @@
 ﻿// ⠀
 // IntLimitToStringConverter.cs
-// TiContent.UI.WPF.WinUI
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 07.06.2025.
 // ⠀

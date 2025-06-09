@@ -1,6 +1,6 @@
 ﻿// ⠀
 // ByteArrayExtensions.cs
-// TiContent.UI.WPF.Foundation.Components
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 07.06.2025.
 // ⠀

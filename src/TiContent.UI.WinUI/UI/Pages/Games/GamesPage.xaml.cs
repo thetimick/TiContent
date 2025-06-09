@@ -1,6 +1,6 @@
 ﻿// ㅤ
 // HomePage.xaml.cs
-// TiContent.UI.WPF.UI.WinUI
+// TiContent.UI.WinUI
 // ㅤ
 // Created by Timick on 16.12.2024.
 // ㅤ

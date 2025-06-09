@@ -69,7 +69,7 @@ namespace TiContent.UI.WPF.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TiContent.UI.WPF by the_timick.
+        ///   Looks up a localized string similar to TiContent by the_timick.
         /// </summary>
         public static string AboutPage_AppTitle {
             get {
@@ -204,7 +204,7 @@ namespace TiContent.UI.WPF.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TiContent.UI.WPF - HydraLinks.
+        ///   Looks up a localized string similar to TiContent - HydraLinks.
         /// </summary>
         public static string HydraLinksWindow_Title {
             get {
@@ -222,7 +222,7 @@ namespace TiContent.UI.WPF.Resources.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to TiContent.UI.WPF.
+        ///   Looks up a localized string similar to TiContent.
         /// </summary>
         public static string MainWindow_Title {
             get {

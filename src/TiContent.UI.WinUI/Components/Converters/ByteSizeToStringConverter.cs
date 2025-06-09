@@ -1,6 +1,6 @@
 ﻿// ⠀
 // ByteSizeToStringConverter.cs
-// TiContent.UI.WPF
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 28.04.2025.
 // ⠀

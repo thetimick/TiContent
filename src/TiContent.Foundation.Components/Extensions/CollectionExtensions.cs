@@ -16,17 +16,8 @@ public static class CollectionExtensions
         return source == null || !source.Any();
     }
     
-    public static string ToStringPretty<T>(this IEnumerable<T> collection)
+    public static ObservableCollection<T> ToObservable<T>(this IEnumerable<T> source)
     {
-        return "[" + string.Join(", ", collection.Select(item => item?.ToString() ?? "null")) + "]";
-    }
-}
-
-public static class ObservableCollectionExtensions
-{
-    public static void AddRange<T>(this ObservableCollection<T> source, IEnumerable<T> items)
-    {
-        foreach (var item in items)
-            source.Add(item);
+        return new ObservableCollection<T>(source);
     }
 }

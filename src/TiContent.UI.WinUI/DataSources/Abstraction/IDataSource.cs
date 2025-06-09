@@ -1,6 +1,6 @@
 ﻿// ⠀
 // IDataSource.cs
-// TiContent.UI.WPF.UI.WinUI
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 08.06.2025.
 // ⠀

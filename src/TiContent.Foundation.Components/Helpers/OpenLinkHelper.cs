@@ -1,6 +1,6 @@
 ﻿// ⠀
-// OpenUrlHelper.cs
-// TiContent.UI.WPF
+// OpenLinkHelper.cs
+// TiContent.Foundation.Components
 // 
 // Created by the_timick on 16.05.2025.
 // ⠀
@@ -10,7 +10,7 @@ using System.Web;
 
 namespace TiContent.Foundation.Components.Helpers;
 
-public static class OpenHelper
+public static class OpenLinkHelper
 {
     public enum Type
     {

@@ -118,8 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MainWindow.Title" xml:space="preserve">
-    <value>TiContent.UI.WPF</value>
-</data>
+    <value>TiContent</value>
+  </data>
   <data name="SettingsPage.Title" xml:space="preserve">
     <value>Settings</value>
 </data>
@@ -130,7 +130,7 @@
     <value>Home</value>
 </data>
   <data name="AboutPage.AppTitle" xml:space="preserve">
-    <value>TiContent.UI.WPF by the_timick</value>
+    <value>TiContent by the_timick</value>
   </data>
   <data name="AboutPage.Licences" xml:space="preserve">
     <value>Licenses</value>
@@ -196,7 +196,7 @@
     <value>Filters in progress</value>
   </data>
   <data name="HydraLinksWindow.Title" xml:space="preserve">
-    <value>TiContent.UI.WPF - HydraLinks</value>
+    <value>TiContent - HydraLinks</value>
   </data>
   <data name="HydraLinksWindow.Search" xml:space="preserve">
     <value>Search...</value>

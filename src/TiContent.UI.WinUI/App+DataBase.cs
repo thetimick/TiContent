@@ -1,6 +1,6 @@
 ﻿// ⠀
 // App+DataBase.cs
-// TiContent.UI.WPF.UI.WinUI
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 03.06.2025.
 // ⠀

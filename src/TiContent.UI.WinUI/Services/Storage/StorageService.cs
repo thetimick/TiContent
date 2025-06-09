@@ -1,6 +1,6 @@
 ﻿// ⠀
 // StorageService.cs
-// TiContent.UI.WPF.UI.WinUI
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 27.05.2025.
 // 

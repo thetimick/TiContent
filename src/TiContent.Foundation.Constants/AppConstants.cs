@@ -1,6 +1,6 @@
 ﻿// ⠀
 // AppConstants.cs
-// TiJacred
+// TiContent.Foundation.Constants
 // 
 // Created by the_timick on 30.03.2025.
 // ⠀

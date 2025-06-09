@@ -23,10 +23,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Remove="Components\UI\ViewStateUserControl.xaml" />
-  </ItemGroup>
-  
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="AutoMapper.Collection" Version="11.0.0" />
     <PackageReference Include="CommunityToolkit.Common" Version="8.4.0" />
@@ -57,14 +53,6 @@
   <ItemGroup>
     <ProjectReference Include="..\TiContent.Foundation.Components\TiContent.Foundation.Components.csproj" />
     <ProjectReference Include="..\TiContent.Foundation.Entities\TiContent.Foundation.Entities.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <AvaloniaResource Include="Resources\Assets\wpfui.png" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <Resource Remove="UI\Windows\Jacred\JacredWindow.xaml" />
   </ItemGroup>
   
   <ItemGroup>

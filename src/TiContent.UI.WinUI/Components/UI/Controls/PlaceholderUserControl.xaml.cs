@@ -1,3 +1,10 @@
+// ⠀
+// PlaceholderUserControl.cs
+// TiContent.UI.WinUI
+// 
+// Created by the_timick on 01.06.2025.
+// 
+
 using Microsoft.UI.Xaml;
 using TiContent.Foundation.Components.Abstractions;
 

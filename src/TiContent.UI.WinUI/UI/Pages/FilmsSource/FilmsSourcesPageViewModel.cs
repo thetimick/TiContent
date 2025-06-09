@@ -1,6 +1,6 @@
 ﻿// ⠀
 // JacredPageViewModel.cs
-// TiContent.UI.WPF.UI.WinUI
+// TiContent.UI.WinUI
 // 
 // Created by the_timick on 26.05.2025.
 // ⠀
@@ -128,13 +128,13 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
     public void TapOnTrackerButton(string title)
     {
         if (Items.FirstOrDefault(entity => entity.Title == title) is {} item)
-            OpenHelper.OpenUrl(item.TrackerUrl);
+            OpenLinkHelper.OpenUrl(item.TrackerUrl);
     }
     
     public void TapOnTorrentButton(string title)
     {
         if (Items.FirstOrDefault(entity => entity.Title == title) is {} item)
-            OpenHelper.OpenUrl(item.TorrentUrl);
+            OpenLinkHelper.OpenUrl(item.TorrentUrl);
     }
     
     // Private Methods
