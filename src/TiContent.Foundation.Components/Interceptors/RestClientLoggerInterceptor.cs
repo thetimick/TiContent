@@ -1,5 +1,5 @@
 ﻿// ⠀
-// Inter.cs
+// RestClientLoggerInterceptor.cs
 // TiContent.UI.WPF
 //
 // Created by the_timick on 27.04.2025.
@@ -18,13 +18,14 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
         CancellationToken cancellationToken
     )
     {
+        // csharpier-ignore
         var str = $"""
-            REQUEST {request.Method.ToString().ToUpperInvariant()}
-                {request.Resource}
-                    Query: {GetQueryString(request)}
-                    Headers: {GetHeaders(request)}
-                    Body: {GetBody(request)}
-            """;
+                  REQUEST {request.Method.ToString().ToUpperInvariant()}
+                      {request.Resource}
+                          Query: {GetQueryString(request)}
+                          Headers: {GetHeaders(request)}
+                          Body: {GetBody(request)}
+                  """;
         logger.LogInformation("{str}", str);
 
         return base.BeforeRequest(request, cancellationToken);
@@ -37,21 +38,21 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
     {
         if (response.IsSuccessful)
         {
+            // csharpier-ignore
             var str = $"""
-                RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)
-                    response.StatusCode} ({response.StatusCode.ToString()})
-                    {response.Request.Resource}
-                """;
+                       RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)response.StatusCode} ({response.StatusCode.ToString()})
+                           {response.Request.Resource}
+                       """;
             logger.LogInformation("{str}", str);
         }
         else
         {
+            // csharpier-ignore
             var str = $"""
-                RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)
-                    response.StatusCode} ({response.StatusCode.ToString()})
-                    {response.Request.Resource}
-                        {response.ErrorException?.Message}
-                """;
+                      RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)response.StatusCode} ({response.StatusCode.ToString()})
+                          {response.Request.Resource}
+                              {response.ErrorException?.Message}
+                      """;
             logger.LogError("{str}", str);
         }
 
