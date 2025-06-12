@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraLinksEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 14.05.2025.
 // ⠀
 
@@ -12,7 +12,7 @@ namespace TiContent.UI.WPF.Entities.Legacy.HydraLinks;
 public sealed record HydraLinksEntity
 {
     public string Owner { get; set; } = string.Empty;
-    
+
     [Key]
     public string Title { get; init; } = string.Empty;
     public string CleanTitle { get; init; } = string.Empty;

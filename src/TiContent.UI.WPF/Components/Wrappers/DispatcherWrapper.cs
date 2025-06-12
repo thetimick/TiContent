@@ -1,7 +1,7 @@
 ﻿// ⠀
 // DispatcherWrapper.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 28.04.2025.
 // ⠀
 
@@ -14,9 +14,8 @@ public static class DispatcherWrapper
         if (System.Windows.Application.Current.Dispatcher.CheckAccess())
             action.Invoke();
         System.Windows.Application.Current.Dispatcher.Invoke(action);
-
     }
-    
+
     public static Task StartNewAsync(Action action, CancellationToken token = default)
     {
         return Task.Factory.StartNew(action, token);

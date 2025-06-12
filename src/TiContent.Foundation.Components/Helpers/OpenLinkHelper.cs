@@ -1,7 +1,7 @@
 ﻿// ⠀
 // OpenLinkHelper.cs
 // TiContent.Foundation.Components
-// 
+//
 // Created by the_timick on 16.05.2025.
 // ⠀
 
@@ -16,18 +16,12 @@ public static class OpenLinkHelper
     {
         Google,
         Rutracker,
-        Rutor
+        Rutor,
     }
-    
+
     public static void OpenUrl(string url)
     {
-        Process.Start(
-            new ProcessStartInfo
-            {
-                FileName = url, 
-                UseShellExecute = true
-            }
-        );
+        Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
     }
 
     public static void OpenUrlForSearch(string query, Type type)

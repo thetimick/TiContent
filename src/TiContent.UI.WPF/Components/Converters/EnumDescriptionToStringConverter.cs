@@ -1,7 +1,7 @@
 ﻿// ⠀
 // EnumDescriptionConverter.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 28.04.2025.
 // ⠀
 
@@ -17,11 +17,16 @@ public class EnumDescriptionToStringConverter : IValueConverter
     {
         if (value == null || !value.GetType().IsEnum)
             return value?.ToString();
-        
+
         return ((Enum)value).Humanize();
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotSupportedException("Converting from description to enum is not supported.");
     }

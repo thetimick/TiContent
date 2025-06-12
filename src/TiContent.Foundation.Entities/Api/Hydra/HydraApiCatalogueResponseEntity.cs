@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraApiCatalogueResponseItemEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 14.05.2025.
 // ⠀
 

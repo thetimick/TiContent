@@ -1,9 +1,9 @@
 ﻿// ⠀
 // StorageService.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 27.05.2025.
-// 
+//
 
 using System;
 using System.IO;
@@ -37,13 +37,14 @@ public interface IStorageService
     public StorageEntity Save();
 }
 
-public class StorageService(ILogger<StorageService> logger) : IStorageService {
+public class StorageService(ILogger<StorageService> logger) : IStorageService
+{
     public StorageEntity? Cached { get; private set; }
 
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
     #region IStorageService
-    
+
     public StorageEntity Obtain()
     {
         if (!File.Exists(AppConstants.FileNames.StorageFileName))
@@ -66,25 +67,30 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService {
     public StorageEntity Save()
     {
         var path = Path.Combine(AppContext.BaseDirectory, AppConstants.FileNames.StorageFileName);
-        
+
         var directory = Path.GetDirectoryName(path);
         if (directory != null && !Directory.Exists(directory))
-            Directory.CreateDirectory(directory); 
-        
+            Directory.CreateDirectory(directory);
+
         Cached ??= new StorageEntity();
-        
+
         try
         {
             var json = JsonSerializer.Serialize(Cached, _options);
             File.WriteAllText(path, json);
             return Cached;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to save storage entity to file {Path}. Error: {Message}", path, ex.Message);
+            logger.LogError(
+                ex,
+                "Failed to save storage entity to file {Path}. Error: {Message}",
+                path,
+                ex.Message
+            );
             return Cached;
         }
     }
-    
+
     #endregion
 }

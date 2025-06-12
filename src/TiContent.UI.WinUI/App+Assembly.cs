@@ -39,46 +39,42 @@ public partial class App
     private static void ConfigureServices(IServiceCollection services)
     {
         // External
-        
+
         // Logger
         ConfigureLogging();
         services.AddLogging(builder => builder.AddSerilog(dispose: true));
 
         // DB
         services.AddDbContext<AppDataBaseContext>();
-        
-        // API
-        services.AddSingleton<IRestClient, RestClient>(
-            provider =>
-            {
-                var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
-                var interceptor = new RestClientLoggerInterceptor(logger);
-                var options = new RestClientOptions
-                {
-                    Interceptors = [interceptor], 
-                    Timeout = new TimeSpan(0,0,0,30),
-                };
-                return new RestClient(options);
-            }
-        );
-        
-        // Mapper
-        services.AddAutoMapper(
-            configuration =>
-            {
-                configuration.AddCollectionMappers();
-                
-                configuration.AddProfile<DataBaseHydraLinksEntity.MapProfile>();
 
-                configuration.AddProfile<FilmsPageItemEntity.MapProfile>();
-                configuration.AddProfile<FilmsSourcePageItemEntity.MapProfile>();
-                configuration.AddProfile<GamesPageItemEntity.MapProfile>();
-                configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
-            }
-        );
-        
+        // API
+        services.AddSingleton<IRestClient, RestClient>(provider =>
+        {
+            var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
+            var interceptor = new RestClientLoggerInterceptor(logger);
+            var options = new RestClientOptions
+            {
+                Interceptors = [interceptor],
+                Timeout = new TimeSpan(0, 0, 0, 30),
+            };
+            return new RestClient(options);
+        });
+
+        // Mapper
+        services.AddAutoMapper(configuration =>
+        {
+            configuration.AddCollectionMappers();
+
+            configuration.AddProfile<DataBaseHydraLinksEntity.MapProfile>();
+
+            configuration.AddProfile<FilmsPageItemEntity.MapProfile>();
+            configuration.AddProfile<FilmsSourcePageItemEntity.MapProfile>();
+            configuration.AddProfile<GamesPageItemEntity.MapProfile>();
+            configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
+        });
+
         // Internal
-        
+
         services.AddHostedService<ConfigureService>();
 
         services.AddSingleton<IImageProvider, ImageProvider>();
@@ -92,15 +88,21 @@ public partial class App
 
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
-        services.AddSingleton<IFilmsSourcePageContentDataSource, FilmsSourcePageContentDataSource>();
+        services.AddSingleton<
+            IFilmsSourcePageContentDataSource,
+            FilmsSourcePageContentDataSource
+        >();
         services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
-        services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
-        
+        services.AddSingleton<
+            IGamesSourcePageContentDataSource,
+            GamesSourcePageContentDataSource
+        >();
+
         services.AddSingleton<INavigationService, NavigationService>();
-        
+
         services.AddSingleton<IDataBaseQueryHistoryService, DataBaseQueryQueryHistoryService>();
         services.AddSingleton<IDataBaseGamesSourceService, DataBaseGamesSourceService>();
-        
+
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 
@@ -110,7 +112,7 @@ public partial class App
         services.AddSingleton<GamesSourcePageViewModel>();
         services.AddSingleton<SettingsPageViewModel>();
     }
-    
+
     private static void ConfigureLogging()
     {
         Log.Logger = new LoggerConfiguration()

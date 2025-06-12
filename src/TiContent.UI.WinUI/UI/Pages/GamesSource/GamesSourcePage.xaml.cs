@@ -8,16 +8,16 @@ namespace TiContent.UI.WinUI.UI.Pages.GamesSource;
 public sealed partial class GamesSourcePage
 {
     // Private Methods
-    
+
     private GamesSourcePageViewModel ViewModel { get; set; } = null!;
-    
+
     // LifeCycle
-    
+
     public GamesSourcePage()
     {
         InitializeComponent();
     }
-    
+
     protected override void OnNavigatedTo(NavigationEventArgs e)
     {
         ViewModel = (GamesSourcePageViewModel)e.Parameter;
@@ -29,9 +29,9 @@ public sealed partial class GamesSourcePage
         ViewModel.OnClosed();
         base.OnNavigatedFrom(e);
     }
-    
+
     // Private Methods
-    
+
     private void SettingsCard_OnClick(object sender, RoutedEventArgs e)
     {
         if (sender is SettingsCard { CommandParameter: string link })

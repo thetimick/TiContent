@@ -1,5 +1,5 @@
-﻿using TiContent.UI.WPF.Entities.Legacy;
-using TiContent.UI.WPF.Entities;
+﻿using TiContent.UI.WPF.Entities;
+using TiContent.UI.WPF.Entities.Legacy;
 
 namespace TiContent.UI.WPF.Services.Storage;
 

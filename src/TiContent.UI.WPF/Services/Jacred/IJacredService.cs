@@ -1,7 +1,7 @@
 ﻿// ⠀
 // IJacredService.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 27.04.2025.
 // ⠀
 

@@ -1,7 +1,7 @@
 ﻿// ⠀
 // GamesPageContentDataSourceV2.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 08.06.2025.
 // ⠀
 
@@ -18,34 +18,30 @@ using TiContent.UI.WinUI.Services.Api.Hydra;
 
 namespace TiContent.UI.WinUI.DataSources;
 
-public interface IGamesPageContentDataSource: IDataSource<GamesPageItemEntity, IGamesPageContentDataSource.ParamsEntity>
+public interface IGamesPageContentDataSource
+    : IDataSource<GamesPageItemEntity, IGamesPageContentDataSource.ParamsEntity>
 {
     public enum ContentTypeEnum
     {
         Catalogue,
-        Popularity
+        Popularity,
     }
-    
-    public record ParamsEntity(
-        string Query,
-        ContentTypeEnum ContentType
-    );
+
+    public record ParamsEntity(string Query, ContentTypeEnum ContentType);
 
     public HydraFiltersEntity Filters { get; }
     public Task<HydraFiltersEntity> ObtainFiltersAsync();
 }
 
-public partial class GamesPageContentDataSource(
-    IHydraApiService api,
-    IMapper mapper
-) {
+public partial class GamesPageContentDataSource(IHydraApiService api, IMapper mapper)
+{
     // Public Props
 
     public bool InProgress => _tokenSource != null;
     public bool IsCompleted => _pagination.IsCompleted;
     public List<GamesPageItemEntity> Cache { get; } = [];
     public HydraFiltersEntity Filters { get; private set; } = new();
-    
+
     // Private Props
 
     private readonly Pagination _pagination = new();
@@ -56,19 +52,20 @@ public partial class GamesPageContentDataSource(
 public partial class GamesPageContentDataSource : IGamesPageContentDataSource
 {
     public async Task<List<GamesPageItemEntity>> ObtainAsync(
-        IGamesPageContentDataSource.ParamsEntity @params, 
+        IGamesPageContentDataSource.ParamsEntity @params,
         bool pagination
-    ) {
+    )
+    {
         if (pagination && IsCompleted)
             return Cache;
 
         if (_tokenSource != null)
             await _tokenSource.CancelAsync();
         _tokenSource = new CancellationTokenSource();
-        
+
         if (!pagination)
             _pagination.Reset();
-        
+
         switch (@params.ContentType)
         {
             case IGamesPageContentDataSource.ContentTypeEnum.Catalogue:
@@ -80,7 +77,7 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
             default:
                 throw new ArgumentOutOfRangeException(nameof(@params));
         }
-        
+
         _pagination.NextPage();
         _tokenSource = null;
 
@@ -92,7 +89,7 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
         if (_tokenSourceForFilters != null)
             await _tokenSourceForFilters.CancelAsync();
         _tokenSourceForFilters = new CancellationTokenSource();
-        
+
         await LoadFiltersAsync(_tokenSourceForFilters.Token);
         return Filters;
     }
@@ -106,27 +103,31 @@ public partial class GamesPageContentDataSource
         {
             Take = _pagination.Take,
             Skip = _pagination.Skip,
-            Type = HydraApiCatalogueRequestParamsEntity.ContentType.Weekly
+            Type = HydraApiCatalogueRequestParamsEntity.ContentType.Weekly,
         };
-        
+
         var items = await api.ObtainCatalogueAsync(parameters, token);
         ApplyItems(items, pagination);
     }
 
-    private async Task ObtainSearchItemsAsync(string query, bool pagination, CancellationToken token = default)
+    private async Task ObtainSearchItemsAsync(
+        string query,
+        bool pagination,
+        CancellationToken token = default
+    )
     {
         query = query.Trim().Humanize(LetterCasing.LowerCase);
-        
+
         var parameters = new HydraApiSearchRequestParamsEntity
         {
             Take = _pagination.Take,
             Skip = _pagination.Skip,
-            Title = query
+            Title = query,
         };
-        
+
         var items = await api.ObtainSearchAsync(parameters, token);
         ApplyItems(items.Edges, pagination);
-        
+
         _pagination.SetTotalItems(items.Count);
     }
 
@@ -138,12 +139,12 @@ public partial class GamesPageContentDataSource
 
     private void ApplyItems<T>(List<T>? items, bool pagination)
     {
-        if (items == null) 
+        if (items == null)
             return;
-        
+
         var mapped = mapper.Map<List<T>, List<GamesPageItemEntity>>(items);
-        
-        if (!pagination) 
+
+        if (!pagination)
             Cache.Clear();
         Cache.AddRange(mapped);
     }
@@ -161,11 +162,11 @@ public partial class GamesPageContentDataSource
     {
         private const int TotalItems = 120;
         private const int ItemsOnPage = 24;
-        
+
         public bool IsCompleted => Take == TotalItemsCount;
         public int Take { get; private set; } = ItemsOnPage;
         public int Skip { get; private set; }
-        
+
         private int TotalItemsCount { get; set; } = TotalItems;
 
         public void SetTotalItems(int? totalItems)
@@ -173,12 +174,10 @@ public partial class GamesPageContentDataSource
             if (totalItems is { } items)
                 TotalItemsCount = items;
         }
-        
+
         public void NextPage()
         {
-            Take = Take + ItemsOnPage > TotalItemsCount
-                ? TotalItemsCount 
-                : Take + ItemsOnPage;
+            Take = Take + ItemsOnPage > TotalItemsCount ? TotalItemsCount : Take + ItemsOnPage;
             Skip = Take - ItemsOnPage;
         }
 

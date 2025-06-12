@@ -1,7 +1,7 @@
 ﻿// ⠀
 // TMDBTrendingRequestEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 13.05.2025.
 // ⠀
 
@@ -14,11 +14,11 @@ public record TMDBTrendingRequestEntity
     public TMDBRequestContentType Content { get; init; }
     public PeriodType Period { get; init; }
     public long Page { get; init; } = 1;
-    
+
     public enum PeriodType
     {
         Day,
-        Week
+        Week,
     }
 };
 
@@ -30,7 +30,7 @@ public static class TMDBTrendingRequestEntityExtensions
         {
             TMDBTrendingRequestEntity.PeriodType.Day => "day",
             TMDBTrendingRequestEntity.PeriodType.Week => "week",
-            _ => throw new ArgumentOutOfRangeException(nameof(type))
+            _ => throw new ArgumentOutOfRangeException(nameof(type)),
         };
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ⠀
 // TMDBSearchRequestEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 13.05.2025.
 // ⠀
 

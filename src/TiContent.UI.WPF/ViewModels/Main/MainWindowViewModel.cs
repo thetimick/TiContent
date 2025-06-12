@@ -1,7 +1,7 @@
 ﻿// ⠀
 // MainWindowViewModel.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 30.03.2025.
 // ⠀
 
@@ -18,27 +18,45 @@ namespace TiContent.UI.WPF.ViewModels.Main;
 public partial class MainWindowViewModel(INavigationService navigation) : ObservableObject
 {
     // Observable
-    
-    [ObservableProperty] 
-    public partial ObservableCollection<object> MenuItems { get; set; } = [
-        // new NavigationViewItem(Strings.HomePage_Title, SymbolRegular.Home24, typeof(HomePage)),
-        new NavigationViewItemHeader
-        {
-            Text = Strings.MainWindow_NavigationItemHeader,
-            FontSize = 14, 
-            FontWeight = FontWeights.SemiBold,
-            Margin = new Thickness(6,4,0,5)
-        },
-        new NavigationViewItem(Strings.FilmsPage_Title, SymbolRegular.Filmstrip24, typeof(FilmsPage)),
-        new NavigationViewItem(Strings.GamesPage_Title, SymbolRegular.Games24, typeof(GamesPage))
-    ];
 
     [ObservableProperty]
-    public partial ObservableCollection<object> FooterItems { get; set; } = [
-        new NavigationViewItem(Strings.SettingsPage_Title, SymbolRegular.Settings24, typeof(SettingsPage)),
-        new NavigationViewItem(Strings.AboutPage_Title, SymbolRegular.Info24, typeof(AboutPage))
-    ];
-    
+    public partial ObservableCollection<object> MenuItems { get; set; } =
+        [
+            // new NavigationViewItem(Strings.HomePage_Title, SymbolRegular.Home24, typeof(HomePage)),
+            new NavigationViewItemHeader
+            {
+                Text = Strings.MainWindow_NavigationItemHeader,
+                FontSize = 14,
+                FontWeight = FontWeights.SemiBold,
+                Margin = new Thickness(6, 4, 0, 5),
+            },
+            new NavigationViewItem(
+                Strings.FilmsPage_Title,
+                SymbolRegular.Filmstrip24,
+                typeof(FilmsPage)
+            ),
+            new NavigationViewItem(
+                Strings.GamesPage_Title,
+                SymbolRegular.Games24,
+                typeof(GamesPage)
+            ),
+        ];
+
+    [ObservableProperty]
+    public partial ObservableCollection<object> FooterItems { get; set; } =
+        [
+            new NavigationViewItem(
+                Strings.SettingsPage_Title,
+                SymbolRegular.Settings24,
+                typeof(SettingsPage)
+            ),
+            new NavigationViewItem(
+                Strings.AboutPage_Title,
+                SymbolRegular.Info24,
+                typeof(AboutPage)
+            ),
+        ];
+
     // Public Methods
 
     public void OnLoaded()

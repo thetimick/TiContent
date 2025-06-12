@@ -12,7 +12,8 @@ public partial class MainWindow
         MainWindowViewModel viewModel,
         INavigationService navigation,
         IStorageService storageService
-    ) {
+    )
+    {
         ViewModel = viewModel;
         DataContext = viewModel;
 
@@ -24,7 +25,7 @@ public partial class MainWindow
         {
             if (storageService.Cached is null)
                 return;
-            
+
             storageService.Cached.Window.Width = args.NewSize.Width;
             storageService.Cached.Window.Height = args.NewSize.Height;
         };
@@ -37,7 +38,7 @@ public partial class MainWindow
             storageService.Cached.Window.X = Left;
             storageService.Cached.Window.Y = Top;
         };
-        
+
         Loaded += (_, _) => ViewModel.OnLoaded();
     }
 }

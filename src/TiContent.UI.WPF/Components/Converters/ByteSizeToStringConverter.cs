@@ -1,7 +1,7 @@
 ﻿// ⠀
 // ByteSizeToStringConverter.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 28.04.2025.
 // ⠀
 
@@ -11,7 +11,7 @@ using Humanizer.Bytes;
 
 namespace TiContent.UI.WPF.Components.Converters;
 
-public class ByteSizeToStringConverter: IValueConverter
+public class ByteSizeToStringConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
@@ -21,7 +21,12 @@ public class ByteSizeToStringConverter: IValueConverter
         return value;
     }
 
-    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotImplementedException();
     }

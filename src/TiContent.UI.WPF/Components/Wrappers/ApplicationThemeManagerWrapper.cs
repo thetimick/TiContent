@@ -1,7 +1,7 @@
 ﻿// ⠀
 // ApplicationThemeManagerWrapper.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 26.04.2025.
 // ⠀
 

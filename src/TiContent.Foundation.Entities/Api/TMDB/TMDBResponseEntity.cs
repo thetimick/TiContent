@@ -1,7 +1,7 @@
 ﻿// ⠀
 // TMDBEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 12.05.2025.
 // ⠀
 
@@ -30,7 +30,7 @@ public record TMDBResponseEntity
 
     [JsonPropertyName("total_results")]
     public int? TotalResults { get; set; }
-    
+
     public record ItemEntity
     {
         [JsonPropertyName("adult")]
@@ -50,7 +50,7 @@ public record TMDBResponseEntity
 
         [JsonPropertyName("original_title")]
         public string? OriginalTitle { get; set; }
-        
+
         [JsonPropertyName("names")]
         public List<string>? Names { get; set; }
 
@@ -63,7 +63,7 @@ public record TMDBResponseEntity
         [JsonPropertyName("release_date")]
         [JsonConverter(typeof(CustomDateTimeOffsetConverter))]
         public DateTimeOffset? ReleaseDate { get; set; }
-        
+
         [JsonPropertyName("first_air_date")]
         [JsonConverter(typeof(CustomDateTimeOffsetConverter))]
         public DateTimeOffset? FirstAirDate { get; set; }
@@ -88,7 +88,7 @@ public record TMDBResponseEntity
 
         [JsonPropertyName("imdb_id")]
         public string? IMDBId { get; set; }
-        
+
         [JsonPropertyName("backdrop_path")]
         public string? BackdropPath { get; set; }
 
@@ -103,10 +103,10 @@ public record TMDBResponseEntity
 
         [JsonPropertyName("original_name")]
         public string? OriginalName { get; set; }
-        
+
         [JsonPropertyName("origin_country")]
         public List<string>? OriginCountry { get; set; }
-        
+
         [JsonPropertyName("kp_rating")]
         public string? KpRating { get; set; }
     }

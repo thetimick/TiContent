@@ -1,7 +1,7 @@
 ﻿// ⠀
 // StorageEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 18.05.2025.
 //
 
@@ -13,7 +13,7 @@ public record StorageEntity
     {
         public DateTime HydraLinks { get; set; } = DateTime.UnixEpoch;
     }
-    
+
     public record UrlsEntity
     {
         public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
@@ -29,7 +29,7 @@ public record StorageEntity
     {
         public string? TMDBApiKey { get; init; }
     }
-    
+
     public record WindowEntity
     {
         public int ThemeIndex { get; set; } = 2;
@@ -46,7 +46,7 @@ public record StorageEntity
         public string Query { get; set; } = string.Empty;
         public int TypeIndex { get; set; }
     }
-    
+
     public DataBaseTimestampEntity DataBaseTimestamp { get; init; } = new();
     public UrlsEntity Urls { get; init; } = new();
     public KeysEntity Keys { get; init; } = new();
@@ -60,6 +60,9 @@ public static class StorageEntityExtensions
 {
     public static bool IsFirstLaunch(this StorageEntity.WindowEntity entity)
     {
-        return entity.Width == null || entity.Height == null || entity.X == null || entity.Y == null;
+        return entity.Width == null
+            || entity.Height == null
+            || entity.X == null
+            || entity.Y == null;
     }
 }

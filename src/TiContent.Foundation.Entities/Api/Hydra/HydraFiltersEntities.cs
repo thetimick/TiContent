@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraFiltersEntities.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 12.05.2025.
 // ⠀
 
@@ -20,10 +20,10 @@ public record HydraFiltersEntity
     public HydraFiltersTagsEntity Tags { get; init; } = new();
     public List<string> Developers { get; init; } = [];
     public List<string> Publishers { get; init; } = [];
-    
+
     public record HydraFiltersGenresEntity
     {
-        [JsonPropertyName("en")] 
+        [JsonPropertyName("en")]
         public List<string> En { get; set; } = [];
 
         [JsonPropertyName("es")]
@@ -51,4 +51,3 @@ public record HydraFiltersEntity
         public Dictionary<string, long> Es { get; set; } = [];
     }
 }
-

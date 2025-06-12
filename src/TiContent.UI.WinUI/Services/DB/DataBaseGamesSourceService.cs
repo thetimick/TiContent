@@ -1,7 +1,7 @@
 ﻿// ⠀
 // DataBaseGamesSourceService.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 04.06.2025.
 // ⠀
 
@@ -46,8 +46,8 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
         var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
         if (cleanQuery.IsNullOrEmpty())
             return [];
-        var items = await db.HydraLinksItems
-            .AsNoTracking()
+        var items = await db
+            .HydraLinksItems.AsNoTracking()
             .Where(entity => EF.Functions.Like(entity.CleanTitle, $"%{cleanQuery}%"))
             .ToListAsync();
         return items;
@@ -60,33 +60,32 @@ public partial class DataBaseGamesSourceService
     {
         if (!IsEmptyOrExpiredDataBaseAsync() && !forceRefresh)
             return;
-        
+
         var items = (await service.ObtainLinksAsync())
-            .SelectMany(
-                rawEntity =>
-                {
-                    return rawEntity?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
-                        .Select(
-                            rawItemEntity =>
-                            {
-                                var item = mapper.Map<DataBaseHydraLinksEntity>(rawItemEntity);
-                                item.Owner = rawEntity.Name ?? string.Empty;
-                                return item;
-                            }
-                        ) ?? [];
-                }
-            )
+            .SelectMany(rawEntity =>
+            {
+                return rawEntity
+                        ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
+                        .Select(rawItemEntity =>
+                        {
+                            var item = mapper.Map<DataBaseHydraLinksEntity>(rawItemEntity);
+                            item.Owner = rawEntity.Name ?? string.Empty;
+                            return item;
+                        }) ?? [];
+            })
             .ToList();
 
         await db.BulkInsertOrUpdateAsync(items);
         await db.BulkSaveChangesAsync();
-        
+
         if (storage.Cached != null)
-            storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;;
+            storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;
+        ;
     }
-    
+
     private bool IsEmptyOrExpiredDataBaseAsync()
     {
-        return db.HydraLinksItems.AsNoTracking().IsEmpty() || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+        return db.HydraLinksItems.AsNoTracking().IsEmpty()
+            || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
     }
 }

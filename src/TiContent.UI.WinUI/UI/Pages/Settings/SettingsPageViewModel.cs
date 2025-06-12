@@ -1,7 +1,7 @@
 ﻿// ⠀
 // SettingsPageViewModel.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 24.05.2025.
 // ⠀
 
@@ -12,23 +12,26 @@ using TiContent.UI.WinUI.Services.Theme;
 
 namespace TiContent.UI.WinUI.UI.Pages.Settings;
 
-public partial class SettingsPageViewModel(IStorageService storageService, IThemeService themeService) : ObservableObject
+public partial class SettingsPageViewModel(
+    IStorageService storageService,
+    IThemeService themeService
+) : ObservableObject
 {
     [ObservableProperty]
     public partial int ThemeIndex { get; set; }
-    
+
     [ObservableProperty]
     public partial bool IsWindowSizePersistent { get; set; }
 
     [ObservableProperty]
     public partial bool IsWindowOnCenterScreen { get; set; }
-    
+
     [ObservableProperty]
     public partial string TMDBApiKey { get; set; } = string.Empty;
-    
+
     partial void OnThemeIndexChanged(int value)
     {
-        if (storageService.Cached == null || storageService.Cached.Window.ThemeIndex == value) 
+        if (storageService.Cached == null || storageService.Cached.Window.ThemeIndex == value)
             return;
         storageService.Cached.Window.ThemeIndex = value;
         themeService.ApplyTheme((ElementTheme)value);
@@ -36,14 +39,20 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
 
     partial void OnIsWindowSizePersistentChanged(bool value)
     {
-        if (storageService.Cached == null || storageService.Cached.Window.IsWindowSizePersistent == value) 
+        if (
+            storageService.Cached == null
+            || storageService.Cached.Window.IsWindowSizePersistent == value
+        )
             return;
         storageService.Cached.Window.IsWindowSizePersistent = value;
     }
 
     partial void OnIsWindowOnCenterScreenChanged(bool value)
     {
-        if (storageService.Cached == null || storageService.Cached.Window.IsWindowOnCenterScreen == value) 
+        if (
+            storageService.Cached == null
+            || storageService.Cached.Window.IsWindowOnCenterScreen == value
+        )
             return;
         storageService.Cached.Window.IsWindowOnCenterScreen = value;
     }
@@ -57,9 +66,9 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
 
     public void OnLoaded()
     {
-        if (storageService.Cached is not { } cached) 
+        if (storageService.Cached is not { } cached)
             return;
-        
+
         ThemeIndex = cached.Window.ThemeIndex;
         IsWindowSizePersistent = cached.Window.IsWindowSizePersistent;
         IsWindowOnCenterScreen = cached.Window.IsWindowOnCenterScreen;

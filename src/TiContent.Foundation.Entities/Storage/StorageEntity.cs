@@ -1,7 +1,7 @@
 ﻿// ⠀
 // StorageEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 18.05.2025.
 //
 

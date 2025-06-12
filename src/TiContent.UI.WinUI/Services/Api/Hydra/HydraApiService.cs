@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraApiServiceV2.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 14.05.2025.
 // ⠀
 
@@ -19,12 +19,12 @@ namespace TiContent.UI.WinUI.Services.Api.Hydra;
 public interface IHydraApiService
 {
     public Task<List<HydraApiCatalogueResponseEntity>> ObtainCatalogueAsync(
-        HydraApiCatalogueRequestParamsEntity @params, 
+        HydraApiCatalogueRequestParamsEntity @params,
         CancellationToken token = default
     );
-    
+
     public Task<HydraApiSearchResponseEntity> ObtainSearchAsync(
-        HydraApiSearchRequestParamsEntity @params, 
+        HydraApiSearchRequestParamsEntity @params,
         CancellationToken token = default
     );
 
@@ -34,32 +34,41 @@ public interface IHydraApiService
 public partial class HydraApiService(IRestClient client, IStorageService storage)
 {
     private string HydraApiBaseUrl => storage.Cached?.Urls.HydraApiBaseUrl ?? string.Empty;
-    private string HydraAssetsApiBaseUrl => storage.Cached?.Urls.HydraApiAssetsBaseUrl ?? string.Empty;
+    private string HydraAssetsApiBaseUrl =>
+        storage.Cached?.Urls.HydraApiAssetsBaseUrl ?? string.Empty;
 }
 
-public partial class HydraApiService: IHydraApiService
+public partial class HydraApiService : IHydraApiService
 {
-    public async Task<List<HydraApiCatalogueResponseEntity>> ObtainCatalogueAsync(HydraApiCatalogueRequestParamsEntity @params, CancellationToken token = default)
+    public async Task<List<HydraApiCatalogueResponseEntity>> ObtainCatalogueAsync(
+        HydraApiCatalogueRequestParamsEntity @params,
+        CancellationToken token = default
+    )
     {
         var path = UrlHelper.Combine(HydraApiBaseUrl, "catalogue", @params.PathType);
         var request = new RestRequest(path)
             .AddParameter("take", @params.Take ?? 12)
             .AddParameter("skip", @params.Skip ?? 0);
-        
-        var response = await client.ExecuteAsync<List<HydraApiCatalogueResponseEntity>>(request, token);
+
+        var response = await client.ExecuteAsync<List<HydraApiCatalogueResponseEntity>>(
+            request,
+            token
+        );
         if (response is { IsSuccessful: true, Data: { } entity })
             return entity;
 
         response.ThrowIfError();
         throw new Exception();
     }
-    
-    public async Task<HydraApiSearchResponseEntity> ObtainSearchAsync(HydraApiSearchRequestParamsEntity @params, CancellationToken token = default)
+
+    public async Task<HydraApiSearchResponseEntity> ObtainSearchAsync(
+        HydraApiSearchRequestParamsEntity @params,
+        CancellationToken token = default
+    )
     {
         var path = UrlHelper.Combine(HydraApiBaseUrl, "catalogue", "search");
-        var request = new RestRequest(path, Method.Post)
-            .AddBody(@params, ContentType.Json);
-        
+        var request = new RestRequest(path, Method.Post).AddBody(@params, ContentType.Json);
+
         var response = await client.ExecuteAsync<HydraApiSearchResponseEntity>(request, token);
         if (response is { IsSuccessful: true, Data: { } entity })
             return entity;
@@ -71,28 +80,23 @@ public partial class HydraApiService: IHydraApiService
     public async Task<HydraFiltersEntity> ObtainFilters(CancellationToken token = default)
     {
         var genres = client.ExecuteAsync<HydraFiltersEntity.HydraFiltersGenresEntity>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-genres.json")), 
+            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-genres.json")),
             token
         );
         var tags = client.ExecuteAsync<HydraFiltersEntity.HydraFiltersTagsEntity>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-user-tags.json")), 
+            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-user-tags.json")),
             token
         );
         var developers = client.ExecuteAsync<List<string>>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-developers.json")), 
+            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-developers.json")),
             token
         );
         var publishers = client.ExecuteAsync<List<string>>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-publishers.json")), 
+            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-publishers.json")),
             token
         );
 
-        await Task.WhenAll(
-            genres, 
-            tags, 
-            developers,
-            publishers
-        );
+        await Task.WhenAll(genres, tags, developers, publishers);
 
         return new HydraFiltersEntity
         {

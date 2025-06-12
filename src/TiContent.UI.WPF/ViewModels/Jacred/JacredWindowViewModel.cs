@@ -1,7 +1,7 @@
 ﻿// ⠀
 // JacredWindowViewModel.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 16.05.2025.
 // ⠀
 
@@ -11,58 +11,63 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using TiContent.UI.WPF.Components.Extensions;
-using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Components.Helpers;
 using TiContent.UI.WPF.Components.Wrappers;
+using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Jacred;
 using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.UI.WPF.ViewModels.Jacred;
 
-public partial class JacredWindowViewModel: ObservableRecipient, IRecipient<JacredWindowViewModel.RecipientModel>
+public partial class JacredWindowViewModel
+    : ObservableRecipient,
+        IRecipient<JacredWindowViewModel.RecipientModel>
 {
-    // Observable 
-    
+    // Observable
+
     [ObservableProperty]
     public partial string Title { get; set; } = string.Empty;
-    
+
     [ObservableProperty]
     public partial string Description { get; set; } = string.Empty;
-    
+
     [ObservableProperty]
     public partial string Query { get; set; } = string.Empty;
-    
+
     [ObservableProperty]
     public partial ObservableCollection<JacredEntity> Items { get; set; } = [];
-    
+
     // Private Props
 
     private readonly IJacredService _jacredService;
     private readonly ILogger<JacredWindowViewModel> _logger;
-    
+
     private string _globalQuery = string.Empty;
 
     private CancellationTokenSource? _cancellationToken;
-    
+
     // Lifecycle
-    
-    public JacredWindowViewModel(IJacredService jacredService, ILogger<JacredWindowViewModel> logger)
+
+    public JacredWindowViewModel(
+        IJacredService jacredService,
+        ILogger<JacredWindowViewModel> logger
+    )
     {
         _jacredService = jacredService;
         _logger = logger;
 
         WeakReferenceMessenger.Default.Register(this);
     }
-    
+
     // IRecipient
-    
+
     public void Receive(RecipientModel message)
     {
         _globalQuery = message.Query;
         ObtainItems();
     }
-    
+
     // Commands
 
     [RelayCommand]
@@ -79,29 +84,30 @@ public partial class JacredWindowViewModel
     {
         if (_cancellationToken != null)
             return;
-        
+
         Items = [];
         Title = _globalQuery;
         Description = string.Empty;
 
-        Task.Run(
-            async () =>
+        Task.Run(async () =>
+        {
+            try
             {
-                try
-                {
-                    _cancellationToken = new CancellationTokenSource();
-                    var entity = await _jacredService.ObtainTorrentsAsync(_globalQuery, _cancellationToken.Token);
-                    DispatcherWrapper.InvokeOnMain(() => SetItems(entity));
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("{ex}", ex);
-                    DispatcherWrapper.InvokeOnMain(() => ExceptionReport.Show(ex));
-                }
-                
-                _cancellationToken = null;
+                _cancellationToken = new CancellationTokenSource();
+                var entity = await _jacredService.ObtainTorrentsAsync(
+                    _globalQuery,
+                    _cancellationToken.Token
+                );
+                DispatcherWrapper.InvokeOnMain(() => SetItems(entity));
             }
-        );
+            catch (Exception ex)
+            {
+                _logger.LogError("{ex}", ex);
+                DispatcherWrapper.InvokeOnMain(() => ExceptionReport.Show(ex));
+            }
+
+            _cancellationToken = null;
+        });
     }
 
     private void SetItems(List<JacredEntity> items)

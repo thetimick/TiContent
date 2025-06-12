@@ -1,7 +1,7 @@
 ﻿// ⠀
 // OpenUrlHelper.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 16.05.2025.
 // ⠀
 
@@ -13,12 +13,6 @@ public static class OpenHelper
 {
     public static void OpenUrl(string url)
     {
-        Process.Start(
-            new ProcessStartInfo
-            {
-                FileName = url, 
-                UseShellExecute = true
-            }
-        );
+        Process.Start(new ProcessStartInfo { FileName = url, UseShellExecute = true });
     }
 }

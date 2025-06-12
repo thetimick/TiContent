@@ -1,7 +1,7 @@
 ﻿// ⠀
 // PluralHelper.cs
 // TiContent.UI.WPF.Foundation.Components
-// 
+//
 // Created by the_timick on 31.05.2025.
 // ⠀
 
@@ -21,7 +21,7 @@ public static class PluralHelper
         {
             1 => form1,
             2 or 3 or 4 => form2,
-            _ => form5
+            _ => form5,
         };
     }
 }

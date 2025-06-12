@@ -1,7 +1,7 @@
 ﻿// ⠀
 // TMDBRequestContentType.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 18.05.2025.
 // ⠀
 
@@ -9,9 +9,9 @@ namespace TiContent.Foundation.Entities.API.TMDB.Requests.Shared;
 
 public enum TMDBRequestContentType
 {
-    Movies, 
+    Movies,
     Serials,
-    Anime
+    Anime,
 }
 
 public static class TMDBSearchRequestEntityExtensions
@@ -23,7 +23,7 @@ public static class TMDBSearchRequestEntityExtensions
             TMDBRequestContentType.Movies => "movie",
             TMDBRequestContentType.Serials => "tv",
             TMDBRequestContentType.Anime => "anime",
-            _ => throw new ArgumentOutOfRangeException(nameof(type))
+            _ => throw new ArgumentOutOfRangeException(nameof(type)),
         };
     }
 }

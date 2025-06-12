@@ -1,10 +1,10 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using TiContent.UI.WPF.Entities;
-using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Components.Converters;
 using TiContent.UI.WPF.Components.Wrappers;
+using TiContent.UI.WPF.Entities;
+using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Storage;
 using TiContent.UI.WPF.Windows.Main;
 
@@ -12,17 +12,17 @@ namespace TiContent.UI.WPF.Application;
 
 public partial class App
 {
-    private class WindowService(
-        IServiceProvider provider
-    ) : IHostedService, IDisposable {
+    private class WindowService(IServiceProvider provider) : IHostedService, IDisposable
+    {
         // Private Props
-        
+
         private readonly AppDataBaseContext _db = provider.GetRequiredService<AppDataBaseContext>();
-        private readonly IStorageService _storageService = provider.GetRequiredService<IStorageService>();
+        private readonly IStorageService _storageService =
+            provider.GetRequiredService<IStorageService>();
         private readonly MainWindow _mainWindow = provider.GetRequiredService<MainWindow>();
-        
+
         // IHostedService
-        
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _storageService.Obtain();
@@ -53,13 +53,14 @@ public partial class App
                     _mainWindow.Top = storage.Window.Y ?? 0;
                 }
             }
-            
+
             // Добавляем динамические ресурсы
-            _mainWindow.Resources["StringToImageCacheConverter"] = new StringToImageCacheConverter();
+            _mainWindow.Resources["StringToImageCacheConverter"] =
+                new StringToImageCacheConverter();
 
             // Показываем окно
             _mainWindow.Show();
-            
+
             return Task.CompletedTask;
         }
 
@@ -69,7 +70,6 @@ public partial class App
             _storageService.Save();
         }
 
-        public void Dispose()
-        { }
+        public void Dispose() { }
     }
 }

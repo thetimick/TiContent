@@ -111,7 +111,11 @@ public static class ListExtensions
     /// <param name="target"></param>
     /// <param name="comparison"></param>
     /// <returns>True if target collection contains items that are also part of source collection.</returns>
-    public static bool IntersectsPartiallyWith(this IEnumerable<string> source, IEnumerable<string> target, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    public static bool IntersectsPartiallyWith(
+        this IEnumerable<string> source,
+        IEnumerable<string> target,
+        StringComparison comparison = StringComparison.InvariantCultureIgnoreCase
+    )
     {
         if (source == null && target == null)
         {
@@ -142,7 +146,11 @@ public static class ListExtensions
     /// <param name="target"></param>
     /// <param name="comparison"></param>
     /// <returns>True if target collection contains items that are also part of source collection.</returns>
-    public static bool IntersectsExactlyWith(this IEnumerable<string> source, IEnumerable<string> target, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    public static bool IntersectsExactlyWith(
+        this IEnumerable<string> source,
+        IEnumerable<string> target,
+        StringComparison comparison = StringComparison.InvariantCultureIgnoreCase
+    )
     {
         if (source == null && target == null)
         {
@@ -169,7 +177,11 @@ public static class ListExtensions
     /// <summary>
     /// Checks if source collection contains specified string completely.
     /// </summary>
-    public static bool ContainsString(this IEnumerable<string> source, string value, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    public static bool ContainsString(
+        this IEnumerable<string> source,
+        string value,
+        StringComparison comparison = StringComparison.InvariantCultureIgnoreCase
+    )
     {
         return source?.Any(a => a?.Equals(value, comparison) == true) == true;
     }
@@ -177,7 +189,11 @@ public static class ListExtensions
     /// <summary>
     /// Checks if part of specified string is part of the collection.
     /// </summary>
-    public static bool ContainsStringPartial(this IEnumerable<string> source, string value, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    public static bool ContainsStringPartial(
+        this IEnumerable<string> source,
+        string value,
+        StringComparison comparison = StringComparison.InvariantCultureIgnoreCase
+    )
     {
         return source?.Any(a => a?.IndexOf(value, comparison) >= 0) == true;
     }
@@ -185,7 +201,11 @@ public static class ListExtensions
     /// <summary>
     /// Checks if source collection contains part of specified string.
     /// </summary>
-    public static bool ContainsPartOfString(this IEnumerable<string> source, string value, StringComparison comparison = StringComparison.InvariantCultureIgnoreCase)
+    public static bool ContainsPartOfString(
+        this IEnumerable<string> source,
+        string value,
+        StringComparison comparison = StringComparison.InvariantCultureIgnoreCase
+    )
     {
         return source?.Any(a => value?.IndexOf(a, comparison) >= 0) == true;
     }
@@ -226,7 +246,11 @@ public static class ListExtensions
     /// <summary>
     /// Checks if two collections contain the same items in any order.
     /// </summary>
-    public static bool IsListEqual<T>(this IEnumerable<T> source, IEnumerable<T> target, IEqualityComparer<T> comparer)
+    public static bool IsListEqual<T>(
+        this IEnumerable<T> source,
+        IEnumerable<T> target,
+        IEqualityComparer<T> comparer
+    )
     {
         if (source == null && target == null)
         {
@@ -349,7 +373,9 @@ public static class ListExtensions
         }
 
         var listsCounts = lists.Count();
-        return new HashSet<T>(set.GroupBy(a => a).Where(a => a.Count() < listsCounts).Select(a => a.Key));
+        return new HashSet<T>(
+            set.GroupBy(a => a).Where(a => a.Count() < listsCounts).Select(a => a.Key)
+        );
     }
 
     /// <summary>

@@ -19,30 +19,38 @@ public record JacredEntity
     {
         [Description("SDR")]
         SDR,
+
         [Description("HDR")]
         HDR,
+
         [Description("n/n")]
-        None
+        None,
     }
-    
+
     public enum TrackerEntity
     {
         [Description("bitru")]
         Bitru,
+
         [Description("kinozal")]
         Kinozal,
+
         [Description("megapeer")]
         Megapeer,
+
         [Description("nnmclub")]
         NNMClub,
+
         [Description("rutor")]
         Rutor,
+
         [Description("rutracker")]
         Rutracker,
+
         [Description("n/n")]
-        None
+        None,
     }
-    
+
     [JsonPropertyName("tracker")]
     [JsonConverter(typeof(TrackerConverter))]
     public TrackerEntity Tracker { get; init; }
@@ -85,40 +93,44 @@ public record JacredEntity
     [JsonPropertyName("videotype")]
     [JsonConverter(typeof(VideoTypeConverter))]
     public VideoTypeEntity VideoType { get; init; }
-    
+
     [JsonPropertyName("quality")]
     public int? Quality { get; init; }
-    
+
     [JsonPropertyName("voices")]
     public List<string>? Voices { get; init; }
-    
+
     [JsonPropertyName("seasons")]
     public List<long>? Seasons { get; init; }
-    
+
     [JsonPropertyName("types")]
     public List<string>? Types { get; init; }
-    
+
     public string AggregatedDescription => MakeDescription();
 
     private string MakeDescription()
     {
         var builder = new StringBuilder();
-        
+
         builder.Append(Tracker.Humanize());
-        if (!Types.IsEmpty()) 
+        if (!Types.IsEmpty())
             builder.Append($" · {Types.Humanize()}");
-        if (!Seasons.IsEmpty()) 
+        if (!Seasons.IsEmpty())
             builder.Append($" · сезон(-ы): {Seasons.Humanize()}");
-        if (!Voices.IsEmpty()) 
+        if (!Voices.IsEmpty())
             builder.Append($" · озвучка(-и): {Voices.Humanize()}");
-        
+
         return builder.ToString();
     }
 }
 
 internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
 {
-    public override JacredEntity.TrackerEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override JacredEntity.TrackerEntity Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
         return value switch
@@ -129,11 +141,15 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
             "nnmclub" => JacredEntity.TrackerEntity.NNMClub,
             "rutor" => JacredEntity.TrackerEntity.Rutor,
             "rutracker" => JacredEntity.TrackerEntity.Rutracker,
-            _ => JacredEntity.TrackerEntity.None
+            _ => JacredEntity.TrackerEntity.None,
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, JacredEntity.TrackerEntity value, JsonSerializerOptions options)
+    public override void Write(
+        Utf8JsonWriter writer,
+        JacredEntity.TrackerEntity value,
+        JsonSerializerOptions options
+    )
     {
         throw new NotImplementedException();
     }
@@ -141,7 +157,11 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
 
 public class ByteSizeConverter : JsonConverter<ByteSize>
 {
-    public override ByteSize Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override ByteSize Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         var size = reader.GetInt64();
         return ByteSize.FromBytes(size);
@@ -155,14 +175,22 @@ public class ByteSizeConverter : JsonConverter<ByteSize>
 
 public class DateTimeConverter : JsonConverter<DateTime?>
 {
-    public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override DateTime? Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         if (reader.GetString() is { } value)
             return DateTime.Parse(value);
         return null;
     }
-    
-    public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
+
+    public override void Write(
+        Utf8JsonWriter writer,
+        DateTime? value,
+        JsonSerializerOptions options
+    )
     {
         throw new NotImplementedException();
     }
@@ -170,18 +198,26 @@ public class DateTimeConverter : JsonConverter<DateTime?>
 
 internal class VideoTypeConverter : JsonConverter<JacredEntity.VideoTypeEntity>
 {
-    public override JacredEntity.VideoTypeEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+    public override JacredEntity.VideoTypeEntity Read(
+        ref Utf8JsonReader reader,
+        Type typeToConvert,
+        JsonSerializerOptions options
+    )
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
         return value switch
         {
             "sdr" => JacredEntity.VideoTypeEntity.SDR,
             "hdr" => JacredEntity.VideoTypeEntity.HDR,
-            _ => JacredEntity.VideoTypeEntity.None
+            _ => JacredEntity.VideoTypeEntity.None,
         };
     }
 
-    public override void Write(Utf8JsonWriter writer, JacredEntity.VideoTypeEntity value, JsonSerializerOptions options)
+    public override void Write(
+        Utf8JsonWriter writer,
+        JacredEntity.VideoTypeEntity value,
+        JsonSerializerOptions options
+    )
     {
         throw new NotImplementedException();
     }

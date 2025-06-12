@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraLinksResponseEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 14.05.2025.
 // ⠀
 
@@ -21,7 +21,7 @@ public record HydraLinksResponseEntity
 
     [JsonPropertyName("downloads")]
     public List<ItemsEntity>? Items { get; set; }
-    
+
     public record ItemsEntity
     {
         [JsonPropertyName("title")]
@@ -42,8 +42,6 @@ public static class HydraLinksResponseExtensions
 {
     public static DateTime? ParseDateTimeOrDefault(this HydraLinksResponseEntity.ItemsEntity entity)
     {
-        return DateTime.TryParse(entity.UploadDate, out var result) 
-            ? result 
-            : DateTime.UnixEpoch;
+        return DateTime.TryParse(entity.UploadDate, out var result) ? result : DateTime.UnixEpoch;
     }
 }
