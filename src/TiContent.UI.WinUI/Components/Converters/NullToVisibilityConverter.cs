@@ -1,7 +1,7 @@
 ﻿// ⠀
 // NullToVisibilityConverter.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 02.06.2025.
 // ⠀
 
@@ -16,14 +16,10 @@ public partial class NullToVisibilityConverter : IValueConverter
 {
     public object Convert(object? value, Type targetType, object parameter, string language)
     {
-        if (value is not string stringValue) 
-            return value == null 
-                ? Visibility.Collapsed
-                : Visibility.Visible;
-        
-        return stringValue.IsNullOrEmpty() 
-            ? Visibility.Collapsed
-            : Visibility.Visible;
+        if (value is not string stringValue)
+            return value == null ? Visibility.Collapsed : Visibility.Visible;
+
+        return stringValue.IsNullOrEmpty() ? Visibility.Collapsed : Visibility.Visible;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, string language)

@@ -1,7 +1,7 @@
 ﻿// ⠀
-// Inter.cs
+// RestClientLoggerInterceptor.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 27.04.2025.
 // ⠀
 
@@ -13,8 +13,12 @@ namespace TiContent.Foundation.Components.Interceptors;
 
 public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> logger) : Interceptor
 {
-    public override ValueTask BeforeRequest(RestRequest request, CancellationToken cancellationToken)
+    public override ValueTask BeforeRequest(
+        RestRequest request,
+        CancellationToken cancellationToken
+    )
     {
+        // csharpier-ignore
         var str = $"""
                   REQUEST {request.Method.ToString().ToUpperInvariant()}
                       {request.Resource}
@@ -23,14 +27,18 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
                           Body: {GetBody(request)}
                   """;
         logger.LogInformation("{str}", str);
-        
+
         return base.BeforeRequest(request, cancellationToken);
     }
 
-    public override ValueTask AfterRequest(RestResponse response, CancellationToken cancellationToken)
+    public override ValueTask AfterRequest(
+        RestResponse response,
+        CancellationToken cancellationToken
+    )
     {
         if (response.IsSuccessful)
         {
+            // csharpier-ignore
             var str = $"""
                        RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)response.StatusCode} ({response.StatusCode.ToString()})
                            {response.Request.Resource}
@@ -39,6 +47,7 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
         }
         else
         {
+            // csharpier-ignore
             var str = $"""
                       RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)response.StatusCode} ({response.StatusCode.ToString()})
                           {response.Request.Resource}
@@ -51,38 +60,36 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
     }
 
     #region Private Methods
-    
+
     private static string GetQueryString(RestRequest request)
     {
-        var queryParams = request.Parameters
-            .Where(p => p.Type == ParameterType.GetOrPost)
+        var queryParams = request
+            .Parameters.Where(p => p.Type == ParameterType.GetOrPost)
             .Select(p => $"{p.Name}={p.Value}")
             .ToList();
-        
-        return queryParams.Count != 0 
-            ? string.Join(", ", queryParams) 
-            : "null";
+
+        return queryParams.Count != 0 ? string.Join(", ", queryParams) : "null";
     }
 
     private static string GetHeaders(RestRequest request)
     {
-        var headers = request.Parameters
-            .Where(p => p.Type == ParameterType.HttpHeader)
+        var headers = request
+            .Parameters.Where(p => p.Type == ParameterType.HttpHeader)
             .Select(p => $"{p.Name}: {p.Value}")
             .ToList();
-        
-        return headers.Count != 0 
-            ? string.Join(", ", headers) 
-            : "null";
+
+        return headers.Count != 0 ? string.Join(", ", headers) : "null";
     }
 
     private static string GetBody(RestRequest request)
     {
         if (request.Method == Method.Get)
             return "null";
-        var body = request.Parameters.FirstOrDefault(p => p.Type == ParameterType.RequestBody)?.Value;
+        var body = request
+            .Parameters.FirstOrDefault(p => p.Type == ParameterType.RequestBody)
+            ?.Value;
         return body?.ToString() ?? "null";
     }
-    
+
     #endregion
 }

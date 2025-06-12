@@ -1,7 +1,7 @@
 ﻿// ⠀
 // RegexHelper.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 16.05.2025.
 // ⠀
 

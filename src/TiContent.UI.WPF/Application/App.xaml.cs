@@ -8,19 +8,18 @@ namespace TiContent.UI.WPF.Application;
 
 public partial class App
 {
-    private static readonly IHost AppHost = Host
-        .CreateDefaultBuilder()
+    private static readonly IHost AppHost = Host.CreateDefaultBuilder()
         .ConfigureAppConfiguration(b => b.SetBasePath(Environment.CurrentDirectory))
         .ConfigureServices(ConfigureServices)
         .Build();
-    
+
     // Lifecycle
 
     public App()
     {
         DispatcherUnhandledException += (_, args) => ExceptionReport.Show(args.Exception);
     }
-    
+
     protected override async void OnStartup(StartupEventArgs e)
     {
         try
@@ -33,7 +32,7 @@ public partial class App
             // Empty
         }
     }
-    
+
     protected override async void OnExit(ExitEventArgs e)
     {
         try
@@ -47,15 +46,16 @@ public partial class App
             // Empty
         }
     }
-    
+
     // Public Methods
-    
+
     /// <summary>
     /// Gets registered service.
     /// </summary>
     /// <typeparam name="T">Type of the service to get.</typeparam>
     /// <returns>Instance of the service or <see langword="null"/>.</returns>
-    public static T GetRequiredService<T>() where T : class
+    public static T GetRequiredService<T>()
+        where T : class
     {
         return AppHost.Services.GetRequiredService<T>();
     }

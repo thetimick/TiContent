@@ -1,7 +1,7 @@
 ﻿// ⠀
 // CollectionExtensions.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 06.05.2025.
 // ⠀
 
@@ -15,7 +15,7 @@ public static class CollectionExtensions
     {
         return source == null || !source.Any();
     }
-    
+
     public static ObservableCollection<T> ToObservable<T>(this IEnumerable<T> source)
     {
         return new ObservableCollection<T>(source);

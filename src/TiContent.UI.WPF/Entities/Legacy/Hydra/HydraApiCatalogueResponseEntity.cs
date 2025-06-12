@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraApiCatalogueResponseItemEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 14.05.2025.
 // ⠀
 
@@ -30,7 +30,7 @@ public record HydraApiCatalogueResponseEntity
 
     [JsonPropertyName("logoImageUrl")]
     public Uri? LogoImageUrl { get; set; }
-    
+
     [JsonPropertyName("coverImageUrl")]
     public Uri? CoverImageUrl { get; set; }
 

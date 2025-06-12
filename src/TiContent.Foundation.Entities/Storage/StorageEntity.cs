@@ -1,7 +1,7 @@
 ﻿// ⠀
 // StorageEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 18.05.2025.
 //
 
@@ -15,14 +15,14 @@ public record StorageEntity
     {
         public DateTime HydraLinks { get; set; } = DateTime.UnixEpoch;
     }
-    
+
     public record UrlsEntity
     {
         public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
         public string HydraApiBaseUrl { get; init; } = AppConstants.Urls.HydraApi;
         public string HydraApiAssetsBaseUrl { get; init; } = AppConstants.Urls.HydraAssetsApi;
         public string TMDBApiBaseUrl { get; init; } = AppConstants.Urls.TMDBApiBaseUrl;
-        
+
         public string HydraLinksSources { get; init; } = AppConstants.Urls.HydraLinksSources;
     }
 
@@ -30,7 +30,7 @@ public record StorageEntity
     {
         public string TMDBApiKey { get; set; } = string.Empty;
     }
-    
+
     public record WindowEntity
     {
         public int ThemeIndex { get; set; }
@@ -41,19 +41,21 @@ public record StorageEntity
         public bool IsWindowSizePersistent { get; set; }
         public bool IsWindowOnCenterScreen { get; set; } = true;
     }
-    
+
+    public record FilmsSourceEntity
+    {
+        public int SortOrder { get; set; } = 2;
+    }
+
+    public record GamesSourceEntity
+    {
+        public int SortOrder { get; set; }
+    }
+
     public DataBaseTimestampEntity DataBaseTimestamp { get; init; } = new();
     public UrlsEntity Urls { get; init; } = new();
     public KeysEntity Keys { get; init; } = new();
     public WindowEntity Window { get; init; } = new();
-}
-
-// Helpers
-
-public static class StorageEntityExtensions
-{
-    public static bool IsFirstLaunch(this StorageEntity.WindowEntity entity)
-    {
-        return entity.Width == null || entity.Height == null || entity.X == null || entity.Y == null;
-    }
+    public FilmsSourceEntity FilmsSource { get; init; } = new();
+    public GamesSourceEntity GamesSource { get; init; } = new();
 }

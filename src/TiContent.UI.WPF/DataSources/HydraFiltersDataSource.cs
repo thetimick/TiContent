@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraFiltersDataSource.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 12.05.2025.
 // ⠀
 
@@ -15,7 +15,7 @@ public interface IHydraFiltersDataSource
     Task<HydraFiltersEntity> ObtainAsync(CancellationToken token = default);
 }
 
-public class HydraFiltersDataSource(IHydraApiService hydraService): IHydraFiltersDataSource
+public class HydraFiltersDataSource(IHydraApiService hydraService) : IHydraFiltersDataSource
 {
     public async Task<HydraFiltersEntity> ObtainAsync(CancellationToken token = default)
     {

@@ -1,7 +1,7 @@
 ﻿// ⠀
 // NavigationService.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 25.05.2025.
 // ⠀
 
@@ -16,10 +16,8 @@ using TiContent.UI.WinUI.UI.Pages.GamesSource;
 using TiContent.UI.WinUI.UI.Pages.Settings;
 using FilmsSource_FilmsSourcesPage = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage;
 using FilmsSource_FilmsSourcesPageViewModel = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPageViewModel;
-using FilmsSourcesPage = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage;
-using FilmsSourcesPageViewModel = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPageViewModel;
 
-namespace TiContent.UI.WinUI.Services.Navigation;
+namespace TiContent.UI.WinUI.Services.UI.Navigation;
 
 public interface INavigationService
 {
@@ -28,30 +26,30 @@ public interface INavigationService
     public void GoBack();
 }
 
-public class NavigationService(IServiceProvider provider): INavigationService
+public class NavigationService(IServiceProvider provider) : INavigationService
 {
     // Private Props
-    
+
     private Frame? _frame;
     private NavigationPath? _currentPath;
-    
+
     // INavigationService
-    
+
     public void Setup(NavigationView view)
     {
         _frame = view.Content as Frame;
     }
-    
+
     public void NavigateTo(NavigationPath path)
     {
         if (_frame == null || _currentPath == path)
             return;
-        
+
         switch (path)
         {
             case NavigationPath.Films:
                 _frame.Navigate(
-                    typeof(FilmsPage), 
+                    typeof(FilmsPage),
                     new FilmsPage.Dependencies(
                         provider.GetRequiredService<FilmsPageViewModel>(),
                         provider.GetRequiredService<IImageProvider>(),
@@ -60,12 +58,15 @@ public class NavigationService(IServiceProvider provider): INavigationService
                 );
                 break;
             case NavigationPath.FilmsSource:
-                _frame.Navigate(typeof(FilmsSource_FilmsSourcesPage), provider.GetRequiredService<FilmsSource_FilmsSourcesPageViewModel>());
+                _frame.Navigate(
+                    typeof(FilmsSource_FilmsSourcesPage),
+                    provider.GetRequiredService<FilmsSource_FilmsSourcesPageViewModel>()
+                );
                 break;
-            
+
             case NavigationPath.Games:
                 _frame.Navigate(
-                    typeof(GamesPage), 
+                    typeof(GamesPage),
                     new GamesPage.Dependencies(
                         provider.GetRequiredService<GamesPageViewModel>(),
                         provider.GetRequiredService<IImageProvider>(),
@@ -73,13 +74,19 @@ public class NavigationService(IServiceProvider provider): INavigationService
                     )
                 );
                 break;
-            
+
             case NavigationPath.GamesSource:
-                _frame.Navigate(typeof(GamesSourcePage), provider.GetRequiredService<GamesSourcePageViewModel>());
+                _frame.Navigate(
+                    typeof(GamesSourcePage),
+                    provider.GetRequiredService<GamesSourcePageViewModel>()
+                );
                 break;
-            
+
             case NavigationPath.Settings:
-                _frame.Navigate(typeof(SettingsPage), provider.GetRequiredService<SettingsPageViewModel>());
+                _frame.Navigate(
+                    typeof(SettingsPage),
+                    provider.GetRequiredService<SettingsPageViewModel>()
+                );
                 break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(path), path, null);
@@ -95,16 +102,17 @@ public class NavigationService(IServiceProvider provider): INavigationService
     }
 
     // Helpers
-    
+
     private static NavigationPath? GetCurrentPath(Type? type)
     {
         return type switch
         {
             not null when type == typeof(FilmsPage) => NavigationPath.Films,
-            not null when type == typeof(FilmsSource_FilmsSourcesPage) => NavigationPath.FilmsSource,
+            not null when type == typeof(FilmsSource_FilmsSourcesPage) =>
+                NavigationPath.FilmsSource,
             not null when type == typeof(GamesPage) => NavigationPath.FilmsSource,
             not null when type == typeof(SettingsPage) => NavigationPath.Settings,
-            _ => null
+            _ => null,
         };
     }
 }

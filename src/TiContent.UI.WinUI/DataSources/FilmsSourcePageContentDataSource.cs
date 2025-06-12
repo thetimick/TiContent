@@ -1,7 +1,7 @@
 ﻿// ⠀
 // FilmsSourcePageContentDataSource.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 28.05.2025.
 // ⠀
 
@@ -16,7 +16,7 @@ namespace TiContent.UI.WinUI.DataSources;
 public interface IFilmsSourcePageContentDataSource
 {
     public bool InProgress { get; }
-    
+
     Task<List<JacredEntity>> ObtainItemsAsync(string query);
     void ClearCache();
 }
@@ -35,7 +35,7 @@ public partial class FilmsSourcePageContentDataSource : IFilmsSourcePageContentD
     {
         if (query.IsNullOrEmpty() || _query == query)
             return _items;
-        
+
         InProgress = true;
         var items = await jacredService.ObtainTorrentsAsync(query);
         InProgress = false;

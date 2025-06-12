@@ -1,7 +1,7 @@
 ﻿// ⠀
 // SettingsPageViewModel.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 30.03.2025.
 // ⠀
 
@@ -12,10 +12,8 @@ using TiContent.UI.WPF.Services.Storage;
 
 namespace TiContent.UI.WPF.ViewModels.Main.Pages;
 
-public partial class SettingsPageViewModel(
-    IStorageService storageService
-) : ObservableObject {
-
+public partial class SettingsPageViewModel(IStorageService storageService) : ObservableObject
+{
     [ObservableProperty]
     public partial int ThemeIndex { get; set; }
 

@@ -1,7 +1,7 @@
 ﻿// ⠀
 // GamesPageViewModel.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 06.05.2025.
 // ⠀
 
@@ -13,8 +13,8 @@ using Humanizer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
-using TiContent.UI.WPF.Components.Extensions;
 using TiContent.UI.WPF.Components.Abstractions;
+using TiContent.UI.WPF.Components.Extensions;
 using TiContent.UI.WPF.Components.Pagination;
 using TiContent.UI.WPF.Components.Wrappers;
 using TiContent.UI.WPF.DataSources;
@@ -26,52 +26,57 @@ using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.UI.WPF.ViewModels.Main.Pages;
 
-public partial class GamesPageViewModel: ObservableObject
+public partial class GamesPageViewModel : ObservableObject
 {
     // Observable
 
     [ObservableProperty]
     public partial ViewStateEnum ViewState { get; set; } = ViewStateEnum.Empty;
-    
+
     [ObservableProperty]
     public partial string Query { get; set; } = string.Empty;
-    
+
     [ObservableProperty]
-    public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } = [];
-    
+    public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } =
+        [];
+
     [ObservableProperty]
     public partial HydraFiltersEntity Filters { get; set; } = new();
-    
+
     // Private Props
-    
+
     private readonly IHydraApiServiceV2 _hydraService;
     private readonly IHydraFiltersDataSource _hydraFiltersDataSource;
     private readonly IServiceProvider _provider;
     private readonly ILogger<GamesPageViewModel> _logger;
-    
+
     private readonly RateLimitedAction _debounceOnQueryChangedAction;
-    
+
     private CancellationTokenSource? _filtersCancellationToken;
     private CancellationTokenSource? _debounceCancellationToken;
-    
+
     private string PreparedQuery => Query.Trim().Humanize(LetterCasing.LowerCase);
 
     private HydraPagination? _pagination;
-    
+
     // Lifecycle
-    
+
     public GamesPageViewModel(
-        IHydraApiServiceV2 hydraService, 
-        IHydraFiltersDataSource hydraFiltersDataSource, 
+        IHydraApiServiceV2 hydraService,
+        IHydraFiltersDataSource hydraFiltersDataSource,
         IServiceProvider provider,
         ILogger<GamesPageViewModel> logger
-    ) {
+    )
+    {
         _hydraService = hydraService;
         _hydraFiltersDataSource = hydraFiltersDataSource;
         _provider = provider;
         _logger = logger;
-        
-        _debounceOnQueryChangedAction = Debouncer.Debounce(() => ObtainItems(true), TimeSpan.FromSeconds(1));
+
+        _debounceOnQueryChangedAction = Debouncer.Debounce(
+            () => ObtainItems(true),
+            TimeSpan.FromSeconds(1)
+        );
     }
 
     public void OnLoaded()
@@ -79,13 +84,13 @@ public partial class GamesPageViewModel: ObservableObject
         ObtainItems();
         // LoadFilters();
     }
-    
+
     public void OnScrollChanged(double offset, double height)
     {
         if (height - offset < 100)
             ObtainItemsWithPagination();
     }
-    
+
     // Observable Methods
 
     partial void OnQueryChanged(string value)
@@ -96,10 +101,10 @@ public partial class GamesPageViewModel: ObservableObject
             ObtainItems(true);
             return;
         }
-        
+
         _debounceOnQueryChangedAction.Invoke();
     }
-    
+
     // Commands
 
     [RelayCommand]
@@ -108,7 +113,7 @@ public partial class GamesPageViewModel: ObservableObject
         var title = Items.FirstOrDefault(entity => entity.Id == id)?.Title ?? string.Empty;
         if (title.IsNullOrEmpty())
             return;
-        
+
         var window = _provider.GetRequiredService<HydraLinksWindow>();
         WeakReferenceMessenger.Default.Send(new HydraLinksWindowViewModel.MessageEntity(title));
         window.ShowDialog();
@@ -120,12 +125,12 @@ public partial class GamesPageViewModel: ObservableObject
     {
         if (!Items.IsEmpty() && !forceRefresh)
             return;
-        
+
         _debounceCancellationToken?.Cancel();
         _debounceCancellationToken = new CancellationTokenSource();
 
         ViewState = ViewStateEnum.InProgress;
-        
+
         LoadItems(token: _debounceCancellationToken.Token);
     }
 
@@ -133,21 +138,26 @@ public partial class GamesPageViewModel: ObservableObject
     {
         if (_pagination is null || _pagination?.InProgress != false)
             return;
-        
+
         _pagination.Next();
-        
+
         _debounceCancellationToken?.Cancel();
         _debounceCancellationToken = new CancellationTokenSource();
-        
+
         LoadItems(
-            take: _pagination.CurrentTakeValue, 
-            skip: _pagination.CurrentSkipValue, 
-            pagination: true, 
+            take: _pagination.CurrentTakeValue,
+            skip: _pagination.CurrentSkipValue,
+            pagination: true,
             token: _debounceCancellationToken.Token
         );
     }
 
-    private void LoadItems(int take = 24, int skip = 0, bool pagination = false, CancellationToken token = default)
+    private void LoadItems(
+        int take = 24,
+        int skip = 0,
+        bool pagination = false,
+        CancellationToken token = default
+    )
     {
         Task.Run(
             async () =>
@@ -166,16 +176,16 @@ public partial class GamesPageViewModel: ObservableObject
                 catch (Exception ex)
                 {
                     _logger.LogError("{ex}", ex);
-                    DispatcherWrapper.InvokeOnMain(
-                        () =>
-                        {
-                            if (ViewState != ViewStateEnum.Content)
-                                ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.InProgress; 
-                            ExceptionReport.Show(ex);
-                        }
-                    );
+                    DispatcherWrapper.InvokeOnMain(() =>
+                    {
+                        if (ViewState != ViewStateEnum.Content)
+                            ViewState = Items.IsEmpty()
+                                ? ViewStateEnum.Empty
+                                : ViewStateEnum.InProgress;
+                        ExceptionReport.Show(ex);
+                    });
                 }
-            }, 
+            },
             token
         );
     }
@@ -185,14 +195,16 @@ public partial class GamesPageViewModel: ObservableObject
     {
         _filtersCancellationToken?.Cancel();
         _filtersCancellationToken = new CancellationTokenSource();
-        
+
         Task.Run(
             async () =>
             {
                 try
                 {
-                   var filters = await _hydraFiltersDataSource.ObtainAsync(_filtersCancellationToken.Token);
-                   DispatcherWrapper.InvokeOnMain(() => Filters = filters);
+                    var filters = await _hydraFiltersDataSource.ObtainAsync(
+                        _filtersCancellationToken.Token
+                    );
+                    DispatcherWrapper.InvokeOnMain(() => Filters = filters);
                 }
                 catch (Exception ex)
                 {
@@ -209,7 +221,7 @@ public partial class GamesPageViewModel: ObservableObject
         {
             _pagination = null;
             ViewState = ViewStateEnum.Empty;
-            
+
             return;
         }
 

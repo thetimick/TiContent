@@ -1,7 +1,7 @@
 ﻿// ⠀
 // TMDBPagination.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 16.05.2025.
 // ⠀
 
@@ -10,22 +10,22 @@ namespace TiContent.UI.WPF.Components.Pagination;
 public class TMDBPagination
 {
     // Public Props
-    
+
     public long TotalPages { get; private set; }
     public long Page { get; private set; }
-    
+
     public bool InProgress;
-    
+
     public bool HasMorePage => Page < TotalPages;
     public bool HasBeenInit { get; private set; }
-    
+
     // Lifecycle
 
     public TMDBPagination(long? totalPages = -1)
     {
         Init(totalPages, false);
     }
-    
+
     // Public Methods
 
     public void Init(long? totalPages, bool hasBeenInit = true)

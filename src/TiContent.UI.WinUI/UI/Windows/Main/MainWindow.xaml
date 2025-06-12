@@ -12,16 +12,25 @@
         <MicaBackdrop />
     </Window.SystemBackdrop>
 
-    <NavigationView
-        x:Name="NavigationView"
-        Margin="0,30,0,0"
-        IsBackButtonVisible="Collapsed"
-        MenuItemsSource="{x:Bind ViewModel.MenuItems, Mode=TwoWay}"
-        OpenPaneLength="256"
-        PaneTitle="TiContent"
-        SelectedItem="{x:Bind ViewModel.NavigationViewSelectedItem, Mode=TwoWay}"
-        SelectionChanged="OnSelectionChanged">
+    <Grid>
+        <NavigationView
+            x:Name="NavigationView"
+            Margin="0,30,0,0"
+            IsBackButtonVisible="Collapsed"
+            MenuItemsSource="{x:Bind ViewModel.MenuItems, Mode=TwoWay}"
+            OpenPaneLength="256"
+            PaneTitle="TiContent"
+            SelectedItem="{x:Bind ViewModel.NavigationViewSelectedItem, Mode=TwoWay}"
+            SelectionChanged="OnSelectionChanged">
 
-        <Frame IsNavigationStackEnabled="True" />
-    </NavigationView>
+            <Frame IsNavigationStackEnabled="True" />
+        </NavigationView>
+
+        <InfoBarPanel
+            x:Name="InfoBarPanel"
+            MaxWidth="256"
+            Margin="0,0,16,16"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Bottom" />
+    </Grid>
 </Window>

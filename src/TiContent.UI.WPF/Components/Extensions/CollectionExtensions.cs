@@ -1,7 +1,7 @@
 ﻿// ⠀
 // CollectionExtensions.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 06.05.2025.
 // ⠀
 

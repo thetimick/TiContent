@@ -1,7 +1,7 @@
 ﻿// ⠀
 // DataBaseHistoryEntity.cs
 // TiContent.UI.WPF.Foundation.Entities
-// 
+//
 // Created by the_timick on 03.06.2025.
 // ⠀
 
@@ -14,11 +14,11 @@ public class DataBaseHistoryEntity
     public enum HistoryType
     {
         Films,
-        Games
+        Games,
     }
-    
-    public HistoryType Type { get; set; }
-    
+
+    public HistoryType Type { get; init; }
+
     [Key]
-    public string Query { get; set; } = string.Empty;
+    public string Query { get; init; } = string.Empty;
 }

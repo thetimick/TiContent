@@ -1,7 +1,7 @@
 ﻿// ⠀
 // ByteSizeToStringConverter.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 28.04.2025.
 // ⠀
 
@@ -11,7 +11,7 @@ using Microsoft.UI.Xaml.Data;
 
 namespace TiContent.UI.WinUI.Components.Converters;
 
-public partial class ByteSizeToStringConverter: IValueConverter
+public partial class ByteSizeToStringConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, string language)
     {

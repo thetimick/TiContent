@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraLinksSourcesResponseEntity.cs
 // TiContent.UI.WPF.Foundation.Entities
-// 
+//
 // Created by the_timick on 04.06.2025.
 // ⠀
 
@@ -18,9 +18,8 @@ public record HydraLinksSourcesResponseEntity
         [property: JsonPropertyName("gamesCount")] string GamesCount,
         [property: JsonPropertyName("status")] string[] Status,
         [property: JsonPropertyName("addedDate")] string AddedDate
-    ); 
-    
+    );
+
     [JsonPropertyName("sources")]
     public List<ItemEntity> Items { get; init; } = [];
 }
-

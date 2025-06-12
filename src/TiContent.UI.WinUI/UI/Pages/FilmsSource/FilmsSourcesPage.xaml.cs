@@ -1,7 +1,7 @@
 // ⠀
 // FilmsSourcesPage.cs
 // TiContent.UI.WinUI
-// 
+//
 // Created by the_timick on 26.05.2025.
 // ⠀
 
@@ -15,7 +15,7 @@ namespace TiContent.UI.WinUI.UI.Pages.FilmsSource;
 public sealed partial class FilmsSourcesPage
 {
     private FilmsSourcesPageViewModel ViewModel { get; set; } = null!;
-    
+
     public FilmsSourcesPage()
     {
         InitializeComponent();
@@ -37,8 +37,8 @@ public sealed partial class FilmsSourcesPage
     {
         if (sender is SettingsCard { CommandParameter: string sParameter })
             ViewModel.TapOnTorrentButton(sParameter);
-        
-        if (sender is not MenuFlyoutItem { CommandParameter: string parameter, Tag: string tag }) 
+
+        if (sender is not MenuFlyoutItem { CommandParameter: string parameter, Tag: string tag })
             return;
 
         switch (tag)

@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraCatalogueSearchRequest.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 07.05.2025.
 // ⠀
 
@@ -65,7 +65,7 @@ public record HydraApiSearchRequestParamsEntity
     [Required]
     [JsonPropertyName("skip")]
     public int? Skip { get; init; } = 0;
-    
+
     /// <summary>
     /// Provides a string representation of the HydraApiSearchRequestParamsEntity object,
     /// including all properties in a readable format.
@@ -76,29 +76,25 @@ public record HydraApiSearchRequestParamsEntity
     /// </returns>
     public override string ToString()
     {
-        var downloadSourcesStr = DownloadSourceFingerprints.Count == 0
-            ? "[]"
-            : "[" + string.Join(", ", DownloadSourceFingerprints.Select(s => s)) + "]";
-        var tagsStr = Tags.Count == 0
-            ? "[]"
-            : "[" + string.Join(", ", Tags.Select(s => s)) + "]";
-        var publishersStr = Publishers.Count == 0
-            ? "[]"
-            : "[" + string.Join(", ", Publishers.Select(s => s)) + "]";
-        var genresStr = Genres.Count == 0
-            ? "[]"
-            : "[" + string.Join(", ", Genres.Select(s => s)) + "]";
-        var developersStr = Developers.Count == 0
-            ? "[]"
-            : "[" + string.Join(", ", Developers.Select(s => s)) + "]";
+        var downloadSourcesStr =
+            DownloadSourceFingerprints.Count == 0
+                ? "[]"
+                : "[" + string.Join(", ", DownloadSourceFingerprints.Select(s => s)) + "]";
+        var tagsStr = Tags.Count == 0 ? "[]" : "[" + string.Join(", ", Tags.Select(s => s)) + "]";
+        var publishersStr =
+            Publishers.Count == 0 ? "[]" : "[" + string.Join(", ", Publishers.Select(s => s)) + "]";
+        var genresStr =
+            Genres.Count == 0 ? "[]" : "[" + string.Join(", ", Genres.Select(s => s)) + "]";
+        var developersStr =
+            Developers.Count == 0 ? "[]" : "[" + string.Join(", ", Developers.Select(s => s)) + "]";
 
-        return $"HydraApiSearchRequestParamsEntity {{ Title={Title}, " +
-               $"DownloadSourceFingerprints={downloadSourcesStr}, " +
-               $"Tags={tagsStr}, " +
-               $"Publishers={publishersStr}, " +
-               $"Genres={genresStr}, " +
-               $"Developers={developersStr}, " +
-               $"Take={Take?.ToString() ?? "null"}, " +
-               $"Skip={Skip?.ToString() ?? "null"} }}";
+        return $"HydraApiSearchRequestParamsEntity {{ Title={Title}, "
+            + $"DownloadSourceFingerprints={downloadSourcesStr}, "
+            + $"Tags={tagsStr}, "
+            + $"Publishers={publishersStr}, "
+            + $"Genres={genresStr}, "
+            + $"Developers={developersStr}, "
+            + $"Take={Take?.ToString() ?? "null"}, "
+            + $"Skip={Skip?.ToString() ?? "null"} }}";
     }
 }

@@ -1,7 +1,7 @@
 ﻿// ⠀
 // UrlHelper.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 13.05.2025.
 // ⠀
 
@@ -56,7 +56,11 @@ public static class UrlHelper
     /// <param name "queryParams">Query parameters as key-value pairs (e.g., ("id", "123")).</param>
     /// <param name "segments">Path segments to append (e.g., "api", "resource").</param>
     /// <returns>A combined URL string with query parameters.</returns>
-    public static string CombineWithQuery(string baseUrl, (string key, string value)[]? queryParams, params string[] segments)
+    public static string CombineWithQuery(
+        string baseUrl,
+        (string key, string value)[]? queryParams,
+        params string[] segments
+    )
     {
         var url = Combine(baseUrl, segments);
 

@@ -22,9 +22,9 @@ using TiContent.UI.WinUI.Services.Api.HydraLinks;
 using TiContent.UI.WinUI.Services.Api.Jacred;
 using TiContent.UI.WinUI.Services.Api.TMDB;
 using TiContent.UI.WinUI.Services.DB;
-using TiContent.UI.WinUI.Services.Navigation;
 using TiContent.UI.WinUI.Services.Storage;
-using TiContent.UI.WinUI.Services.Theme;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 using TiContent.UI.WinUI.UI.Pages.Films;
 using TiContent.UI.WinUI.UI.Pages.FilmsSource;
 using TiContent.UI.WinUI.UI.Pages.Games;
@@ -39,46 +39,42 @@ public partial class App
     private static void ConfigureServices(IServiceCollection services)
     {
         // External
-        
+
         // Logger
         ConfigureLogging();
         services.AddLogging(builder => builder.AddSerilog(dispose: true));
 
         // DB
         services.AddDbContext<AppDataBaseContext>();
-        
-        // API
-        services.AddSingleton<IRestClient, RestClient>(
-            provider =>
-            {
-                var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
-                var interceptor = new RestClientLoggerInterceptor(logger);
-                var options = new RestClientOptions
-                {
-                    Interceptors = [interceptor], 
-                    Timeout = new TimeSpan(0,0,0,30),
-                };
-                return new RestClient(options);
-            }
-        );
-        
-        // Mapper
-        services.AddAutoMapper(
-            configuration =>
-            {
-                configuration.AddCollectionMappers();
-                
-                configuration.AddProfile<DataBaseHydraLinksEntity.MapProfile>();
 
-                configuration.AddProfile<FilmsPageItemEntity.MapProfile>();
-                configuration.AddProfile<FilmsSourcePageItemEntity.MapProfile>();
-                configuration.AddProfile<GamesPageItemEntity.MapProfile>();
-                configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
-            }
-        );
-        
+        // API
+        services.AddSingleton<IRestClient, RestClient>(provider =>
+        {
+            var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
+            var interceptor = new RestClientLoggerInterceptor(logger);
+            var options = new RestClientOptions
+            {
+                Interceptors = [interceptor],
+                Timeout = new TimeSpan(0, 0, 0, 30),
+            };
+            return new RestClient(options);
+        });
+
+        // Mapper
+        services.AddAutoMapper(configuration =>
+        {
+            configuration.AddCollectionMappers();
+
+            configuration.AddProfile<DataBaseHydraLinksEntity.MapProfile>();
+
+            configuration.AddProfile<FilmsPageItemEntity.MapProfile>();
+            configuration.AddProfile<FilmsSourcePageItemEntity.MapProfile>();
+            configuration.AddProfile<GamesPageItemEntity.MapProfile>();
+            configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
+        });
+
         // Internal
-        
+
         services.AddHostedService<ConfigureService>();
 
         services.AddSingleton<IImageProvider, ImageProvider>();
@@ -88,19 +84,26 @@ public partial class App
         services.AddSingleton<IJacredService, JacredService>();
         services.AddSingleton<IHydraApiService, HydraApiService>();
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
-        services.AddSingleton<IThemeService, ThemeService>();
 
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
-        services.AddSingleton<IFilmsSourcePageContentDataSource, FilmsSourcePageContentDataSource>();
+        services.AddSingleton<
+            IFilmsSourcePageContentDataSource,
+            FilmsSourcePageContentDataSource
+        >();
         services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
-        services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
-        
+        services.AddSingleton<
+            IGamesSourcePageContentDataSource,
+            GamesSourcePageContentDataSource
+        >();
+
         services.AddSingleton<INavigationService, NavigationService>();
-        
+        services.AddSingleton<IThemeService, ThemeService>();
+        services.AddSingleton<INotificationService, NotificationService>();
+
         services.AddSingleton<IDataBaseQueryHistoryService, DataBaseQueryQueryHistoryService>();
         services.AddSingleton<IDataBaseGamesSourceService, DataBaseGamesSourceService>();
-        
+
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 
@@ -110,7 +113,7 @@ public partial class App
         services.AddSingleton<GamesSourcePageViewModel>();
         services.AddSingleton<SettingsPageViewModel>();
     }
-    
+
     private static void ConfigureLogging()
     {
         Log.Logger = new LoggerConfiguration()

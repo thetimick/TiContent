@@ -1,7 +1,7 @@
 ﻿// ⠀
 // ImageCacheProvider.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 18.05.2025.
 // ⠀
 
@@ -16,7 +16,7 @@ public interface IImageCacheProvider
     ImageEntity GetImage(string url);
 }
 
-public class ImageCacheProvider(App.AppDataBaseContext db, HttpClient client): IImageCacheProvider
+public class ImageCacheProvider(App.AppDataBaseContext db, HttpClient client) : IImageCacheProvider
 {
     public ImageEntity GetImage(string url)
     {
@@ -25,9 +25,9 @@ public class ImageCacheProvider(App.AppDataBaseContext db, HttpClient client): I
 
         var bytes = client.GetByteArrayAsync(url).Result;
         var remoteItem = new ImageEntity(url, bytes);
-        
+
         db.Add(remoteItem);
-        
+
         return remoteItem;
     }
 }

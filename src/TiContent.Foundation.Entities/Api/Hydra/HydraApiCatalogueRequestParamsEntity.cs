@@ -1,7 +1,7 @@
 ﻿// ⠀
 // HydraApiCatalogueRequestParamsEntity.cs
 // TiContent.UI.WPF
-// 
+//
 // Created by the_timick on 14.05.2025.
 // ⠀
 
@@ -17,9 +17,9 @@ public record HydraApiCatalogueRequestParamsEntity
     public enum ContentType
     {
         Hot,
-        Weekly
+        Weekly,
     }
-    
+
     public int? Take { get; init; }
     public int? Skip { get; init; }
     public ContentType Type { get; init; }
@@ -32,7 +32,7 @@ public record HydraApiCatalogueRequestParamsEntity
             {
                 ContentType.Hot => "hot",
                 ContentType.Weekly => "weekly",
-                _ => throw new ArgumentOutOfRangeException()
+                _ => throw new ArgumentOutOfRangeException(),
             };
         }
     }
