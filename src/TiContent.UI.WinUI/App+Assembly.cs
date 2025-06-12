@@ -22,9 +22,9 @@ using TiContent.UI.WinUI.Services.Api.HydraLinks;
 using TiContent.UI.WinUI.Services.Api.Jacred;
 using TiContent.UI.WinUI.Services.Api.TMDB;
 using TiContent.UI.WinUI.Services.DB;
-using TiContent.UI.WinUI.Services.Navigation;
 using TiContent.UI.WinUI.Services.Storage;
-using TiContent.UI.WinUI.Services.Theme;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 using TiContent.UI.WinUI.UI.Pages.Films;
 using TiContent.UI.WinUI.UI.Pages.FilmsSource;
 using TiContent.UI.WinUI.UI.Pages.Games;
@@ -84,7 +84,6 @@ public partial class App
         services.AddSingleton<IJacredService, JacredService>();
         services.AddSingleton<IHydraApiService, HydraApiService>();
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
-        services.AddSingleton<IThemeService, ThemeService>();
 
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
@@ -99,6 +98,8 @@ public partial class App
         >();
 
         services.AddSingleton<INavigationService, NavigationService>();
+        services.AddSingleton<IThemeService, ThemeService>();
+        services.AddSingleton<INotificationService, NotificationService>();
 
         services.AddSingleton<IDataBaseQueryHistoryService, DataBaseQueryQueryHistoryService>();
         services.AddSingleton<IDataBaseGamesSourceService, DataBaseGamesSourceService>();

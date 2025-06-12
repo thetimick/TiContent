@@ -14,7 +14,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using TiContent.UI.WinUI.Services.DB;
 using TiContent.UI.WinUI.Services.Storage;
-using TiContent.UI.WinUI.Services.Theme;
+using TiContent.UI.WinUI.Services.UI;
 using TiContent.UI.WinUI.UI.Windows.Main;
 using Windows.Graphics;
 using WinUIEx;

@@ -20,14 +20,16 @@ using CommunityToolkit.WinUI;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.Jacred;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources;
-using TiContent.UI.WinUI.Services.Navigation;
 using TiContent.UI.WinUI.Services.Storage;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 
 namespace TiContent.UI.WinUI.UI.Pages.FilmsSource;
 
@@ -62,6 +64,7 @@ public partial class FilmsSourcesPageViewModel
     private readonly IMapper _mapper;
     private readonly ILogger<FilmsSourcesPageViewModel> _logger;
     private readonly IStorageService _storage;
+    private readonly INotificationService _notificationService;
 
     private readonly DispatcherQueue _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
@@ -72,7 +75,8 @@ public partial class FilmsSourcesPageViewModel
         IFilmsSourcePageContentDataSource dataSource,
         IMapper mapper,
         ILogger<FilmsSourcesPageViewModel> logger,
-        IStorageService storage
+        IStorageService storage,
+        INotificationService notificationService
     )
     {
         _navigationService = navService;
@@ -80,6 +84,7 @@ public partial class FilmsSourcesPageViewModel
         _mapper = mapper;
         _logger = logger;
         _storage = storage;
+        _notificationService = notificationService;
 
         // Регистрируем получение сообщений
         WeakReferenceMessenger.Default.Register(this);
@@ -179,8 +184,13 @@ public partial class FilmsSourcesPageViewModel
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "{msg}", ex.Message);
-                await _dispatcherQueue.EnqueueAsync(() => State = ViewStateEnum.Empty);
+                await _dispatcherQueue.EnqueueAsync(() =>
+                {
+                    State = ViewStateEnum.Empty;
+
+                    _notificationService.ShowErrorNotification(ex);
+                    _logger.LogError(ex, "{msg}", ex.Message);
+                });
             }
         });
     }

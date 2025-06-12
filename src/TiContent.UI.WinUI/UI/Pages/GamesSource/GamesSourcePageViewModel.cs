@@ -22,8 +22,9 @@ using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources;
-using TiContent.UI.WinUI.Services.Navigation;
 using TiContent.UI.WinUI.Services.Storage;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 
 namespace TiContent.UI.WinUI.UI.Pages.GamesSource;
 
@@ -54,6 +55,7 @@ public partial class GamesSourcePageViewModel
     private readonly INavigationService _navigationService;
     private readonly IGamesSourcePageContentDataSource _dataSource;
     private readonly IStorageService _storage;
+    private readonly INotificationService _notificationService;
 
     private readonly DispatcherQueue _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
@@ -63,13 +65,15 @@ public partial class GamesSourcePageViewModel
         ILogger<GamesSourcePageViewModel> logger,
         INavigationService navigationService,
         IGamesSourcePageContentDataSource dataSource,
-        IStorageService storage
+        IStorageService storage,
+        INotificationService notificationService
     )
     {
         _logger = logger;
         _navigationService = navigationService;
         _dataSource = dataSource;
         _storage = storage;
+        _notificationService = notificationService;
 
         // Регистрируем получение сообщений
         WeakReferenceMessenger.Default.Register(this);
@@ -145,6 +149,7 @@ public partial class GamesSourcePageViewModel
         }
         catch (Exception ex)
         {
+            _notificationService.ShowErrorNotification(ex);
             _logger.LogError(ex, "{message}", ex.Message);
         }
     }

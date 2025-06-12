@@ -16,10 +16,8 @@ using TiContent.UI.WinUI.UI.Pages.GamesSource;
 using TiContent.UI.WinUI.UI.Pages.Settings;
 using FilmsSource_FilmsSourcesPage = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage;
 using FilmsSource_FilmsSourcesPageViewModel = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPageViewModel;
-using FilmsSourcesPage = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage;
-using FilmsSourcesPageViewModel = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPageViewModel;
 
-namespace TiContent.UI.WinUI.Services.Navigation;
+namespace TiContent.UI.WinUI.Services.UI.Navigation;
 
 public interface INavigationService
 {

@@ -17,7 +17,9 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Collections;
 using Humanizer;
+using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.Api.Hydra;
@@ -25,7 +27,8 @@ using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.DB;
-using TiContent.UI.WinUI.Services.Navigation;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 using TiContent.UI.WinUI.UI.Pages.GamesSource;
 
 namespace TiContent.UI.WinUI.UI.Pages.Games;
@@ -63,6 +66,8 @@ public partial class GamesPageViewModel : ObservableObject
     private readonly IGamesPageContentDataSource _dataSource;
     private readonly INavigationService _navigationService;
     private readonly IDataBaseQueryHistoryService _queryHistoryService;
+    private readonly INotificationService _notificationService;
+    private readonly ILogger<GamesPageViewModel> _logger;
 
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly DispatcherQueueTimer _dispatcherQueueTimer;
@@ -73,12 +78,16 @@ public partial class GamesPageViewModel : ObservableObject
     public GamesPageViewModel(
         IGamesPageContentDataSource dataSource,
         INavigationService navigationService,
-        IDataBaseQueryHistoryService queryHistoryService
+        IDataBaseQueryHistoryService queryHistoryService,
+        INotificationService notificationService,
+        ILogger<GamesPageViewModel> logger
     )
     {
         _dataSource = dataSource;
         _navigationService = navigationService;
         _queryHistoryService = queryHistoryService;
+        _notificationService = notificationService;
+        _logger = logger;
 
         _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         _dispatcherQueueTimer = _dispatcherQueue.CreateTimer();
@@ -245,21 +254,35 @@ public partial class GamesPageViewModel
 {
     private async Task ObtainItemsTaskAsync(bool pagination)
     {
-        var type =
-            Query.IsNullOrEmpty() && ContentTypeIndex == 1
-                ? IGamesPageContentDataSource.ContentTypeEnum.Popularity
-                : IGamesPageContentDataSource.ContentTypeEnum.Catalogue;
-
-        var items = await _dataSource.ObtainAsync(
-            new IGamesPageContentDataSource.ParamsEntity(Query, type),
-            pagination
-        );
-
-        _dispatcherQueue.TryEnqueue(() =>
+        try
         {
-            Items = items.ToObservable();
-            State = ViewStateEnum.Content;
-        });
+            var type =
+                Query.IsNullOrEmpty() && ContentTypeIndex == 1
+                    ? IGamesPageContentDataSource.ContentTypeEnum.Popularity
+                    : IGamesPageContentDataSource.ContentTypeEnum.Catalogue;
+
+            var items = await _dataSource.ObtainAsync(
+                new IGamesPageContentDataSource.ParamsEntity(Query, type),
+                pagination
+            );
+
+            _dispatcherQueue.TryEnqueue(() =>
+            {
+                Items = items.ToObservable();
+                State = ViewStateEnum.Content;
+            });
+        }
+        catch (Exception ex)
+        {
+            await _dispatcherQueue.EnqueueAsync(() =>
+            {
+                Items = [];
+                State = ViewStateEnum.Empty;
+
+                _notificationService.ShowErrorNotification(ex);
+                _logger.LogError(ex, "{msg}", ex.Message);
+            });
+        }
     }
 
     private async Task ObtainHistoryAsync()

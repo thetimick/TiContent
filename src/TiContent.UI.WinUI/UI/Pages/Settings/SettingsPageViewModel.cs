@@ -8,7 +8,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.UI.Xaml;
 using TiContent.UI.WinUI.Services.Storage;
-using TiContent.UI.WinUI.Services.Theme;
+using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.UI.Pages.Settings;
 

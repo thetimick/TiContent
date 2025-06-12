@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Humanizer;
 using Microsoft.UI.Xaml.Controls;
-using TiContent.UI.WinUI.Services.Navigation;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 
 namespace TiContent.UI.WinUI.UI.Windows.Main;
 

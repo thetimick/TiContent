@@ -16,13 +16,15 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.DB;
-using TiContent.UI.WinUI.Services.Navigation;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 using TiContent.UI.WinUI.UI.Pages.FilmsSource;
 
 namespace TiContent.UI.WinUI.UI.Pages.Films;
@@ -58,6 +60,7 @@ public partial class FilmsPageViewModel : ObservableObject
     private readonly ILogger<FilmsPageViewModel> _logger;
     private readonly INavigationService _navigationService;
     private readonly IDataBaseQueryHistoryService _queryHistoryService;
+    private readonly INotificationService _notificationService;
 
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly DispatcherQueueTimer _dispatcherQueueTimer;
@@ -69,13 +72,15 @@ public partial class FilmsPageViewModel : ObservableObject
         IFilmsPageContentDataSource dataSource,
         ILogger<FilmsPageViewModel> logger,
         IDataBaseQueryHistoryService queryHistoryService,
-        INavigationService navigationService
+        INavigationService navigationService,
+        INotificationService notificationService
     )
     {
         _dataSource = dataSource;
         _logger = logger;
         _queryHistoryService = queryHistoryService;
         _navigationService = navigationService;
+        _notificationService = notificationService;
 
         _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         _dispatcherQueueTimer = _dispatcherQueue.CreateTimer();
@@ -218,8 +223,13 @@ public partial class FilmsPageViewModel
         }
         catch (Exception ex)
         {
-            _logger.LogError("{ex}", ex);
-            _dispatcherQueue.TryEnqueue(() => ApplyItems([]));
+            await _dispatcherQueue.EnqueueAsync(() =>
+            {
+                ApplyItems([]);
+
+                _notificationService.ShowErrorNotification(ex);
+                _logger.LogError("{ex}", ex);
+            });
         }
     }
 

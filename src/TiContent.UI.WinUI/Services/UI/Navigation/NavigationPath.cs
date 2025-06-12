@@ -7,7 +7,7 @@
 
 using System.ComponentModel;
 
-namespace TiContent.UI.WinUI.Services.Navigation;
+namespace TiContent.UI.WinUI.Services.UI.Navigation;
 
 public enum NavigationPath
 {

@@ -10,7 +10,7 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using TiContent.UI.WinUI.UI.Windows.Main;
 
-namespace TiContent.UI.WinUI.Services.Theme;
+namespace TiContent.UI.WinUI.Services.UI;
 
 public interface IThemeService
 {

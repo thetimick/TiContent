@@ -1,7 +1,8 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.UI.Xaml.Controls;
-using TiContent.UI.WinUI.Services.Navigation;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 
 namespace TiContent.UI.WinUI.UI.Windows.Main;
 
@@ -12,12 +13,15 @@ public sealed partial class MainWindow
 
     // Private Props
     private readonly INavigationService _navigationService;
+    private readonly INotificationService _notificationService;
 
     // LifeCycle
     public MainWindow(IServiceProvider provider)
     {
         ViewModel = provider.GetRequiredService<MainWindowViewModel>();
+
         _navigationService = provider.GetRequiredService<INavigationService>();
+        _notificationService = provider.GetRequiredService<INotificationService>();
 
         InitializeComponent();
         ExtendsContentIntoTitleBar = true;
@@ -26,6 +30,8 @@ public sealed partial class MainWindow
 
         _navigationService.Setup(NavigationView);
         _navigationService.NavigateTo(NavigationPath.Films);
+
+        _notificationService.Setup(InfoBarPanel);
     }
 
     // Private Methods
