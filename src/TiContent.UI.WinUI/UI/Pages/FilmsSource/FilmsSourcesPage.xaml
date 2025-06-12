@@ -118,7 +118,7 @@
                             </cControls:SettingsCard.Header>
 
                             <StackPanel VerticalAlignment="Center" Spacing="4">
-                                <DropDownButton HorizontalAlignment="Stretch" Content="Опции">
+                                <DropDownButton HorizontalAlignment="Stretch" Content="Действия">
                                     <DropDownButton.Flyout>
                                         <MenuFlyout Placement="Bottom">
                                             <MenuFlyoutItem

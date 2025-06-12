@@ -109,7 +109,7 @@
         <Grid
             Column="1"
             Row="1"
-            RowDefinitions="Auto, Auto, *"
+            RowDefinitions="Auto, Auto, Auto, *"
             RowSpacing="8">
 
             <AutoSuggestBox
@@ -121,6 +121,10 @@
                 PointerPressed="AutoSuggestBox_OnPointerPressed"
                 SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
                 Text="{x:Bind ViewModel.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                <AutoSuggestBox.QueryIcon>
+                    <FontIcon FontSize="12" Glyph="&#xE721;" />
+                </AutoSuggestBox.QueryIcon>
 
                 <AutoSuggestBox.ItemTemplate>
                     <DataTemplate>
@@ -168,6 +172,28 @@
                     FontWeight="SemiBold"
                     Icon="{ui:FontIcon Glyph='&#xECAD;'}" />
             </controls:Segmented>
+
+            <Border Grid.Row="2" Style="{StaticResource CustomBorderCardStyle}">
+                <StackPanel Spacing="4">
+                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="Фильтрация" />
+
+                    <controls:TokenizingTextBox
+                        IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
+                        ItemsSource="{x:Bind ViewModel.Filters.GenresSelectedItems, Mode=TwoWay}"
+                        PlaceholderText="Жанры"
+                        QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
+                        SuggestedItemsSource="{x:Bind ViewModel.Filters.Genres, Mode=TwoWay}"
+                        Text="{x:Bind ViewModel.Filters.GenresQuery, Mode=TwoWay}" />
+
+                    <controls:TokenizingTextBox
+                        IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
+                        ItemsSource="{x:Bind ViewModel.Filters.TagsSelectedItems, Mode=TwoWay}"
+                        PlaceholderText="Теги"
+                        QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
+                        SuggestedItemsSource="{x:Bind ViewModel.Filters.Tags, Mode=TwoWay}"
+                        Text="{x:Bind ViewModel.Filters.TagsQuery, Mode=TwoWay}" />
+                </StackPanel>
+            </Border>
         </Grid>
     </Grid>
 </Page>

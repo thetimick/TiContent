@@ -30,6 +30,9 @@ public interface IGamesPageContentDataSource: IDataSource<GamesPageItemEntity, I
         string Query,
         ContentTypeEnum ContentType
     );
+
+    public HydraFiltersEntity Filters { get; }
+    public Task<HydraFiltersEntity> ObtainFiltersAsync();
 }
 
 public partial class GamesPageContentDataSource(
@@ -41,11 +44,13 @@ public partial class GamesPageContentDataSource(
     public bool InProgress => _tokenSource != null;
     public bool IsCompleted => _pagination.IsCompleted;
     public List<GamesPageItemEntity> Cache { get; } = [];
+    public HydraFiltersEntity Filters { get; private set; } = new();
     
     // Private Props
 
     private readonly Pagination _pagination = new();
     private CancellationTokenSource? _tokenSource;
+    private CancellationTokenSource? _tokenSourceForFilters;
 }
 
 public partial class GamesPageContentDataSource : IGamesPageContentDataSource
@@ -81,6 +86,16 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
 
         return Cache;
     }
+
+    public async Task<HydraFiltersEntity> ObtainFiltersAsync()
+    {
+        if (_tokenSourceForFilters != null)
+            await _tokenSourceForFilters.CancelAsync();
+        _tokenSourceForFilters = new CancellationTokenSource();
+        
+        await LoadFiltersAsync(_tokenSourceForFilters.Token);
+        return Filters;
+    }
 }
 
 public partial class GamesPageContentDataSource
@@ -115,6 +130,12 @@ public partial class GamesPageContentDataSource
         _pagination.SetTotalItems(items.Count);
     }
 
+    private async Task LoadFiltersAsync(CancellationToken token = default)
+    {
+        var response = await api.ObtainFilters(token);
+        ApplyFilters(response);
+    }
+
     private void ApplyItems<T>(List<T>? items, bool pagination)
     {
         if (items == null) 
@@ -125,6 +146,12 @@ public partial class GamesPageContentDataSource
         if (!pagination) 
             Cache.Clear();
         Cache.AddRange(mapped);
+    }
+
+    private void ApplyFilters(HydraFiltersEntity filters)
+    {
+        Filters = filters;
+        _tokenSourceForFilters = null;
     }
 }
 

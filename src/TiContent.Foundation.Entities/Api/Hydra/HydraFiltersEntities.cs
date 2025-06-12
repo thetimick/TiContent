@@ -21,8 +21,6 @@ public record HydraFiltersEntity
     public List<string> Developers { get; init; } = [];
     public List<string> Publishers { get; init; } = [];
     
-    public DateTime Timestamp { get; init; } = DateTime.Now;
-    
     public record HydraFiltersGenresEntity
     {
         [JsonPropertyName("en")] 

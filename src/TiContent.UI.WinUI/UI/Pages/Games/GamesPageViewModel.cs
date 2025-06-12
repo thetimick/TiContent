@@ -8,15 +8,19 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
+using CommunityToolkit.WinUI.Collections;
+using Humanizer;
 using Microsoft.UI.Dispatching;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
+using TiContent.Foundation.Entities.Api.Hydra;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources;
@@ -50,6 +54,9 @@ public partial class GamesPageViewModel : ObservableObject
     
     [ObservableProperty]
     public partial double ScrollViewOffset { get; set; }
+    
+    [ObservableProperty]
+    public partial FiltersEntity Filters { get; set; } = new();
 
     // Private Props
     
@@ -74,6 +81,8 @@ public partial class GamesPageViewModel : ObservableObject
 
         _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         _dispatcherQueueTimer = _dispatcherQueue.CreateTimer();
+        
+        Filters.PropertyChanged += FiltersOnPropertyChanged;
     }
     
     // Observable
@@ -113,7 +122,37 @@ public partial class GamesPageViewModel : ObservableObject
     [SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")]
     partial void OnContentTypeIndexChanged(int value)
     {
+        Filters.IsEnabled = value == 0;
         ObtainItemsFromDataSource();
+    }
+    
+    private void FiltersOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        switch (e.PropertyName)
+        {
+            case nameof(Filters.GenresQuery):
+                Filters.Genres.Filter += o => Filter(o, Filters.GenresQuery, Filters.GenresSelectedItems);
+                Filters.Genres.RefreshFilter();
+                break;
+            case nameof(Filters.TagsQuery):
+                Filters.Tags.Filter += o => Filter(o, Filters.TagsQuery, Filters.TagsSelectedItems);
+                Filters.Tags.RefreshFilter();
+                break;
+        }
+
+        return;
+
+        bool Filter(object o, string query, ObservableCollection<string> selectedItems)
+        {
+            var pass = true;
+            if (o is not string genre) 
+                return pass;
+            var cleanGenre = genre.Trim().Humanize(LetterCasing.LowerCase);
+            var cleanQuery = query.Trim().Humanize(LetterCasing.LowerCase);
+            pass &= cleanGenre.Contains(cleanQuery);
+            pass &= selectedItems.All(s => s.Trim().Humanize(LetterCasing.LowerCase) != cleanGenre);
+            return pass;
+        }
     }
 }
 
@@ -175,13 +214,20 @@ public partial class GamesPageViewModel
         Task.WhenAll(
             ObtainItemsTaskAsync(pagination), 
             ObtainHistoryAsync(),
-            AddQueryToHistoryAsync()
+            AddQueryToHistoryAsync(),
+            ObtainFiltersAsync()
         );
     }
     
     private void ApplyQueryHistoryItems(IEnumerable<string> items)
     {
         QueryHistoryItems = items.ToObservable();
+    }
+
+    private void ApplyFilters(HydraFiltersEntity filters)
+    {
+        Filters.Genres = new AdvancedCollectionView(filters.Genres.En);
+        Filters.Tags = new AdvancedCollectionView(filters.Tags.En.Select(pair => pair.Key).ToList());
     }
 }
 
@@ -230,5 +276,34 @@ public partial class GamesPageViewModel
     {
         await _queryHistoryService.ClearItemAsync(DataBaseHistoryEntity.HistoryType.Games, query);
         await ObtainHistoryAsync();
+    }
+
+    private async Task ObtainFiltersAsync()
+    {
+        var filters = await _dataSource.ObtainFiltersAsync();
+        await _dispatcherQueue.EnqueueAsync(() => ApplyFilters(filters));
+    }
+}
+
+public partial class GamesPageViewModel
+{
+    public partial class FiltersEntity: ObservableObject
+    {
+        [ObservableProperty] 
+        public partial bool IsEnabled { get; set; } = true;
+        
+        [ObservableProperty]
+        public partial AdvancedCollectionView Genres { get; set; } = [];
+        [ObservableProperty]
+        public partial ObservableCollection<string> GenresSelectedItems { get; set; } = [];
+        [ObservableProperty]
+        public partial string GenresQuery { get; set; } = string.Empty;
+        
+        [ObservableProperty]
+        public partial AdvancedCollectionView Tags { get; set; } = [];
+        [ObservableProperty]
+        public partial ObservableCollection<string> TagsSelectedItems { get; set; } = [];
+        [ObservableProperty]
+        public partial string TagsQuery { get; set; } = string.Empty;
     }
 }
