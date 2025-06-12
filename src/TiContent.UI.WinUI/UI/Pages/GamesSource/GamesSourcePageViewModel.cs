@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Collections;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
@@ -22,6 +23,7 @@ using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.Navigation;
+using TiContent.UI.WinUI.Services.Storage;
 
 namespace TiContent.UI.WinUI.UI.Pages.GamesSource;
 
@@ -49,6 +51,7 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
     private readonly ILogger<GamesSourcePageViewModel> _logger;
     private readonly INavigationService _navigationService;
     private readonly IGamesSourcePageContentDataSource _dataSource;
+    private readonly IStorageService _storage;
     
     private readonly DispatcherQueue _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
@@ -57,11 +60,13 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
     public GamesSourcePageViewModel(
         ILogger<GamesSourcePageViewModel> logger,
         INavigationService navigationService, 
-        IGamesSourcePageContentDataSource dataSource
+        IGamesSourcePageContentDataSource dataSource, 
+        IStorageService storage
     ) {
         _logger = logger;
         _navigationService = navigationService;
         _dataSource = dataSource;
+        _storage = storage;
 
         // Регистрируем получение сообщений
         WeakReferenceMessenger.Default.Register(this);
@@ -75,6 +80,8 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
     partial void OnSortOrderChanged(int value)
     {
         ApplySort();
+        if (_storage.Cached != null)
+            _storage.Cached.GamesSource.SortOrder = value;
     }
     
     private void FiltersOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -96,6 +103,8 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
     public void Receive(InitialDataEntity message)
     {
         Title = message.Query;
+        SortOrder = _storage.Cached?.GamesSource.SortOrder ?? 0;
+        
         ObtainItems();
     }
 
@@ -106,7 +115,7 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
         Items = [];
     }
 
-    public void TapOnItem(string link)
+    public static void TapOnItem(string link)
     {
         OpenLinkHelper.OpenUrl(link);
     }
@@ -123,7 +132,7 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
         try
         {
             var items = await _dataSource.ObtainItemsAsync(Title);
-            _dispatcherQueue.TryEnqueue(
+            await _dispatcherQueue.EnqueueAsync(
                 () =>
                 {
                     ApplyItems(items);
@@ -149,6 +158,7 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
             .OrderBy(s => s)
             .Prepend("Не задано")
             .ToObservable();
+        
         Filters.OwnersIndex = 0;
     }
 

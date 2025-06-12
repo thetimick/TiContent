@@ -16,6 +16,7 @@ using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using CommunityToolkit.WinUI;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
@@ -26,6 +27,7 @@ using TiContent.Foundation.Entities.Api.Jacred;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.Navigation;
+using TiContent.UI.WinUI.Services.Storage;
 
 namespace TiContent.UI.WinUI.UI.Pages.FilmsSource;
 
@@ -57,17 +59,24 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
     private readonly IFilmsSourcePageContentDataSource _dataSource;
     private readonly IMapper _mapper;
     private readonly ILogger<FilmsSourcesPageViewModel> _logger;
+    private readonly IStorageService _storage;
     
     private readonly DispatcherQueue _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
     private ObservableCollection<FilmsSourcePageItemEntity> _allItems = [];
 
-    public FilmsSourcesPageViewModel(INavigationService navService, IFilmsSourcePageContentDataSource dataSource, IMapper mapper, ILogger<FilmsSourcesPageViewModel> logger)
-    {
+    public FilmsSourcesPageViewModel(
+        INavigationService navService,
+        IFilmsSourcePageContentDataSource dataSource, 
+        IMapper mapper, 
+        ILogger<FilmsSourcesPageViewModel> logger,
+        IStorageService storage
+    ) {
         _navigationService = navService;
         _dataSource = dataSource;
         _mapper = mapper;
         _logger = logger;
+        _storage = storage;
 
         // Регистрируем получение сообщений
         WeakReferenceMessenger.Default.Register(this);
@@ -92,10 +101,11 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
 
     // Props Changed
 
-    [SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")]
     partial void OnSortOrderChanged(int value)
     {
         ApplySortAndFilters(_allItems);
+        if (_storage.Cached != null)
+            _storage.Cached.FilmsSource.SortOrder = value;
     }
 
     // IRecipient
@@ -103,6 +113,7 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
     public void Receive(InitialDataEntity message)
     {
         Title = message.Query;
+        SortOrder = _storage.Cached?.FilmsSource.SortOrder ?? 2;
         
         _dataSource.ClearCache();
         ObtainItems(message.Query);
@@ -149,18 +160,26 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
         Task.Run(
             async () =>
             {
-                var rawItems = await _dataSource.ObtainItemsAsync(query);
-                var mappedItems = _mapper.Map<List<JacredEntity>, ObservableCollection<FilmsSourcePageItemEntity>>(rawItems);
-                
-                // UI Thread
-                _dispatcherQueue.TryEnqueue(
-                    () =>
-                    {
-                        _allItems = mappedItems;
-                        SetupFilters(mappedItems);
-                        ApplySortAndFilters(mappedItems);
-                    }
-                );
+                try
+                {
+                    var rawItems = await _dataSource.ObtainItemsAsync(query);
+                    var mappedItems =
+                        _mapper.Map<List<JacredEntity>, ObservableCollection<FilmsSourcePageItemEntity>>(rawItems);
+                    
+                    await _dispatcherQueue.EnqueueAsync(
+                        () =>
+                        {
+                            _allItems = mappedItems;
+                            SetupFilters(mappedItems);
+                            ApplySortAndFilters(mappedItems);
+                        }
+                    );
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex, "{msg}", ex.Message);
+                    await _dispatcherQueue.EnqueueAsync(() => State = ViewStateEnum.Empty);
+                }
             }
         );
     }
@@ -170,7 +189,7 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
         Filters.Qualities = source
             .Select(entity => entity.Quality)
             .Distinct()
-            .OrderBy(s => s)
+            .OrderByDescending(s => int.Parse(s.Replace("p", "")))
             .Prepend("Не задано")
             .ToObservable();
         
@@ -178,28 +197,28 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
             .Where(entity => entity.ContentType != FilmsSourcePageItemEntity.ContentTypeEnum.Any)
             .Select(entity => entity.ContentType.Humanize())
             .Distinct()
-            .OrderBy(s => s)
+            .OrderByDescending(s => s)
             .Prepend("Не задано")
             .ToObservable();
         
         Filters.Voices = source
             .SelectMany(entity => entity.Voices)
             .Distinct()
-            .OrderBy(s => s)
+            .OrderByDescending(s => s)
             .Prepend("Не задано")
             .ToObservable();
         
         Filters.Trackers = source
             .Select(entity => entity.Tracker)
             .Distinct()
-            .OrderBy(s => s)
+            .OrderByDescending(s => s)
             .Prepend("Не задано")
             .ToObservable();
         
         Filters.Years = source
             .Select(entity => entity.Date.Year.ToString())
             .Distinct()
-            .OrderBy(s => s)
+            .OrderByDescending(s => s)
             .Prepend("Не задано")
             .ToObservable();
         
@@ -265,10 +284,14 @@ public partial class FilmsSourcesPageViewModel: ObservableObject, IRecipient<Fil
     }
 }
 
+// InitialData
+
 public partial class FilmsSourcesPageViewModel
 {
     public record InitialDataEntity(string Query);
 }
+
+// Filters
 
 public partial class FilmsSourcesPageViewModel
 {

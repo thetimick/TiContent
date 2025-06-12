@@ -35,6 +35,6 @@ public sealed partial class GamesSourcePage
     private void SettingsCard_OnClick(object sender, RoutedEventArgs e)
     {
         if (sender is SettingsCard { CommandParameter: string link })
-            ViewModel.TapOnItem(link);
+            GamesSourcePageViewModel.TapOnItem(link);
     }
 }
