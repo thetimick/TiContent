@@ -11,8 +11,8 @@ using TiContent.UI.WinUI;
 namespace TiContent.UI.WinUI.Migrations
 {
     [DbContext(typeof(App.AppDataBaseContext))]
-    [Migration("20250613151208_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250613153908_HydraFilters")]
+    partial class HydraFilters
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
