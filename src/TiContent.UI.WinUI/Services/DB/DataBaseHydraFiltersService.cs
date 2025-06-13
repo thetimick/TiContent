@@ -56,7 +56,7 @@ public class DataBaseHydraFiltersService(
         await db.FiltersItems.AddRangeAsync(items, token);
 
         if (storage.Cached != null)
-            storage.Cached.DataBaseTimestamp.Filters = DateTime.Now;
+            storage.Cached.DataBaseTimestamp.HydraFilters = DateTime.Now;
 
         await db.SaveChangesAsync(token);
 
@@ -66,6 +66,6 @@ public class DataBaseHydraFiltersService(
     private bool IsEmptyOrExpiredDataBase()
     {
         return db.FiltersItems.AsNoTracking().IsEmpty()
-            || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+            || storage.Obtain().DataBaseTimestamp.HydraFilters < DateTime.Now.AddHours(-3);
     }
 }
