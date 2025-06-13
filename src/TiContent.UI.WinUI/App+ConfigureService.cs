@@ -8,6 +8,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -50,6 +51,7 @@ public partial class App
                 {
                     try
                     {
+                        await _db.Database.MigrateAsync(cancellationToken);
                         await _dbGamesSourceService.ObtainItemsIfNeededAsync();
                     }
                     catch (Exception ex)

@@ -23,8 +23,6 @@ public partial class App
 
         // LifeCycle
 
-        public AppDataBaseContext() => Database.EnsureCreated();
-
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite($"Data Source={AppConstants.FileNames.DataBaseFileName}");
