@@ -55,7 +55,7 @@ public partial class App
             var options = new RestClientOptions
             {
                 Interceptors = [interceptor],
-                Timeout = new TimeSpan(0, 0, 0, 30),
+                Timeout = new TimeSpan(0, 0, 0, 10),
             };
             return new RestClient(options);
         });
