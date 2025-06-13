@@ -43,6 +43,9 @@ public partial class HydraLinksService : IHydraLinksService
 
         await Parallel.ForEachAsync(tasks, async (task, token) => await task.WaitAsync(token));
 
-        return tasks.Select(task => task.Result.Data).ToList();
+        return tasks
+            .Where(task => task.Result.IsSuccessful)
+            .Select(task => task.Result.Data)
+            .ToList();
     }
 }

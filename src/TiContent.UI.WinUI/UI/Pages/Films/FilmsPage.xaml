@@ -6,6 +6,7 @@
     xmlns:customControls="using:TiContent.UI.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:films="using:TiContent.UI.WinUI.UI.Pages.Films"
+    xmlns:filmsPage="using:TiContent.Foundation.Entities.ViewModel.FilmsPage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:CommunityToolkit.WinUI"
     xmlns:viewModel="using:TiContent.Foundation.Entities.ViewModel"
@@ -47,7 +48,7 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="viewModel:FilmsPageItemEntity">
+                <DataTemplate x:DataType="filmsPage:FilmsPageItemEntity">
                     <controls:SettingsCard
                         Margin="0,0,0,4"
                         Click="SettingsCard_OnClick"

@@ -8,17 +8,17 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
-using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Components.Helpers;
 using TiContent.UI.WinUI.Providers;
-using Windows.Storage.Streams;
+using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.UI.Pages.Films;
 
@@ -27,6 +27,7 @@ public partial class FilmsPage
     private FilmsPageViewModel ViewModel { get; set; } = null!;
     private IImageProvider ImageProvider { get; set; } = null!;
     private ILogger<FilmsPage> Logger { get; set; } = null!;
+    private INotificationService NotificationService { get; set; } = null!;
 
     private ScrollView? _scrollView;
 
@@ -60,6 +61,7 @@ public partial class FilmsPage
         ViewModel = dependencies.ViewModel;
         ImageProvider = dependencies.ImageProvider;
         Logger = dependencies.Logger;
+        NotificationService = dependencies.NotificationService;
 
         ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         DataContext = ViewModel;
@@ -99,14 +101,20 @@ public partial class FilmsPage
                 {
                     var entity = await ImageProvider.ObtainImageAsync(url);
                     var stream = await entity.Data.ToRandomAccessStreamAsync();
-                    DispatcherQueue.TryEnqueue(() =>
-                    {
-                        var bitmap = CreateBitmapAsync(stream);
-                        image.Source = bitmap;
-                    });
+                    await DispatcherQueue.EnqueueAsync(async () =>
+                        image.Source = await stream.CreateBitmapAsync()
+                    );
                 }
                 catch (Exception ex)
                 {
+                    await DispatcherQueue.EnqueueAsync(() =>
+                        NotificationService.ShowNotification(
+                            "Изображение не загрузилось =(",
+                            $"{url}\n{ex.Message}",
+                            InfoBarSeverity.Warning,
+                            TimeSpan.FromSeconds(3)
+                        )
+                    );
                     Logger.LogError(ex, "{msg}", ex.Message);
                     throw;
                 }
@@ -158,19 +166,10 @@ public partial class FilmsPage
 
 public partial class FilmsPage
 {
-    private static BitmapImage CreateBitmapAsync(IRandomAccessStream stream)
-    {
-        var bitmap = new BitmapImage();
-        bitmap.SetSource(stream);
-        return bitmap;
-    }
-}
-
-public partial class FilmsPage
-{
     public record Dependencies(
         FilmsPageViewModel ViewModel,
         IImageProvider ImageProvider,
-        ILogger<FilmsPage> Logger
+        ILogger<FilmsPage> Logger,
+        INotificationService NotificationService
     );
 }

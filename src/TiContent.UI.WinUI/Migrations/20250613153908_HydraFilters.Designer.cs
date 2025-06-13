@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TiContent.UI.WinUI;
 
@@ -10,9 +11,11 @@ using TiContent.UI.WinUI;
 namespace TiContent.UI.WinUI.Migrations
 {
     [DbContext(typeof(App.AppDataBaseContext))]
-    partial class AppDataBaseContextModelSnapshot : ModelSnapshot
+    [Migration("20250613153908_HydraFilters")]
+    partial class HydraFilters
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");

@@ -24,7 +24,7 @@ public interface INotificationService
         TimeSpan? duration = null
     );
 
-    public void ShowErrorNotification(Exception ex);
+    public void ShowErrorNotification(Exception ex, TimeSpan? duration = null);
 }
 
 public class NotificationService : INotificationService
@@ -54,9 +54,9 @@ public class NotificationService : INotificationService
         _stack?.Children.Add(bar);
     }
 
-    public void ShowErrorNotification(Exception ex)
+    public void ShowErrorNotification(Exception ex, TimeSpan? duration = null)
     {
-        ShowNotification("Ошибка", ex.Message, InfoBarSeverity.Error, null);
+        ShowNotification("Ошибка", ex.Message, InfoBarSeverity.Error, duration);
     }
 
     private void TimerOnTick(InfoBar bar)

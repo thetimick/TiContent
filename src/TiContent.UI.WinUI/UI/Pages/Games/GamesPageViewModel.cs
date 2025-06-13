@@ -19,7 +19,6 @@ using CommunityToolkit.WinUI.Collections;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
-using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.Api.Hydra;

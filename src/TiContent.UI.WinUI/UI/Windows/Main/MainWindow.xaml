@@ -28,7 +28,7 @@
 
         <InfoBarPanel
             x:Name="InfoBarPanel"
-            MaxWidth="256"
+            MaxWidth="512"
             Margin="0,0,16,16"
             HorizontalAlignment="Right"
             VerticalAlignment="Bottom" />

@@ -5,7 +5,7 @@
 // Created by the_timick on 18.05.2025.
 // ⠀
 
-namespace TiContent.Foundation.Entities.API.TMDB.Requests.Shared;
+namespace TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 
 public enum TMDBRequestContentType
 {

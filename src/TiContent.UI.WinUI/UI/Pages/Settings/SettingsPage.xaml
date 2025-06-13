@@ -22,7 +22,7 @@
             Text="Параметры" />
 
         <ScrollView Grid.Row="1">
-            <Grid RowDefinitions="Auto, Auto, Auto, *" RowSpacing="16">
+            <Grid RowDefinitions="Auto, Auto, Auto, Auto, *" RowSpacing="16">
                 <StackPanel Grid.Row="0">
                     <TextBlock
                         Margin="16,0,0,8"
@@ -74,6 +74,20 @@
                 </StackPanel>
 
                 <StackPanel Grid.Row="2">
+                    <TextBlock
+                        Margin="16,0,0,8"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="Действия" />
+
+                    <controls:SettingsCard
+                        Command="{x:Bind ViewModel.TapOnOpenStorageButtonCommand}"
+                        Description="Открыть папку, в которой хранятся пользовательские данные"
+                        Header="Хранилище"
+                        HeaderIcon="{ui:FontIcon Glyph='&#xEC25;'}"
+                        IsClickEnabled="True" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="3">
                     <TextBlock
                         Margin="16,0,0,8"
                         Style="{ThemeResource BodyStrongTextBlockStyle}"

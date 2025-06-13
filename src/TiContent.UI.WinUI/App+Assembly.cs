@@ -15,6 +15,7 @@ using TiContent.Foundation.Components.Interceptors;
 using TiContent.Foundation.Constants;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
+using TiContent.Foundation.Entities.ViewModel.FilmsPage;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.Api.Hydra;
@@ -40,14 +41,11 @@ public partial class App
     {
         // External
 
-        // Logger
         ConfigureLogging();
         services.AddLogging(builder => builder.AddSerilog(dispose: true));
 
-        // DB
         services.AddDbContext<AppDataBaseContext>();
 
-        // API
         services.AddSingleton<IRestClient, RestClient>(provider =>
         {
             var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
@@ -60,12 +58,11 @@ public partial class App
             return new RestClient(options);
         });
 
-        // Mapper
         services.AddAutoMapper(configuration =>
         {
             configuration.AddCollectionMappers();
 
-            configuration.AddProfile<DataBaseHydraLinksEntity.MapProfile>();
+            configuration.AddProfile<DataBaseHydraLinkEntity.MapProfile>();
 
             configuration.AddProfile<FilmsPageItemEntity.MapProfile>();
             configuration.AddProfile<FilmsSourcePageItemEntity.MapProfile>();
@@ -103,6 +100,7 @@ public partial class App
 
         services.AddSingleton<IDataBaseQueryHistoryService, DataBaseQueryQueryHistoryService>();
         services.AddSingleton<IDataBaseGamesSourceService, DataBaseGamesSourceService>();
+        services.AddSingleton<IDataBaseFiltersService, DataBaseFiltersService>();
 
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();

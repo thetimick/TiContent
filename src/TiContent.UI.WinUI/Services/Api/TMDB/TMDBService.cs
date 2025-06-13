@@ -12,9 +12,9 @@ using Microsoft.Extensions.Logging;
 using RestSharp;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Constants;
-using TiContent.Foundation.Entities.API.TMDB;
-using TiContent.Foundation.Entities.API.TMDB.Requests;
-using TiContent.Foundation.Entities.API.TMDB.Requests.Shared;
+using TiContent.Foundation.Entities.Api.TMDB;
+using TiContent.Foundation.Entities.Api.TMDB.Requests;
+using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 using TiContent.UI.WinUI.Services.Storage;
 
 namespace TiContent.UI.WinUI.Services.Api.TMDB;

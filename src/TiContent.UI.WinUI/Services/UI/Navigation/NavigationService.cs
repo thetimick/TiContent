@@ -53,7 +53,8 @@ public class NavigationService(IServiceProvider provider) : INavigationService
                     new FilmsPage.Dependencies(
                         provider.GetRequiredService<FilmsPageViewModel>(),
                         provider.GetRequiredService<IImageProvider>(),
-                        provider.GetRequiredService<ILogger<FilmsPage>>()
+                        provider.GetRequiredService<ILogger<FilmsPage>>(),
+                        provider.GetRequiredService<INotificationService>()
                     )
                 );
                 break;
@@ -70,7 +71,8 @@ public class NavigationService(IServiceProvider provider) : INavigationService
                     new GamesPage.Dependencies(
                         provider.GetRequiredService<GamesPageViewModel>(),
                         provider.GetRequiredService<IImageProvider>(),
-                        provider.GetRequiredService<ILogger<GamesPage>>()
+                        provider.GetRequiredService<ILogger<GamesPage>>(),
+                        provider.GetRequiredService<INotificationService>()
                     )
                 );
                 break;

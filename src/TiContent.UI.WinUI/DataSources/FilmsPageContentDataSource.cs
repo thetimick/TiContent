@@ -13,10 +13,11 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Humanizer;
 using TiContent.Foundation.Components.Extensions;
-using TiContent.Foundation.Entities.API.TMDB;
-using TiContent.Foundation.Entities.API.TMDB.Requests;
-using TiContent.Foundation.Entities.API.TMDB.Requests.Shared;
+using TiContent.Foundation.Entities.Api.TMDB;
+using TiContent.Foundation.Entities.Api.TMDB.Requests;
+using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 using TiContent.Foundation.Entities.ViewModel;
+using TiContent.Foundation.Entities.ViewModel.FilmsPage;
 using TiContent.UI.WinUI.DataSources.Abstraction;
 using TiContent.UI.WinUI.Services.Api.TMDB;
 

@@ -5,6 +5,8 @@
 // Created by the_timick on 03.06.2025.
 // ⠀
 
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TiContent.Foundation.Constants;
 using TiContent.Foundation.Entities.DB;
@@ -18,8 +20,9 @@ public partial class App
         // Data
 
         public DbSet<DataBaseHistoryEntity> QueryHistoryItems => Set<DataBaseHistoryEntity>();
-        public DbSet<DataBaseHydraLinksEntity> HydraLinksItems => Set<DataBaseHydraLinksEntity>();
+        public DbSet<DataBaseHydraLinkEntity> HydraLinksItems => Set<DataBaseHydraLinkEntity>();
         public DbSet<DataBaseImageEntity> ImageItems => Set<DataBaseImageEntity>();
+        public DbSet<DataBaseFiltersEntity> FiltersItems => Set<DataBaseFiltersEntity>();
 
         // LifeCycle
 
@@ -28,6 +31,13 @@ public partial class App
             optionsBuilder.UseSqlite($"Data Source={AppConstants.FileNames.DataBaseFileName}");
             optionsBuilder.EnableSensitiveDataLogging();
             base.OnConfiguring(optionsBuilder);
+        }
+
+        // Public Methods
+
+        public async Task MigrateAsync(CancellationToken token = default)
+        {
+            await Database.MigrateAsync(token);
         }
     }
 }
