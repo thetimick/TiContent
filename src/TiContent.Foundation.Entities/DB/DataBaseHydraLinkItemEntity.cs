@@ -13,7 +13,7 @@ using TiContent.Foundation.Entities.Api.HydraLinks;
 
 namespace TiContent.Foundation.Entities.DB;
 
-public partial record DataBaseHydraLinkEntity
+public partial record DataBaseHydraLinkItemEntity
 {
     public string Owner { get; set; } = string.Empty;
 
@@ -25,13 +25,13 @@ public partial record DataBaseHydraLinkEntity
     public string Link { get; init; } = string.Empty;
 }
 
-public partial record DataBaseHydraLinkEntity
+public partial record DataBaseHydraLinkItemEntity
 {
     public partial class MapProfile : Profile
     {
         public MapProfile()
         {
-            CreateMap<HydraLinksResponseEntity.ItemsEntity, DataBaseHydraLinkEntity>()
+            CreateMap<HydraLinksResponseEntity.ItemsEntity, DataBaseHydraLinkItemEntity>()
                 .ForMember(
                     dest => dest.CleanTitle,
                     opt => opt.MapFrom(src => CleanRegex().Replace(src.Title.Trim().ToLower(), ""))

@@ -5,7 +5,7 @@
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:customControls="using:TiContent.UI.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:ets="using:TiContent.Foundation.Entities.ViewModel"
+    xmlns:entities="using:TiContent.Foundation.Entities.ViewModel.GamesPage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
@@ -44,7 +44,7 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="ets:GamesPageItemEntity">
+                <DataTemplate x:DataType="entities:GamesPageItemEntity">
                     <controls:SettingsCard
                         Margin="0,0,0,4"
                         Click="SettingsCard_OnClick"
@@ -183,7 +183,20 @@
                         PlaceholderText="Жанры"
                         QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
                         SuggestedItemsSource="{x:Bind ViewModel.Filters.Genres, Mode=TwoWay}"
-                        Text="{x:Bind ViewModel.Filters.GenresQuery, Mode=TwoWay}" />
+                        Text="{x:Bind ViewModel.Filters.GenresQuery, Mode=TwoWay}">
+
+                        <controls:TokenizingTextBox.TokenItemTemplate>
+                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                                <TextBlock Text="{x:Bind Title}" />
+                            </DataTemplate>
+                        </controls:TokenizingTextBox.TokenItemTemplate>
+
+                        <controls:TokenizingTextBox.SuggestedItemTemplate>
+                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                                <TextBlock Text="{x:Bind Title}" />
+                            </DataTemplate>
+                        </controls:TokenizingTextBox.SuggestedItemTemplate>
+                    </controls:TokenizingTextBox>
 
                     <controls:TokenizingTextBox
                         IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
@@ -191,7 +204,20 @@
                         PlaceholderText="Теги"
                         QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
                         SuggestedItemsSource="{x:Bind ViewModel.Filters.Tags, Mode=TwoWay}"
-                        Text="{x:Bind ViewModel.Filters.TagsQuery, Mode=TwoWay}" />
+                        Text="{x:Bind ViewModel.Filters.TagsQuery, Mode=TwoWay}">
+
+                        <controls:TokenizingTextBox.TokenItemTemplate>
+                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                            </DataTemplate>
+                        </controls:TokenizingTextBox.TokenItemTemplate>
+
+                        <controls:TokenizingTextBox.SuggestedItemTemplate>
+                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                            </DataTemplate>
+                        </controls:TokenizingTextBox.SuggestedItemTemplate>
+                    </controls:TokenizingTextBox>
                 </StackPanel>
             </Border>
         </Grid>

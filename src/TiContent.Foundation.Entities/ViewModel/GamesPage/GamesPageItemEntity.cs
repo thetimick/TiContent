@@ -9,7 +9,7 @@ using AutoMapper;
 using Humanizer;
 using TiContent.Foundation.Entities.Api.Hydra;
 
-namespace TiContent.Foundation.Entities.ViewModel;
+namespace TiContent.Foundation.Entities.ViewModel.GamesPage;
 
 public partial record GamesPageItemEntity
 {

@@ -20,6 +20,9 @@
     <ProjectCapability Include="Msix" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Components\UI\Converters.xaml" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="AutoMapper.Collection" Version="11.0.0" />
     <PackageReference Include="CommunityToolkit.Common" Version="8.4.0" />
@@ -28,14 +31,8 @@
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Collections" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.250402" />
-    <PackageReference
-      Include="CommunityToolkit.WinUI.Controls.SettingsControls"
-      Version="8.2.250402"
-    />
-    <PackageReference
-      Include="CommunityToolkit.WinUI.Controls.TokenizingTextBox"
-      Version="8.2.250402"
-    />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.TokenizingTextBox" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Converters" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Extensions" Version="8.2.250402" />
     <PackageReference Include="EFCore.BulkExtensions.Core" Version="9.0.1" />
@@ -59,6 +56,11 @@
   <ItemGroup>
     <ProjectReference Include="..\TiContent.Foundation.Components\TiContent.Foundation.Components.csproj" />
     <ProjectReference Include="..\TiContent.Foundation.Entities\TiContent.Foundation.Entities.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Components\UI\Converters.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Components\UI\PlaceholderUserControl.xaml">

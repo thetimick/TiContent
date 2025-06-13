@@ -17,9 +17,9 @@ using TiContent.Foundation.Entities.Api.TMDB;
 using TiContent.Foundation.Entities.Api.TMDB.Requests;
 using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 using TiContent.Foundation.Entities.ViewModel;
-using TiContent.Foundation.Entities.ViewModel.FilmsPage;
 using TiContent.UI.WinUI.DataSources.Abstraction;
 using TiContent.UI.WinUI.Services.Api.TMDB;
+using TiContent.UI.WinUI.Services.DB;
 
 namespace TiContent.UI.WinUI.DataSources;
 

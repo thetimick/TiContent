@@ -32,8 +32,8 @@ public partial class App
             provider.GetRequiredService<IStorageService>();
         private readonly IDataBaseGamesSourceService _dbGamesSourceService =
             provider.GetRequiredService<IDataBaseGamesSourceService>();
-        private readonly IDataBaseFiltersService _dbFiltersService =
-            provider.GetRequiredService<IDataBaseFiltersService>();
+        private readonly IDataBaseHydraFiltersService _dbHydraFiltersService =
+            provider.GetRequiredService<IDataBaseHydraFiltersService>();
         private readonly ILogger<ConfigureService> _logger = provider.GetRequiredService<
             ILogger<ConfigureService>
         >();
@@ -55,7 +55,7 @@ public partial class App
                     {
                         await _db.Database.MigrateAsync(cancellationToken);
                         await _dbGamesSourceService.ObtainItemsIfNeededAsync();
-                        await _dbFiltersService.ObtainIfNeededAsync(cancellationToken);
+                        await _dbHydraFiltersService.ObtainIfNeededAsync(cancellationToken);
                     }
                     catch (Exception ex)
                     {

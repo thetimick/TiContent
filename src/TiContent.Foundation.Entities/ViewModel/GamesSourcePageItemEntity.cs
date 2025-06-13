@@ -27,7 +27,7 @@ public partial record GamesSourcePageItemEntity
     {
         public MapProfile()
         {
-            CreateMap<DataBaseHydraLinkEntity, GamesSourcePageItemEntity>()
+            CreateMap<DataBaseHydraLinkItemEntity, GamesSourcePageItemEntity>()
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.UploadDate))

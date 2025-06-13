@@ -15,7 +15,7 @@ using TiContent.Foundation.Components.Interceptors;
 using TiContent.Foundation.Constants;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
-using TiContent.Foundation.Entities.ViewModel.FilmsPage;
+using TiContent.Foundation.Entities.ViewModel.GamesPage;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.Api.Hydra;
@@ -62,11 +62,12 @@ public partial class App
         {
             configuration.AddCollectionMappers();
 
-            configuration.AddProfile<DataBaseHydraLinkEntity.MapProfile>();
+            configuration.AddProfile<DataBaseHydraLinkItemEntity.MapProfile>();
 
             configuration.AddProfile<FilmsPageItemEntity.MapProfile>();
             configuration.AddProfile<FilmsSourcePageItemEntity.MapProfile>();
             configuration.AddProfile<GamesPageItemEntity.MapProfile>();
+            configuration.AddProfile<GamesPageFilterItemEntity.MapProfile>();
             configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
         });
 
@@ -100,7 +101,7 @@ public partial class App
 
         services.AddSingleton<IDataBaseQueryHistoryService, DataBaseQueryQueryHistoryService>();
         services.AddSingleton<IDataBaseGamesSourceService, DataBaseGamesSourceService>();
-        services.AddSingleton<IDataBaseFiltersService, DataBaseFiltersService>();
+        services.AddSingleton<IDataBaseHydraFiltersService, DataBaseHydraFiltersService>();
 
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();

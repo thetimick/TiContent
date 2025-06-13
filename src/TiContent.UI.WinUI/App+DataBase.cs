@@ -20,9 +20,11 @@ public partial class App
         // Data
 
         public DbSet<DataBaseHistoryEntity> QueryHistoryItems => Set<DataBaseHistoryEntity>();
-        public DbSet<DataBaseHydraLinkEntity> HydraLinksItems => Set<DataBaseHydraLinkEntity>();
+        public DbSet<DataBaseHydraLinkItemEntity> HydraLinksItems =>
+            Set<DataBaseHydraLinkItemEntity>();
         public DbSet<DataBaseImageEntity> ImageItems => Set<DataBaseImageEntity>();
-        public DbSet<DataBaseFiltersEntity> FiltersItems => Set<DataBaseFiltersEntity>();
+        public DbSet<DataBaseHydraFilterItemEntity> FiltersItems =>
+            Set<DataBaseHydraFilterItemEntity>();
 
         // LifeCycle
 

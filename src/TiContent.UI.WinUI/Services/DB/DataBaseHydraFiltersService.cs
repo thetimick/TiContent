@@ -1,5 +1,5 @@
 ﻿// ⠀
-// DataBaseFiltersService.cs
+// DataBaseHydraFiltersService.cs
 // TiContent.UI.WinUI
 //
 // Created by the_timick on 12.06.2025.
@@ -18,18 +18,20 @@ using TiContent.UI.WinUI.Services.Storage;
 
 namespace TiContent.UI.WinUI.Services.DB;
 
-public interface IDataBaseFiltersService
+public interface IDataBaseHydraFiltersService
 {
-    public Task<List<DataBaseFiltersEntity>> ObtainIfNeededAsync(CancellationToken token = default);
+    public Task<List<DataBaseHydraFilterItemEntity>> ObtainIfNeededAsync(
+        CancellationToken token = default
+    );
 }
 
-public class DataBaseFiltersService(
+public class DataBaseHydraFiltersService(
     IHydraApiService api,
     App.AppDataBaseContext db,
     IStorageService storage
-) : IDataBaseFiltersService
+) : IDataBaseHydraFiltersService
 {
-    public async Task<List<DataBaseFiltersEntity>> ObtainIfNeededAsync(
+    public async Task<List<DataBaseHydraFilterItemEntity>> ObtainIfNeededAsync(
         CancellationToken token = default
     )
     {
@@ -37,17 +39,17 @@ public class DataBaseFiltersService(
             return await db.FiltersItems.AsNoTracking().ToListAsync(cancellationToken: token);
 
         var filters = await api.ObtainFiltersAsync(token);
-        var genres = filters.Genres.En.Select(s => new DataBaseFiltersEntity
+        var genres = filters.Genres.En.Select(s => new DataBaseHydraFilterItemEntity
         {
             Id = Guid.NewGuid().ToString(),
             Title = s,
-            FilterType = DataBaseFiltersEntity.FilterTypeEnum.Genre,
+            FilterType = DataBaseHydraFilterItemEntity.FilterTypeEnum.Genre,
         });
-        var tags = filters.Tags.En.Select(pair => new DataBaseFiltersEntity
+        var tags = filters.Tags.En.Select(pair => new DataBaseHydraFilterItemEntity
         {
             Id = Guid.NewGuid().ToString(),
             Title = $"{pair.Key}|{pair.Value}",
-            FilterType = DataBaseFiltersEntity.FilterTypeEnum.Tag,
+            FilterType = DataBaseHydraFilterItemEntity.FilterTypeEnum.Tag,
         });
 
         var items = genres.Concat(tags);

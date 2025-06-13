@@ -20,4 +20,11 @@ public static class CollectionExtensions
     {
         return new ObservableCollection<T>(source);
     }
+
+    public static T? GetSafe<T>(this IEnumerable<T?> source, int index)
+    {
+        if (source is IList<T> list)
+            return index >= 0 && index < list.Count ? list[index] : default;
+        return index >= 0 ? source.Skip(index).Take(1).FirstOrDefault() : default;
+    }
 }
