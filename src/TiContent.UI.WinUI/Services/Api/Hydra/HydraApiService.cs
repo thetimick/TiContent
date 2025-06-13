@@ -28,7 +28,7 @@ public interface IHydraApiService
         CancellationToken token = default
     );
 
-    public Task<HydraFiltersEntity> ObtainFilters(CancellationToken token = default);
+    public Task<HydraFiltersEntity> ObtainFiltersAsync(CancellationToken token = default);
 }
 
 public partial class HydraApiService(IRestClient client, IStorageService storage)
@@ -77,7 +77,7 @@ public partial class HydraApiService : IHydraApiService
         throw new Exception();
     }
 
-    public async Task<HydraFiltersEntity> ObtainFilters(CancellationToken token = default)
+    public async Task<HydraFiltersEntity> ObtainFiltersAsync(CancellationToken token = default)
     {
         var genres = client.ExecuteAsync<HydraFiltersEntity.HydraFiltersGenresEntity>(
             new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-genres.json")),
@@ -87,23 +87,13 @@ public partial class HydraApiService : IHydraApiService
             new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-user-tags.json")),
             token
         );
-        var developers = client.ExecuteAsync<List<string>>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-developers.json")),
-            token
-        );
-        var publishers = client.ExecuteAsync<List<string>>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-publishers.json")),
-            token
-        );
 
-        await Task.WhenAll(genres, tags, developers, publishers);
+        await Task.WhenAll(genres, tags);
 
         return new HydraFiltersEntity
         {
             Genres = genres.Result.Data ?? new HydraFiltersEntity.HydraFiltersGenresEntity(),
             Tags = tags.Result.Data ?? new HydraFiltersEntity.HydraFiltersTagsEntity(),
-            Developers = developers.Result.Data ?? [],
-            Publishers = publishers.Result.Data ?? [],
         };
     }
 }

@@ -7,9 +7,9 @@
 
 using AutoMapper;
 using TiContent.Foundation.Constants;
-using TiContent.Foundation.Entities.API.TMDB;
+using TiContent.Foundation.Entities.Api.TMDB;
 
-namespace TiContent.Foundation.Entities.ViewModel;
+namespace TiContent.Foundation.Entities.ViewModel.FilmsPage;
 
 public partial record FilmsPageItemEntity
 {

@@ -24,7 +24,7 @@ namespace TiContent.UI.WinUI.Services.DB;
 public interface IDataBaseGamesSourceService
 {
     Task ObtainItemsIfNeededAsync();
-    Task<List<DataBaseHydraLinksEntity>> SearchAsync(string query);
+    Task<List<DataBaseHydraLinkEntity>> SearchAsync(string query);
 }
 
 public partial class DataBaseGamesSourceService(
@@ -41,7 +41,7 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
         await ObtainAllLinksAsync();
     }
 
-    public async Task<List<DataBaseHydraLinksEntity>> SearchAsync(string query)
+    public async Task<List<DataBaseHydraLinkEntity>> SearchAsync(string query)
     {
         var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
         if (cleanQuery.IsNullOrEmpty())
@@ -67,11 +67,10 @@ public partial class DataBaseGamesSourceService
                 return rawEntity
                         ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
                         .Select(rawItemEntity =>
-                        {
-                            var item = mapper.Map<DataBaseHydraLinksEntity>(rawItemEntity);
-                            item.Owner = rawEntity.Name ?? string.Empty;
-                            return item;
-                        }) ?? [];
+                            mapper
+                                .Map<DataBaseHydraLinkEntity>(rawItemEntity)
+                                .Do(entity => entity.Owner = rawEntity.Name ?? string.Empty)
+                        ) ?? [];
             })
             .ToList();
 
@@ -80,7 +79,6 @@ public partial class DataBaseGamesSourceService
 
         if (storage.Cached != null)
             storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;
-        ;
     }
 
     private bool IsEmptyOrExpiredDataBaseAsync()

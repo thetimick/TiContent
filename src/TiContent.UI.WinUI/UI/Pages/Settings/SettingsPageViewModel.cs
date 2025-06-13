@@ -5,8 +5,11 @@
 // Created by the_timick on 24.05.2025.
 // ⠀
 
+using System.Diagnostics;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
+using TiContent.Foundation.Constants;
 using TiContent.UI.WinUI.Services.Storage;
 using TiContent.UI.WinUI.Services.UI;
 
@@ -73,5 +76,16 @@ public partial class SettingsPageViewModel(
         IsWindowSizePersistent = cached.Window.IsWindowSizePersistent;
         IsWindowOnCenterScreen = cached.Window.IsWindowOnCenterScreen;
         TMDBApiKey = cached.Keys.TMDBApiKey;
+    }
+
+    [RelayCommand]
+    private void TapOnOpenStorageButton()
+    {
+        Process.Start(
+            new ProcessStartInfo(
+                "explorer.exe",
+                $"/select,\"{AppConstants.FileNames.DataBaseFileName}\""
+            )
+        );
     }
 }

@@ -8,6 +8,7 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml;
@@ -18,6 +19,8 @@ using Microsoft.UI.Xaml.Navigation;
 using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Components.Helpers;
 using TiContent.UI.WinUI.Providers;
+using TiContent.UI.WinUI.Services.UI;
+using TiContent.UI.WinUI.Services.UI.Navigation;
 using Windows.Storage.Streams;
 
 namespace TiContent.UI.WinUI.UI.Pages.Games;
@@ -27,6 +30,7 @@ public partial class GamesPage
     private GamesPageViewModel ViewModel { get; set; } = null!;
     private IImageProvider ImageProvider { get; set; } = null!;
     private ILogger<GamesPage> Logger { get; set; } = null!;
+    private INotificationService NotificationService { get; set; } = null!;
 
     private ScrollView? _scrollView;
 
@@ -58,6 +62,7 @@ public partial class GamesPage
         ViewModel = dependencies.ViewModel;
         ImageProvider = dependencies.ImageProvider;
         Logger = dependencies.Logger;
+        NotificationService = dependencies.NotificationService;
 
         ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         DataContext = ViewModel;
@@ -105,6 +110,14 @@ public partial class GamesPage
                 }
                 catch (Exception ex)
                 {
+                    await DispatcherQueue.EnqueueAsync(() =>
+                        NotificationService.ShowNotification(
+                            "Изображение не загрузилось =(",
+                            $"{url}\n{ex.Message}",
+                            InfoBarSeverity.Warning,
+                            TimeSpan.FromSeconds(3)
+                        )
+                    );
                     Logger.LogError(ex, "{msg}", ex.Message);
                     throw;
                 }
@@ -167,6 +180,7 @@ public partial class GamesPage
     public record Dependencies(
         GamesPageViewModel ViewModel,
         IImageProvider ImageProvider,
-        ILogger<GamesPage> Logger
+        ILogger<GamesPage> Logger,
+        INotificationService NotificationService
     );
 }

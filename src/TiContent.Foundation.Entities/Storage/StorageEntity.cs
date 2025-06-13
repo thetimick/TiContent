@@ -14,6 +14,7 @@ public record StorageEntity
     public record DataBaseTimestampEntity
     {
         public DateTime HydraLinks { get; set; } = DateTime.UnixEpoch;
+        public DateTime Filters { get; set; } = DateTime.UnixEpoch;
     }
 
     public record UrlsEntity

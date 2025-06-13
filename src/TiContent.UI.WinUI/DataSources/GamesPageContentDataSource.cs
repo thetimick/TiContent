@@ -133,7 +133,7 @@ public partial class GamesPageContentDataSource
 
     private async Task LoadFiltersAsync(CancellationToken token = default)
     {
-        var response = await api.ObtainFilters(token);
+        var response = await api.ObtainFiltersAsync(token);
         ApplyFilters(response);
     }
 

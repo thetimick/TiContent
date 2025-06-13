@@ -5,9 +5,9 @@
 // Created by the_timick on 13.05.2025.
 // ⠀
 
-using TiContent.Foundation.Entities.API.TMDB.Requests.Shared;
+using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 
-namespace TiContent.Foundation.Entities.API.TMDB.Requests;
+namespace TiContent.Foundation.Entities.Api.TMDB.Requests;
 
 public record TMDBTrendingRequestEntity
 {

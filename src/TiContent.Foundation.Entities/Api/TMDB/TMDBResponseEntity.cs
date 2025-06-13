@@ -5,7 +5,6 @@
 // Created by the_timick on 12.05.2025.
 // ⠀
 
-using System.ComponentModel;
 using System.Text.Json.Serialization;
 using TiContent.Foundation.Entities.Api.Converters;
 
@@ -15,7 +14,7 @@ using TiContent.Foundation.Entities.Api.Converters;
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 // ReSharper disable ClassNeverInstantiated.Global
 
-namespace TiContent.Foundation.Entities.API.TMDB;
+namespace TiContent.Foundation.Entities.Api.TMDB;
 
 public record TMDBResponseEntity
 {
