@@ -29,6 +29,8 @@ public partial class GamesSourcePageContentDataSource : IGamesSourcePageContentD
     public async Task<List<GamesSourcePageItemEntity>> ObtainItemsAsync(string query)
     {
         var items = await dbService.SearchAsync(query);
-        return mapper.Map<List<DataBaseHydraLinkEntity>, List<GamesSourcePageItemEntity>>(items);
+        return mapper.Map<List<DataBaseHydraLinkItemEntity>, List<GamesSourcePageItemEntity>>(
+            items
+        );
     }
 }

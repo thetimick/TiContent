@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:TiContent.UI.WinUI.Components.Converters">
+
+    <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
+    <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+    <converters:ViewStateToVisibilityConverter x:Key="ViewStateToVisibilityConverter" />
+    <converters:VoteToColorConverter x:Key="VoteToColorConverter" />
+    <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
+    <converters:IntLimitToStringConverter x:Key="IntLimitToStringConverter" />
+    <converters:SplitToStringConverter x:Key="SplitToStringConverter" />
+</ResourceDictionary>

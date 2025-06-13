@@ -24,7 +24,7 @@ namespace TiContent.UI.WinUI.Services.DB;
 public interface IDataBaseGamesSourceService
 {
     Task ObtainItemsIfNeededAsync();
-    Task<List<DataBaseHydraLinkEntity>> SearchAsync(string query);
+    Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query);
 }
 
 public partial class DataBaseGamesSourceService(
@@ -41,7 +41,7 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
         await ObtainAllLinksAsync();
     }
 
-    public async Task<List<DataBaseHydraLinkEntity>> SearchAsync(string query)
+    public async Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query)
     {
         var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
         if (cleanQuery.IsNullOrEmpty())
@@ -68,7 +68,7 @@ public partial class DataBaseGamesSourceService
                         ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
                         .Select(rawItemEntity =>
                             mapper
-                                .Map<DataBaseHydraLinkEntity>(rawItemEntity)
+                                .Map<DataBaseHydraLinkItemEntity>(rawItemEntity)
                                 .Do(entity => entity.Owner = rawEntity.Name ?? string.Empty)
                         ) ?? [];
             })

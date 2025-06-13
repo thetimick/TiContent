@@ -17,7 +17,7 @@ namespace TiContent.UI.WinUI.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
 
-            modelBuilder.Entity("TiContent.Foundation.Entities.DB.DataBaseFiltersEntity", b =>
+            modelBuilder.Entity("TiContent.Foundation.Entities.DB.DataBaseHydraFilterItemEntity", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("TEXT");
@@ -47,7 +47,7 @@ namespace TiContent.UI.WinUI.Migrations
                     b.ToTable("QueryHistoryItems");
                 });
 
-            modelBuilder.Entity("TiContent.Foundation.Entities.DB.DataBaseHydraLinkEntity", b =>
+            modelBuilder.Entity("TiContent.Foundation.Entities.DB.DataBaseHydraLinkItemEntity", b =>
                 {
                     b.Property<string>("Title")
                         .HasColumnType("TEXT");

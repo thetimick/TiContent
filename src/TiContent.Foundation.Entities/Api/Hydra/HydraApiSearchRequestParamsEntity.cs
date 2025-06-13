@@ -32,7 +32,7 @@ public record HydraApiSearchRequestParamsEntity
     /// Теги, связанные с игрой
     /// </summary>
     [JsonPropertyName("tags")]
-    public List<string> Tags { get; init; } = [];
+    public List<int> Tags { get; init; } = [];
 
     /// <summary>
     /// Издатели игры

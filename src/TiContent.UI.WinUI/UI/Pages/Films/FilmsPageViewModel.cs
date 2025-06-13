@@ -20,7 +20,6 @@ using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
-using TiContent.Foundation.Entities.ViewModel.FilmsPage;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.DB;
 using TiContent.UI.WinUI.Services.UI;
