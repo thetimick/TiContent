@@ -308,7 +308,7 @@ public partial class FilmsSourcesPageViewModel
     public record InitialDataEntity(string Query);
 }
 
-// Filters
+// HydraFilters
 
 public partial class FilmsSourcesPageViewModel
 {
