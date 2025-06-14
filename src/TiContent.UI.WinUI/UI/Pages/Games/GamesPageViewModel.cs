@@ -35,29 +35,21 @@ public partial class GamesPageViewModel : ObservableObject
 {
     // Observable
 
-    [ObservableProperty]
-    public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty] public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<GamesPageItemEntity> Items { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<GamesPageItemEntity> Items { get; set; } = [];
 
-    [ObservableProperty]
-    public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
 
-    [ObservableProperty]
-    public partial int ContentTypeIndex { get; set; }
+    [ObservableProperty] public partial int ContentTypeIndex { get; set; }
 
-    [ObservableProperty]
-    public partial bool ContentTypeIsEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool ContentTypeIsEnabled { get; set; } = true;
 
-    [ObservableProperty]
-    public partial double ScrollViewOffset { get; set; }
+    [ObservableProperty] public partial double ScrollViewOffset { get; set; }
 
-    [ObservableProperty]
-    public partial FiltersEntity Filters { get; set; } = new();
+    [ObservableProperty] public partial FiltersEntity Filters { get; set; } = new();
 
     // Private Props
 
@@ -145,12 +137,12 @@ public partial class GamesPageViewModel : ObservableObject
                     Filter(o, Filters.GenresQuery, Filters.GenresSelectedItems);
                 Filters.Genres.RefreshFilter();
                 Filters.Genres.RefreshSorting();
-                break;
+            break;
             case nameof(Filters.TagsQuery):
                 Filters.Tags.Filter += o => Filter(o, Filters.TagsQuery, Filters.TagsSelectedItems);
                 Filters.Tags.RefreshFilter();
                 Filters.Tags.RefreshSorting();
-                break;
+            break;
         }
 
         return;
@@ -251,9 +243,7 @@ public partial class GamesPageViewModel
     {
         Filters.Genres = new AdvancedCollectionView(
             filters
-                .Where(entity =>
-                    entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Genre
-                )
+                .Where(entity => entity.Type == GamesPageFilterItemEntity.FilterType.Genre)
                 .ToList()
         );
         Filters.Genres.SortDescriptions.Add(
@@ -263,7 +253,7 @@ public partial class GamesPageViewModel
 
         Filters.Tags = new AdvancedCollectionView(
             filters
-                .Where(entity => entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Tags)
+                .Where(entity => entity.Type == GamesPageFilterItemEntity.FilterType.Tags)
                 .ToList()
         );
         Filters.Tags.SortDescriptions.Add(
@@ -367,27 +357,20 @@ public partial class GamesPageViewModel
 {
     public partial class FiltersEntity : ObservableObject
     {
-        [ObservableProperty]
-        public partial bool IsEnabled { get; set; } = true;
+        [ObservableProperty] public partial bool IsEnabled { get; set; } = true;
 
-        [ObservableProperty]
-        public partial AdvancedCollectionView Genres { get; set; } = [];
+        [ObservableProperty] public partial AdvancedCollectionView Genres { get; set; } = [];
 
-        [ObservableProperty]
-        public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
+        [ObservableProperty] public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
             [];
 
-        [ObservableProperty]
-        public partial string GenresQuery { get; set; } = string.Empty;
+        [ObservableProperty] public partial string GenresQuery { get; set; } = string.Empty;
 
-        [ObservableProperty]
-        public partial AdvancedCollectionView Tags { get; set; } = [];
+        [ObservableProperty] public partial AdvancedCollectionView Tags { get; set; } = [];
 
-        [ObservableProperty]
-        public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
+        [ObservableProperty] public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
             [];
 
-        [ObservableProperty]
-        public partial string TagsQuery { get; set; } = string.Empty;
+        [ObservableProperty] public partial string TagsQuery { get; set; } = string.Empty;
     }
 }

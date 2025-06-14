@@ -8,6 +8,7 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,6 @@ using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Components.Helpers;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.UI;
-using Windows.Storage.Streams;
 
 namespace TiContent.UI.WinUI.UI.Pages.Games;
 
@@ -94,7 +94,6 @@ public partial class GamesPage
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
         if (sender is Image { Tag: string url } image)
-        {
             Task.Run(async () =>
             {
                 try
@@ -121,7 +120,6 @@ public partial class GamesPage
                     throw;
                 }
             });
-        }
     }
 
     // AutoSuggestBox

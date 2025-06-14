@@ -72,13 +72,13 @@ public partial class HydraLinksDataSource
             .SelectMany(rawEntity =>
             {
                 return rawEntity
-                        ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
-                        .Select(rawItemEntity =>
-                        {
-                            var item = mapper.Map<HydraLinksEntity>(rawItemEntity);
-                            item.Owner = rawEntity.Name ?? string.Empty;
-                            return item;
-                        }) ?? [];
+                    ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
+                    .Select(rawItemEntity =>
+                    {
+                        var item = mapper.Map<HydraLinksEntity>(rawItemEntity);
+                        item.Owner = rawEntity.Name ?? string.Empty;
+                        return item;
+                    }) ?? [];
             })
             .ToList();
 
@@ -95,6 +95,6 @@ public partial class HydraLinksDataSource
     private bool IsEmptyOrExpiredDataBaseAsync()
     {
         return db.HydraLinksItems.AsNoTracking().IsEmpty()
-            || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+               || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
     }
 }

@@ -17,62 +17,53 @@ namespace TiContent.Foundation.Entities.Api.Hydra;
 public record HydraApiSearchRequestParamsEntity
 {
     /// <summary>
-    /// Название игры для поиска
+    ///     Название игры для поиска
     /// </summary>
-    [JsonPropertyName("title")]
-    public string Title { get; init; } = string.Empty;
+    [JsonPropertyName("title")] public string Title { get; init; } = string.Empty;
 
     /// <summary>
-    /// Список отпечатков источников загрузки
+    ///     Список отпечатков источников загрузки
     /// </summary>
     [JsonPropertyName("downloadSourceFingerprints")]
     public List<string> DownloadSourceFingerprints { get; init; } = [];
 
     /// <summary>
-    /// Теги, связанные с игрой
+    ///     Теги, связанные с игрой
     /// </summary>
-    [JsonPropertyName("tags")]
-    public List<int> Tags { get; init; } = [];
+    [JsonPropertyName("tags")] public List<int> Tags { get; init; } = [];
 
     /// <summary>
-    /// Издатели игры
+    ///     Издатели игры
     /// </summary>
-    [JsonPropertyName("publishers")]
-    public List<string> Publishers { get; init; } = [];
+    [JsonPropertyName("publishers")] public List<string> Publishers { get; init; } = [];
 
     /// <summary>
-    /// Жанры игры
+    ///     Жанры игры
     /// </summary>
-    [JsonPropertyName("genres")]
-    public List<string> Genres { get; init; } = [];
+    [JsonPropertyName("genres")] public List<string> Genres { get; init; } = [];
 
     /// <summary>
-    /// Разработчики игры
+    ///     Разработчики игры
     /// </summary>
-    [JsonPropertyName("developers")]
-    public List<string> Developers { get; init; } = [];
+    [JsonPropertyName("developers")] public List<string> Developers { get; init; } = [];
 
     /// <summary>
-    /// Количество записей для получения
+    ///     Количество записей для получения
     /// </summary>
-    [Required]
-    [JsonPropertyName("take")]
-    public int? Take { get; init; } = 12;
+    [Required] [JsonPropertyName("take")] public int? Take { get; init; } = 12;
 
     /// <summary>
-    /// Количество записей для пропуска
+    ///     Количество записей для пропуска
     /// </summary>
-    [Required]
-    [JsonPropertyName("skip")]
-    public int? Skip { get; init; } = 0;
+    [Required] [JsonPropertyName("skip")] public int? Skip { get; init; } = 0;
 
     /// <summary>
-    /// Provides a string representation of the HydraApiSearchRequestParamsEntity object,
-    /// including all properties in a readable format.
+    ///     Provides a string representation of the HydraApiSearchRequestParamsEntity object,
+    ///     including all properties in a readable format.
     /// </summary>
     /// <returns>
-    /// A string in the format "HydraApiSearchRequestParamsEntity{Title=value, DownloadSourceFingerprints=[...], ...}".
-    /// Null values are represented as "null", and collections are formatted as comma-separated lists in brackets.
+    ///     A string in the format "HydraApiSearchRequestParamsEntity{Title=value, DownloadSourceFingerprints=[...], ...}".
+    ///     Null values are represented as "null", and collections are formatted as comma-separated lists in brackets.
     /// </returns>
     public override string ToString()
     {
@@ -89,12 +80,12 @@ public record HydraApiSearchRequestParamsEntity
             Developers.Count == 0 ? "[]" : "[" + string.Join(", ", Developers.Select(s => s)) + "]";
 
         return $"HydraApiSearchRequestParamsEntity {{ Title={Title}, "
-            + $"DownloadSourceFingerprints={downloadSourcesStr}, "
-            + $"Tags={tagsStr}, "
-            + $"Publishers={publishersStr}, "
-            + $"Genres={genresStr}, "
-            + $"Developers={developersStr}, "
-            + $"Take={Take?.ToString() ?? "null"}, "
-            + $"Skip={Skip?.ToString() ?? "null"} }}";
+               + $"DownloadSourceFingerprints={downloadSourcesStr}, "
+               + $"Tags={tagsStr}, "
+               + $"Publishers={publishersStr}, "
+               + $"Genres={genresStr}, "
+               + $"Developers={developersStr}, "
+               + $"Take={Take?.ToString() ?? "null"}, "
+               + $"Skip={Skip?.ToString() ?? "null"} }}";
     }
 }

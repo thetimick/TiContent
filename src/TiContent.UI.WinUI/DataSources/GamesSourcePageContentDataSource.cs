@@ -19,18 +19,13 @@ public interface IGamesSourcePageContentDataSource
     public Task<List<GamesSourcePageItemEntity>> ObtainItemsAsync(string query);
 }
 
-public partial class GamesSourcePageContentDataSource(
-    IDataBaseGamesSourceService dbService,
-    IMapper mapper
-);
+public partial class GamesSourcePageContentDataSource(IDataBaseGamesSourceService dbService, IMapper mapper);
 
 public partial class GamesSourcePageContentDataSource : IGamesSourcePageContentDataSource
 {
     public async Task<List<GamesSourcePageItemEntity>> ObtainItemsAsync(string query)
     {
         var items = await dbService.SearchAsync(query);
-        return mapper.Map<List<DataBaseHydraLinkItemEntity>, List<GamesSourcePageItemEntity>>(
-            items
-        );
+        return mapper.Map<List<DataBaseHydraLinkItemEntity>, List<GamesSourcePageItemEntity>>(items);
     }
 }

@@ -6,9 +6,11 @@
 // ㅤ
 
 using System;
+using System.Net.Http;
 using AutoMapper.EquivalencyExpression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI.Dispatching;
 using RestSharp;
 using Serilog;
 using TiContent.Foundation.Components.Interceptors;
@@ -46,14 +48,14 @@ public partial class App
 
         services.AddDbContext<AppDataBaseContext>();
 
+        services.AddSingleton<HttpClient>();
         services.AddSingleton<IRestClient, RestClient>(provider =>
         {
             var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
             var interceptor = new RestClientLoggerInterceptor(logger);
-            var options = new RestClientOptions
-            {
+            var options = new RestClientOptions {
                 Interceptors = [interceptor],
-                Timeout = new TimeSpan(0, 0, 0, 10),
+                Timeout = new TimeSpan(0, 0, 0, 10)
             };
             return new RestClient(options);
         });
@@ -70,6 +72,8 @@ public partial class App
             configuration.AddProfile<GamesPageFilterItemEntity.MapProfile>();
             configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
         });
+
+        services.AddSingleton(DispatcherQueue.GetForCurrentThread());
 
         // Internal
 

@@ -21,12 +21,7 @@ public class EnumDescriptionToStringConverter : IValueConverter
         return ((Enum)value).Humanize();
     }
 
-    public object ConvertBack(
-        object? value,
-        Type targetType,
-        object? parameter,
-        CultureInfo culture
-    )
+    public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         throw new NotSupportedException("Converting from description to enum is not supported.");
     }

@@ -6,8 +6,6 @@
 // ⠀
 
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using TiContent.UI.WPF.Components.Extensions;
 using TiContent.UI.WPF.DataSources;
 
 namespace TiContent.UI.WPF.Workers;

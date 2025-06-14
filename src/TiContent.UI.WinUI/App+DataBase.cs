@@ -20,13 +20,21 @@ public partial class App
         // Data
 
         public DbSet<DataBaseHistoryEntity> QueryHistoryItems => Set<DataBaseHistoryEntity>();
+
         public DbSet<DataBaseHydraLinkItemEntity> HydraLinksItems =>
             Set<DataBaseHydraLinkItemEntity>();
-        public DbSet<DataBaseImageEntity> ImageItems => Set<DataBaseImageEntity>();
-        public DbSet<DataBaseHydraFilterItemEntity> FiltersItems =>
+
+        public DbSet<DataBaseHydraFilterItemEntity> HydraFiltersItems =>
             Set<DataBaseHydraFilterItemEntity>();
 
+        public DbSet<DataBaseImageEntity> ImageItems => Set<DataBaseImageEntity>();
+
         // LifeCycle
+
+        public AppDataBaseContext()
+        {
+            Database.EnsureCreated();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

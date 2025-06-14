@@ -53,14 +53,12 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
         );
 
         if (!response.IsSuccessful)
-        {
             logger.LogError(
                 "{StatusCode} {ReasonPhrase}. Error: {ErrorMessage}",
                 (int)response.StatusCode,
                 response.StatusDescription,
                 response.ErrorMessage ?? "No additional error message"
             );
-        }
 
         return base.AfterRequest(response, cancellationToken);
     }

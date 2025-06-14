@@ -36,7 +36,10 @@ public partial class App
     // Public Methods
 
     public static T GetRequiredService<T>()
-        where T : notnull => AppHost.Services.GetRequiredService<T>();
+        where T : notnull
+    {
+        return AppHost.Services.GetRequiredService<T>();
+    }
 
     // Private Methods
 

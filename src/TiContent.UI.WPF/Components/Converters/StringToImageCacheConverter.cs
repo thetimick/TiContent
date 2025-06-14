@@ -7,8 +7,6 @@
 
 using System.Globalization;
 using System.Windows.Data;
-using TiContent.UI.WPF.Application;
-using TiContent.UI.WPF.Providers;
 
 namespace TiContent.UI.WPF.Components.Converters;
 

@@ -34,6 +34,7 @@ public interface IHydraApiService
 public partial class HydraApiService(IRestClient client, IStorageService storage)
 {
     private string HydraApiBaseUrl => storage.Cached?.Urls.HydraApiBaseUrl ?? string.Empty;
+
     private string HydraAssetsApiBaseUrl =>
         storage.Cached?.Urls.HydraApiAssetsBaseUrl ?? string.Empty;
 }
@@ -90,10 +91,9 @@ public partial class HydraApiService : IHydraApiService
 
         await Task.WhenAll(genres, tags);
 
-        return new HydraFiltersEntity
-        {
+        return new HydraFiltersEntity {
             Genres = genres.Result.Data ?? new HydraFiltersEntity.HydraFiltersGenresEntity(),
-            Tags = tags.Result.Data ?? new HydraFiltersEntity.HydraFiltersTagsEntity(),
+            Tags = tags.Result.Data ?? new HydraFiltersEntity.HydraFiltersTagsEntity()
         };
     }
 }

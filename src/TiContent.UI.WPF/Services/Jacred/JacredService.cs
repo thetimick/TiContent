@@ -1,12 +1,11 @@
 ﻿using RestSharp;
-using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Storage;
 
 namespace TiContent.UI.WPF.Services.Jacred;
 
 /// <summary>
-/// Реализация сервиса для работы с торрентами
+///     Реализация сервиса для работы с торрентами
 /// </summary>
 public class JacredService(IRestClient client, IStorageService storage) : IJacredService
 {
@@ -18,6 +17,7 @@ public class JacredService(IRestClient client, IStorageService storage) : IJacre
 
     // Private Props
     private string BaseUrl => storage.Cached?.Urls.JacredApiBaseUrl ?? "";
+
     private readonly IRestClient _client =
         client ?? throw new ArgumentNullException(nameof(client));
 

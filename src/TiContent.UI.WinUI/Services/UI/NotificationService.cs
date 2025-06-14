@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -15,7 +16,7 @@ namespace TiContent.UI.WinUI.Services.UI;
 
 public interface INotificationService
 {
-    public void Setup(InfoBarPanel stack);
+    public void Setup(InfoBarPanel stack, DispatcherQueue dispatcherQueue);
 
     public void ShowNotification(
         string title,
@@ -30,12 +31,14 @@ public interface INotificationService
 public class NotificationService : INotificationService
 {
     private InfoBarPanel? _stack;
+    private DispatcherQueue? _dispatcherQueue;
 
     private readonly Dictionary<InfoBar, DispatcherTimer> _timers = new();
 
-    public void Setup(InfoBarPanel stack)
+    public void Setup(InfoBarPanel stack, DispatcherQueue dispatcherQueue)
     {
         _stack = stack;
+        _dispatcherQueue = dispatcherQueue;
     }
 
     public void ShowNotification(
@@ -45,13 +48,13 @@ public class NotificationService : INotificationService
         TimeSpan? duration
     )
     {
-        var bar = MakeNotification(title, message, severity);
-        if (duration is { } unwrapped)
+        _dispatcherQueue?.TryEnqueue(() =>
         {
-            var timer = MakeTimer(bar, unwrapped);
-            _timers.Add(bar, timer);
-        }
-        _stack?.Children.Add(bar);
+            var bar = MakeNotification(title, message, severity);
+            if (duration is { } unwrapped)
+                _timers.Add(bar, MakeTimer(bar, unwrapped));
+            _stack?.Children.Add(bar);
+        });
     }
 
     public void ShowErrorNotification(Exception ex, TimeSpan? duration = null)
@@ -71,12 +74,11 @@ public class NotificationService : INotificationService
 
     private InfoBar MakeNotification(string title, string message, InfoBarSeverity severity)
     {
-        var infoBar = new InfoBar
-        {
+        var infoBar = new InfoBar {
             Title = title,
             Message = message,
             Severity = severity,
-            IsOpen = true,
+            IsOpen = true
         };
         infoBar.CloseButtonClick += (_, _) => CloseButtonClick(infoBar);
         return infoBar;
@@ -97,6 +99,7 @@ public class NotificationService : INotificationService
             timer.Stop();
             _timers.Remove(bar);
         }
+
         bar.IsOpen = false;
         _stack?.Children.Remove(bar);
     }

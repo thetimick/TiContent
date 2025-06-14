@@ -21,11 +21,10 @@ public partial class VoteToColorConverter : IValueConverter
             || doubleVote == 0
         )
             return Application.Current.Resources["TextFillColorSecondaryBrush"];
-        return doubleVote switch
-        {
+        return doubleVote switch {
             < 4 => Application.Current.Resources["SystemFillColorCriticalBrush"],
             < 7 => Application.Current.Resources["SystemFillColorCautionBrush"],
-            _ => Application.Current.Resources["SystemFillColorSuccessBrush"],
+            _   => Application.Current.Resources["SystemFillColorSuccessBrush"]
         };
     }
 

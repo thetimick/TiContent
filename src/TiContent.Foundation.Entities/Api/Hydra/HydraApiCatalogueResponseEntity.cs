@@ -16,15 +16,11 @@ namespace TiContent.Foundation.Entities.Api.Hydra;
 
 public record HydraApiCatalogueResponseEntity
 {
-    [JsonPropertyName("title")]
-    public string? Title { get; set; }
+    [JsonPropertyName("title")] public string? Title { get; set; }
 
-    [JsonPropertyName("shop")]
-    public string? Shop { get; set; }
+    [JsonPropertyName("shop")] public string? Shop { get; set; }
 
-    [JsonPropertyName("objectId")]
-    public string? ObjectId { get; set; }
+    [JsonPropertyName("objectId")] public string? ObjectId { get; set; }
 
-    [JsonPropertyName("libraryImageUrl")]
-    public Uri? LibraryImageUrl { get; set; }
+    [JsonPropertyName("libraryImageUrl")] public Uri? LibraryImageUrl { get; set; }
 }

@@ -8,9 +8,9 @@
 using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
+using Windows.Web.Http;
 using Microsoft.Extensions.Logging;
 using TiContent.Foundation.Entities.DB;
-using Windows.Web.Http;
 
 namespace TiContent.UI.WinUI.Providers;
 
@@ -31,8 +31,7 @@ public partial class ImageProvider : IImageProvider
         try
         {
             await using var db = new App.AppDataBaseContext();
-            var item = await db.ImageItems.FindAsync(url);
-            if (item != null)
+            if (await db.ImageItems.FindAsync(url) is { } item)
                 return item;
 
             var imageData = await LoadImageAsync(url);

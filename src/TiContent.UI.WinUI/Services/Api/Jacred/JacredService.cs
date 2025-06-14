@@ -21,16 +21,9 @@ public interface IJacredService
     Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default);
 }
 
-public class JacredService(
-    IRestClient client,
-    IStorageService storage,
-    ILogger<JacredService> logger
-) : IJacredService
+public class JacredService(IRestClient client, IStorageService storage, ILogger<JacredService> logger) : IJacredService
 {
-    public async Task<List<JacredEntity>> ObtainTorrentsAsync(
-        string search,
-        CancellationToken token = default
-    )
+    public async Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default)
     {
         if (storage.Cached?.Urls.JacredApiBaseUrl is not { } baseUrl)
         {
@@ -38,10 +31,7 @@ public class JacredService(
             return [];
         }
 
-        var request = new RestRequest(UrlHelper.Combine(baseUrl, "api/v1.0/torrents")).AddParameter(
-            "search",
-            search
-        );
+        var request = new RestRequest(UrlHelper.Combine(baseUrl, "api/v1.0/torrents")).AddParameter("search", search);
 
         var response = await client.ExecuteAsync<List<JacredEntity>>(request, token);
         if (response is { IsSuccessful: true, Data: { } data })

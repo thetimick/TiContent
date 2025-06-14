@@ -64,11 +64,10 @@ public partial class FilmsPageContentDataSource
         _pagination ??= new TMDBPagination();
         _pagination.NextPage();
 
-        var request = new TMDBTrendingRequestEntity
-        {
+        var request = new TMDBTrendingRequestEntity {
             Period = TMDBTrendingRequestEntity.PeriodType.Week,
             Content = content.MapToContentType(),
-            Page = _pagination.Page,
+            Page = _pagination.Page
         };
 
         var response = await contentService.ObtainTrendingAsync(request);
@@ -96,11 +95,10 @@ public partial class FilmsPageContentDataSource
         _pagination ??= new TMDBPagination();
         _pagination.NextPage();
 
-        var request = new TMDBSearchRequestEntity
-        {
+        var request = new TMDBSearchRequestEntity {
             Content = content.MapToContentType(),
             Query = query,
-            Page = _pagination.Page,
+            Page = _pagination.Page
         };
 
         var response = await contentService.ObtainSearchAsync(request);
@@ -130,12 +128,11 @@ internal static class IntExtensions
 {
     public static TMDBRequestContentType MapToContentType(this int index)
     {
-        return index switch
-        {
+        return index switch {
             0 => TMDBRequestContentType.Movies,
             1 => TMDBRequestContentType.Serials,
             2 => TMDBRequestContentType.Anime,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null),
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
         };
     }
 }

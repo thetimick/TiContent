@@ -7,7 +7,6 @@
 
 using RestSharp;
 using TiContent.UI.WPF.Components.Helpers;
-using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Storage;
 

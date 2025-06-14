@@ -5,12 +5,12 @@
 namespace TiContent.UI.WPF.Components.Extensions;
 
 /// <summary>
-/// Represents class with various extension methods for IEnumerable lists.
+///     Represents class with various extension methods for IEnumerable lists.
 /// </summary>
 public static class ListExtensions
 {
     /// <summary>
-    /// Converts collection to <see cref="ObservableCollection{T}"/> collection.
+    ///     Converts collection to <see cref="ObservableCollection{T}" /> collection.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -18,15 +18,13 @@ public static class ListExtensions
     public static ObservableCollection<T> ToObservable<T>(this IEnumerable<T> source)
     {
         if (source == null)
-        {
             return null;
-        }
 
         return new ObservableCollection<T>(source);
     }
 
     /// <summary>
-    /// Check if collection has any items.
+    ///     Check if collection has any items.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -37,7 +35,7 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Check if collection has any items.
+    ///     Check if collection has any items.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -49,7 +47,7 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Adds new item to the list only if it's not already part of the list.
+    ///     Adds new item to the list only if it's not already part of the list.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -62,14 +60,12 @@ public static class ListExtensions
             source.Add(item);
             return true;
         }
-        else
-        {
-            return false;
-        }
+
+        return false;
     }
 
     /// <summary>
-    /// Adds new items to the list only if they are not already part of the list.
+    ///     Adds new items to the list only if they are not already part of the list.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -78,24 +74,18 @@ public static class ListExtensions
     public static bool AddMissing<T>(this IList<T> source, IEnumerable<T> items)
     {
         if (items == null)
-        {
             return false;
-        }
 
         var anyAdded = false;
         foreach (var item in items)
-        {
             if (AddMissing(source, item))
-            {
                 anyAdded = true;
-            }
-        }
 
         return anyAdded;
     }
 
     /// <summary>
-    /// Checks if collection has any non-empty string items.
+    ///     Checks if collection has any non-empty string items.
     /// </summary>
     /// <param name="source"></param>
     /// <returns></returns>
@@ -105,7 +95,7 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Checks if source collection contains any items from target one, even if just partially.
+    ///     Checks if source collection contains any items from target one, even if just partially.
     /// </summary>
     /// <param name="source"></param>
     /// <param name="target"></param>
@@ -118,29 +108,21 @@ public static class ListExtensions
     )
     {
         if (source == null && target == null)
-        {
             return false;
-        }
 
         if ((source == null && target != null) || (source != null && target == null))
-        {
             return false;
-        }
 
         var intersects = false;
         foreach (var sourceItem in source)
-        {
             if (target.Any(a => a?.IndexOf(sourceItem, comparison) >= 0))
-            {
                 return true;
-            }
-        }
 
         return intersects;
     }
 
     /// <summary>
-    /// Checks if source collection contains any items from target one.
+    ///     Checks if source collection contains any items from target one.
     /// </summary>
     /// <param name="source"></param>
     /// <param name="target"></param>
@@ -153,29 +135,21 @@ public static class ListExtensions
     )
     {
         if (source == null && target == null)
-        {
             return false;
-        }
 
         if ((source == null && target != null) || (source != null && target == null))
-        {
             return false;
-        }
 
         var intersects = false;
         foreach (var sourceItem in source)
-        {
             if (target.Any(a => a?.Equals(sourceItem, comparison) == true))
-            {
                 return true;
-            }
-        }
 
         return intersects;
     }
 
     /// <summary>
-    /// Checks if source collection contains specified string completely.
+    ///     Checks if source collection contains specified string completely.
     /// </summary>
     public static bool ContainsString(
         this IEnumerable<string> source,
@@ -187,7 +161,7 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Checks if part of specified string is part of the collection.
+    ///     Checks if part of specified string is part of the collection.
     /// </summary>
     public static bool ContainsStringPartial(
         this IEnumerable<string> source,
@@ -199,7 +173,7 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Checks if source collection contains part of specified string.
+    ///     Checks if source collection contains part of specified string.
     /// </summary>
     public static bool ContainsPartOfString(
         this IEnumerable<string> source,
@@ -211,40 +185,30 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Checks if two collections contain the same items in any order.
+    ///     Checks if two collections contain the same items in any order.
     /// </summary>
     public static bool IsListEqual<T>(this IEnumerable<T> source, IEnumerable<T> target)
     {
         if (source == null && target == null)
-        {
             return true;
-        }
 
         if ((source == null && target != null) || (source != null && target == null))
-        {
             return false;
-        }
 
         if (source.Count() != target.Count())
-        {
             return false;
-        }
 
         if (source.Except(target).Any())
-        {
             return false;
-        }
 
         if (target.Except(source).Any())
-        {
             return false;
-        }
 
         return true;
     }
 
     /// <summary>
-    /// Checks if two collections contain the same items in any order.
+    ///     Checks if two collections contain the same items in any order.
     /// </summary>
     public static bool IsListEqual<T>(
         this IEnumerable<T> source,
@@ -253,124 +217,88 @@ public static class ListExtensions
     )
     {
         if (source == null && target == null)
-        {
             return true;
-        }
 
         if ((source == null && target != null) || (source != null && target == null))
-        {
             return false;
-        }
 
         if (source.Count() != target.Count())
-        {
             return false;
-        }
 
         if (source.Except(target, comparer).Any())
-        {
             return false;
-        }
 
         if (target.Except(source, comparer).Any())
-        {
             return false;
-        }
 
         return true;
     }
 
     /// <summary>
-    /// Checks if two collections contain the same items in the same order.
+    ///     Checks if two collections contain the same items in the same order.
     /// </summary>
     public static bool IsListEqualExact<T>(this IEnumerable<T> source, IEnumerable<T> target)
     {
         if (source == null && target == null)
-        {
             return true;
-        }
 
         if ((source == null && target != null) || (source != null && target == null))
-        {
             return false;
-        }
 
         if (source.Count() != target.Count())
-        {
             return false;
-        }
 
         return source.SequenceEqual(target);
     }
 
     /// <summary>
-    /// Check if collection contains all items from other collection (in any order).
+    ///     Check if collection contains all items from other collection (in any order).
     /// </summary>
     public static bool Contains<T>(this IEnumerable<T> source, IEnumerable<T> target)
     {
         if (source == null && target == null)
-        {
             return true;
-        }
 
         if ((source == null && target != null) || (source != null && target == null))
-        {
             return false;
-        }
 
         var targetCount = target.Count();
         if (targetCount > source.Count())
-        {
             return false;
-        }
 
         return target.Intersect(source).Count() == targetCount;
     }
 
     /// <summary>
-    /// Gets items contained in all colletions.
+    ///     Gets items contained in all colletions.
     /// </summary>
     public static HashSet<T> GetCommonItems<T>(IEnumerable<IEnumerable<T>> lists)
     {
         if (lists?.Any() != true || lists?.First()?.Any() != true)
-        {
             return new HashSet<T>();
-        }
 
         var set = new HashSet<T>(lists.First());
         foreach (var list in lists)
-        {
             if (list == null)
-            {
                 set.IntersectWith(new List<T>());
-            }
             else
-            {
                 set.IntersectWith(list);
-            }
-        }
 
         return set;
     }
 
     /// <summary>
-    /// Gets items distinct to all collections.
+    ///     Gets items distinct to all collections.
     /// </summary>
     public static HashSet<T> GetDistinctItems<T>(IEnumerable<IEnumerable<T>> lists)
     {
         if (lists?.Any() != true)
-        {
             return new HashSet<T>();
-        }
 
         var set = new List<T>();
         foreach (var list in lists)
-        {
             if (list != null)
-            {
                 set.AddRange(list);
-            }
-        }
 
         var listsCounts = lists.Count();
         return new HashSet<T>(
@@ -379,20 +307,18 @@ public static class ListExtensions
     }
 
     /// <summary>
-    /// Gets items distinct to all collections.
+    ///     Gets items distinct to all collections.
     /// </summary>
     public static HashSet<T> GetDistinctItemsP<T>(params IEnumerable<T>[] lists)
     {
         if (lists?.Any() != true)
-        {
             return new HashSet<T>();
-        }
 
         return GetDistinctItems(lists.ToList());
     }
 
     /// <summary>
-    /// Merge collections together.
+    ///     Merge collections together.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="lists"></param>
@@ -401,18 +327,14 @@ public static class ListExtensions
     {
         var allItems = new List<T>();
         foreach (var list in lists)
-        {
             if (list.HasItems())
-            {
                 allItems.AddRange(list);
-            }
-        }
 
         return allItems;
     }
 
     /// <summary>
-    /// Merge two collections together.
+    ///     Merge two collections together.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="list1"></param>
@@ -427,20 +349,17 @@ public static class ListExtensions
             allItems.AddRange(list2);
             return allItems;
         }
-        else if (list1.HasItems() && !list2.HasItems())
-        {
+
+        if (list1.HasItems() && !list2.HasItems())
             return list1.ToList();
-        }
-        else if (!list1.HasItems() && list2.HasItems())
-        {
+
+        if (!list1.HasItems() && list2.HasItems())
             return list2.ToList();
-        }
 
         return new List<T>();
     }
 
     /// <summary>
-    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -448,18 +367,13 @@ public static class ListExtensions
     public static void ForEach<T>(this ObservableCollection<T> source, Action<T> action)
     {
         if (source.HasItems() != true)
-        {
             return;
-        }
 
         foreach (var item in source)
-        {
             action(item);
-        }
     }
 
     /// <summary>
-    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -467,18 +381,13 @@ public static class ListExtensions
     public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
     {
         if (source.HasItems() != true)
-        {
             return;
-        }
 
         foreach (var item in source)
-        {
             action(item);
-        }
     }
 
     /// <summary>
-    ///
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <param name="source"></param>
@@ -486,14 +395,10 @@ public static class ListExtensions
     public static HashSet<T> ToHashSet<T>(this IEnumerable<T> source)
     {
         if (source == null)
-        {
             return null;
-        }
 
         if (!source.HasItems())
-        {
             return new HashSet<T>();
-        }
 
         return new HashSet<T>(source);
     }

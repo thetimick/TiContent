@@ -5,7 +5,6 @@
 // Created by the_timick on 28.05.2025.
 // ⠀
 
-using System.ComponentModel;
 using AutoMapper;
 using Humanizer;
 using Humanizer.Bytes;
@@ -19,7 +18,7 @@ public partial record FilmsSourcePageItemEntity
     {
         Any,
         Movie,
-        Serial,
+        Serial
     }
 
     public string Title { get; init; } = string.Empty;
@@ -66,8 +65,7 @@ public partial record FilmsSourcePageItemEntity
                 .ForMember(
                     dest => dest.ContentType,
                     opt =>
-                        opt.MapFrom(
-                            (src, _) =>
+                        opt.MapFrom((src, _) =>
                             {
                                 if (src.Types?.Contains("movie") == true)
                                     return ContentTypeEnum.Movie;

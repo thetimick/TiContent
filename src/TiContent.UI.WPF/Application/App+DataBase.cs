@@ -6,7 +6,6 @@
 // ⠀
 
 using Microsoft.EntityFrameworkCore;
-using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Entities.DB;
 using TiContent.UI.WPF.Entities.Legacy.HydraLinks;
 
@@ -24,7 +23,10 @@ public partial class App
 
         // LifeCycle
 
-        public AppDataBaseContext() => Database.EnsureCreated();
+        public AppDataBaseContext()
+        {
+            Database.EnsureCreated();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

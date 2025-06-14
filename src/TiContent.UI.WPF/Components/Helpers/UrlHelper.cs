@@ -12,7 +12,7 @@ namespace TiContent.UI.WPF.Components.Helpers;
 public static class UrlHelper
 {
     /// <summary>
-    /// Combines a base URL with path segments and optional query parameters into a valid URL.
+    ///     Combines a base URL with path segments and optional query parameters into a valid URL.
     /// </summary>
     /// <param name "baseUrl">The base URL (e.g., "https://example.com").</param>
     /// <param name "segments">Path segments to append (e.g., "api", "resource").</param>
@@ -25,10 +25,8 @@ public static class UrlHelper
             throw new ArgumentNullException(nameof(baseUrl));
 
         if (!Uri.TryCreate(baseUrl, UriKind.Absolute, out var baseUri))
-        {
             if (!Uri.TryCreate(baseUrl, UriKind.RelativeOrAbsolute, out baseUri))
                 throw new UriFormatException("Invalid base URL format.");
-        }
 
         var cleanedBase = baseUri.GetLeftPart(UriPartial.Path).TrimEnd('/');
 
@@ -50,7 +48,7 @@ public static class UrlHelper
     }
 
     /// <summary>
-    /// Combines a base URL with path segments and query parameters.
+    ///     Combines a base URL with path segments and query parameters.
     /// </summary>
     /// <param name "baseUrl">The base URL (e.g., "https://example.com").</param>
     /// <param name "queryParams">Query parameters as key-value pairs (e.g., ("id", "123")).</param>

@@ -17,13 +17,13 @@ public static class ApplicationThemeManagerWrapper
         {
             case 0:
                 ApplicationThemeManager.Apply(ApplicationTheme.Light);
-                break;
+            break;
             case 1:
                 ApplicationThemeManager.Apply(ApplicationTheme.Dark);
-                break;
+            break;
             case 2:
                 ApplicationThemeManager.ApplySystemTheme(true);
-                break;
+            break;
         }
     }
 }

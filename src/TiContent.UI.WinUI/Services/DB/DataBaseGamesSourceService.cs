@@ -8,40 +8,53 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.HydraLinks;
 using TiContent.Foundation.Entities.DB;
 using TiContent.UI.WinUI.Services.Api.HydraLinks;
 using TiContent.UI.WinUI.Services.Storage;
+using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.Services.DB;
 
 public interface IDataBaseGamesSourceService
 {
-    Task ObtainItemsIfNeededAsync();
-    Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query);
+    Task ObtainIfNeededAsync(CancellationToken token = default);
+
+    Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(
+        string query,
+        CancellationToken token = default
+    );
 }
 
 public partial class DataBaseGamesSourceService(
     App.AppDataBaseContext db,
     IStorageService storage,
-    IHydraLinksService service,
-    IMapper mapper
+    IHydraLinksService api,
+    IMapper mapper,
+    INotificationService notifications,
+    ILogger<DataBaseGamesSourceService> logger
 );
 
 public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
 {
-    public async Task ObtainItemsIfNeededAsync()
+    public async Task ObtainIfNeededAsync(CancellationToken token)
     {
-        await ObtainAllLinksAsync();
+        await ObtainAllLinksAsync(false, token);
     }
 
-    public async Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query)
+    public async Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(
+        string query,
+        CancellationToken token
+    )
     {
         var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
         if (cleanQuery.IsNullOrEmpty())
@@ -49,41 +62,53 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
         var items = await db
             .HydraLinksItems.AsNoTracking()
             .Where(entity => EF.Functions.Like(entity.CleanTitle, $"%{cleanQuery}%"))
-            .ToListAsync();
+            .ToListAsync(token);
         return items;
     }
 }
 
 public partial class DataBaseGamesSourceService
 {
-    private async Task ObtainAllLinksAsync(bool forceRefresh = false)
+    private async Task ObtainAllLinksAsync(
+        bool forceRefresh = false,
+        CancellationToken token = default
+    )
     {
         if (!IsEmptyOrExpiredDataBaseAsync() && !forceRefresh)
             return;
 
-        var items = (await service.ObtainLinksAsync())
+        var items = (await api.ObtainLinksAsync())
             .SelectMany(rawEntity =>
             {
                 return rawEntity
-                        ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
-                        .Select(rawItemEntity =>
-                            mapper
-                                .Map<DataBaseHydraLinkItemEntity>(rawItemEntity)
-                                .Do(entity => entity.Owner = rawEntity.Name ?? string.Empty)
-                        ) ?? [];
+                    ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
+                    .Select(rawItemEntity =>
+                        mapper
+                            .Map<DataBaseHydraLinkItemEntity>(rawItemEntity)
+                            .Do(entity => entity.Owner = rawEntity.Name ?? string.Empty)
+                    ) ?? [];
             })
             .ToList();
 
-        await db.BulkInsertOrUpdateAsync(items);
-        await db.BulkSaveChangesAsync();
+        await db.BulkDeleteAsync(db.HydraLinksItems.AsNoTracking(), cancellationToken: token);
+        await db.BulkInsertOrUpdateAsync(items, cancellationToken: token);
+        await db.BulkSaveChangesAsync(cancellationToken: token);
 
-        if (storage.Cached != null)
-            storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;
+        storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;
+
+        notifications.ShowNotification(
+            "Обновление",
+            "Обновлены источники HydraLinks!",
+            InfoBarSeverity.Success,
+            TimeSpan.FromSeconds(3)
+        );
+
+        logger.LogInformation("Обновлены источники HydraLinks!");
     }
 
     private bool IsEmptyOrExpiredDataBaseAsync()
     {
-        return db.HydraLinksItems.AsNoTracking().IsEmpty()
-            || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+        return db.HydraLinksItems.AsNoTracking().IsEmpty() ||
+               storage.Cached.DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
     }
 }

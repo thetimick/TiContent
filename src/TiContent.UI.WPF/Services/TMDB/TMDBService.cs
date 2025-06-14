@@ -16,18 +16,14 @@ namespace TiContent.UI.WPF.Services.TMDB;
 
 public partial class TMDBService(IRestClient client, IStorageService storage)
 {
-    private string TMDBApiBaseUrl =>
-        storage.Cached?.Urls.TMDBApiBaseUrl ?? AppConstants.Urls.TMDBApiBaseUrl;
+    private string TMDBApiBaseUrl => storage.Cached?.Urls.TMDBApiBaseUrl ?? AppConstants.Urls.TMDBApiBaseUrl;
 }
 
 // ITMDBService
 
 public partial class TMDBService : ITMDBService
 {
-    public async Task<TMDBResponseEntity> ObtainNowPlayingAsync(
-        int page,
-        CancellationToken token = default
-    )
+    public async Task<TMDBResponseEntity> ObtainNowPlayingAsync(int page, CancellationToken token = default)
     {
         var request = MakeRequest("/3/movie/now_playing").AddParameter("page", page);
         var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
@@ -39,14 +35,9 @@ public partial class TMDBService : ITMDBService
         throw new Exception();
     }
 
-    public async Task<TMDBResponseEntity> ObtainTrendingAsync(
-        TMDBTrendingRequestEntity requestEntity,
-        CancellationToken token = default
-    )
+    public async Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity requestEntity, CancellationToken token = default)
     {
-        var request = MakeRequest(
-                $"/3/trending/{requestEntity.Content.RawValue()}/{requestEntity.Period.RawValue()}"
-            )
+        var request = MakeRequest($"/3/trending/{requestEntity.Content.RawValue()}/{requestEntity.Period.RawValue()}")
             .AddParameter("page", requestEntity.Page);
         var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
 
@@ -57,10 +48,7 @@ public partial class TMDBService : ITMDBService
         throw new Exception();
     }
 
-    public async Task<TMDBResponseEntity> ObtainSearchAsync(
-        TMDBSearchRequestEntity requestEntity,
-        CancellationToken token = default
-    )
+    public async Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity requestEntity, CancellationToken token = default)
     {
         var request = MakeRequest($"/3/search/{requestEntity.Content.RawValue()}")
             .AddParameter("query", requestEntity.Query)
@@ -82,8 +70,6 @@ public partial class TMDBService
     private RestRequest MakeRequest(string path)
     {
         var url = UrlHelper.Combine(TMDBApiBaseUrl, path);
-        return new RestRequest(url)
-            .AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey)
-            .AddParameter("language", "ru");
+        return new RestRequest(url).AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey).AddParameter("language", "ru");
     }
 }

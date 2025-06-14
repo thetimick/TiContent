@@ -16,115 +16,81 @@ public record JacredEntity
 {
     public enum VideoTypeEntity
     {
-        [Description("SDR")]
-        SDR,
+        [Description("SDR")] SDR,
 
-        [Description("HDR")]
-        HDR,
+        [Description("HDR")] HDR,
 
-        [Description("n/n")]
-        None,
+        [Description("n/n")] None
     }
 
     public enum TrackerEntity
     {
-        [Description("bitru")]
-        Bitru,
+        [Description("bitru")] Bitru,
 
-        [Description("kinozal")]
-        Kinozal,
+        [Description("kinozal")] Kinozal,
 
-        [Description("megapeer")]
-        Megapeer,
+        [Description("megapeer")] Megapeer,
 
-        [Description("nnmclub")]
-        NNMClub,
+        [Description("nnmclub")] NNMClub,
 
-        [Description("rutor")]
-        Rutor,
+        [Description("rutor")] Rutor,
 
-        [Description("rutracker")]
-        Rutracker,
+        [Description("rutracker")] Rutracker,
 
-        [Description("toloka")]
-        Toloka,
+        [Description("toloka")] Toloka,
 
-        [Description("selezen")]
-        Selezen,
+        [Description("selezen")] Selezen,
 
-        [Description("anilibria")]
-        Anilibria,
+        [Description("anilibria")] Anilibria,
 
-        [Description("torrentby")]
-        TorrentBy,
+        [Description("torrentby")] TorrentBy,
 
-        [Description("baibako")]
-        Baibako,
+        [Description("baibako")] Baibako,
 
-        [Description("animelayer")]
-        AnimeLayer,
+        [Description("animelayer")] AnimeLayer,
 
-        [Description("lostfilm")]
-        LostFilm,
+        [Description("lostfilm")] LostFilm,
 
-        [Description("n/n")]
-        None,
+        [Description("n/n")] None
     }
 
-    [JsonPropertyName("tracker")]
-    [JsonConverter(typeof(TrackerConverter))]
+    [JsonPropertyName("tracker")] [JsonConverter(typeof(TrackerConverter))]
     public TrackerEntity Tracker { get; init; }
 
-    [JsonPropertyName("url")]
-    public string? Url { get; init; }
+    [JsonPropertyName("url")] public string? Url { get; init; }
 
-    [JsonPropertyName("title")]
-    public string? Title { get; init; }
+    [JsonPropertyName("title")] public string? Title { get; init; }
 
-    [JsonPropertyName("size")]
-    [JsonConverter(typeof(ByteSizeConverter))]
+    [JsonPropertyName("size")] [JsonConverter(typeof(ByteSizeConverter))]
     public ByteSize Size { get; init; }
 
-    [JsonPropertyName("sizeName")]
-    public string? SizeName { get; init; }
+    [JsonPropertyName("sizeName")] public string? SizeName { get; init; }
 
-    [JsonPropertyName("createTime")]
-    [JsonConverter(typeof(DateTimeConverter))]
+    [JsonPropertyName("createTime")] [JsonConverter(typeof(DateTimeConverter))]
     public DateTime? CreateTime { get; init; }
 
-    [JsonPropertyName("sid")]
-    public int? Sid { get; init; }
+    [JsonPropertyName("sid")] public int? Sid { get; init; }
 
-    [JsonPropertyName("pir")]
-    public int? Pir { get; init; }
+    [JsonPropertyName("pir")] public int? Pir { get; init; }
 
-    [JsonPropertyName("magnet")]
-    public string? Magnet { get; init; }
+    [JsonPropertyName("magnet")] public string? Magnet { get; init; }
 
-    [JsonPropertyName("name")]
-    public string? Name { get; init; }
+    [JsonPropertyName("name")] public string? Name { get; init; }
 
-    [JsonPropertyName("originalname")]
-    public string? OriginalName { get; init; }
+    [JsonPropertyName("originalname")] public string? OriginalName { get; init; }
 
-    [JsonPropertyName("relased")]
-    public int Released { get; init; }
+    [JsonPropertyName("relased")] public int Released { get; init; }
 
-    [JsonPropertyName("videotype")]
-    [JsonConverter(typeof(VideoTypeConverter))]
+    [JsonPropertyName("videotype")] [JsonConverter(typeof(VideoTypeConverter))]
     public VideoTypeEntity VideoType { get; init; }
 
-    [JsonPropertyName("quality")]
-    public int? Quality { get; init; }
+    [JsonPropertyName("quality")] public int? Quality { get; init; }
 
-    [JsonPropertyName("voices")]
-    public List<string>? Voices { get; init; }
+    [JsonPropertyName("voices")] public List<string>? Voices { get; init; }
 
-    [JsonPropertyName("seasons")]
-    public List<long>? Seasons { get; init; }
+    [JsonPropertyName("seasons")] public List<long>? Seasons { get; init; }
 
-    [JsonPropertyName("types")]
-    public List<string>? Types { get; init; }
+    [JsonPropertyName("types")] public List<string>? Types { get; init; }
 
     public string AggregatedDescription => MakeDescription();
 
@@ -153,22 +119,21 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
     )
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
-        return value switch
-        {
-            "bitru" => JacredEntity.TrackerEntity.Bitru,
-            "kinozal" => JacredEntity.TrackerEntity.Kinozal,
-            "megapeer" => JacredEntity.TrackerEntity.Megapeer,
-            "nnmclub" => JacredEntity.TrackerEntity.NNMClub,
-            "rutor" => JacredEntity.TrackerEntity.Rutor,
-            "rutracker" => JacredEntity.TrackerEntity.Rutracker,
-            "toloka" => JacredEntity.TrackerEntity.Toloka,
-            "selezen" => JacredEntity.TrackerEntity.Selezen,
-            "anilibria" => JacredEntity.TrackerEntity.Anilibria,
-            "torrentby" => JacredEntity.TrackerEntity.TorrentBy,
-            "baibako" => JacredEntity.TrackerEntity.Baibako,
+        return value switch {
+            "bitru"      => JacredEntity.TrackerEntity.Bitru,
+            "kinozal"    => JacredEntity.TrackerEntity.Kinozal,
+            "megapeer"   => JacredEntity.TrackerEntity.Megapeer,
+            "nnmclub"    => JacredEntity.TrackerEntity.NNMClub,
+            "rutor"      => JacredEntity.TrackerEntity.Rutor,
+            "rutracker"  => JacredEntity.TrackerEntity.Rutracker,
+            "toloka"     => JacredEntity.TrackerEntity.Toloka,
+            "selezen"    => JacredEntity.TrackerEntity.Selezen,
+            "anilibria"  => JacredEntity.TrackerEntity.Anilibria,
+            "torrentby"  => JacredEntity.TrackerEntity.TorrentBy,
+            "baibako"    => JacredEntity.TrackerEntity.Baibako,
             "animelayer" => JacredEntity.TrackerEntity.AnimeLayer,
-            "lostfilm" => JacredEntity.TrackerEntity.LostFilm,
-            _ => JacredEntity.TrackerEntity.None,
+            "lostfilm"   => JacredEntity.TrackerEntity.LostFilm,
+            _            => JacredEntity.TrackerEntity.None
         };
     }
 
@@ -232,11 +197,10 @@ internal class VideoTypeConverter : JsonConverter<JacredEntity.VideoTypeEntity>
     )
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
-        return value switch
-        {
+        return value switch {
             "sdr" => JacredEntity.VideoTypeEntity.SDR,
             "hdr" => JacredEntity.VideoTypeEntity.HDR,
-            _ => JacredEntity.VideoTypeEntity.None,
+            _     => JacredEntity.VideoTypeEntity.None
         };
     }
 

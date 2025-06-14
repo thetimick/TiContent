@@ -7,12 +7,12 @@ using System.Text;
 namespace TiContent.UI.WPF.Components.Extensions;
 
 /// <summary>
-/// String extensions.
+///     String extensions.
 /// </summary>
 public static class StringExtension
 {
     /// <summary>
-    /// Returns true if string is null or empty.
+    ///     Returns true if string is null or empty.
     /// </summary>
     public static bool IsNullOrEmpty([NotNullWhen(false)] this string? s)
     {
@@ -20,7 +20,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns true if string is null, empty or only whitespaces.
+    ///     Returns true if string is null, empty or only whitespaces.
     /// </summary>
     public static bool IsNullOrWhiteSpace(this string s)
     {
@@ -28,19 +28,17 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns specified value if string is null/empty/whitespace else same string.
+    ///     Returns specified value if string is null/empty/whitespace else same string.
     /// </summary>
     public static string Or(this string s, string or)
     {
         if (!s.IsNullOrWhiteSpace())
-        {
             return s;
-        }
         return or;
     }
 
     /// <summary>
-    /// Returns empty if string is null/empty/whitespace else same string.
+    ///     Returns empty if string is null/empty/whitespace else same string.
     /// </summary>
     public static string OrEmpty(this string s)
     {
@@ -48,7 +46,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns null if string is null/empty else same string.
+    ///     Returns null if string is null/empty else same string.
     /// </summary>
     public static string NullIfEmpty(this string s)
     {
@@ -56,7 +54,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns null if string is null/empty/whitespace else same string.
+    ///     Returns null if string is null/empty/whitespace else same string.
     /// </summary>
     public static string NullIfWhiteSpace(this string s)
     {
@@ -64,7 +62,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns html-encoded string.
+    ///     Returns html-encoded string.
     /// </summary>
     public static string HtmlEncode(this string s)
     {
@@ -72,7 +70,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns html-decoded string.
+    ///     Returns html-decoded string.
     /// </summary>
     public static string HtmlDecode(this string s)
     {
@@ -80,7 +78,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns url-encoded string.
+    ///     Returns url-encoded string.
     /// </summary>
     public static string UrlEncode(this string s)
     {
@@ -88,7 +86,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns url-decoded string.
+    ///     Returns url-decoded string.
     /// </summary>
     public static string UrlDecode(this string s)
     {
@@ -96,7 +94,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Formats string as string.Format() but the parameter index is optional and parameter meta is allowed.
+    ///     Formats string as string.Format() but the parameter index is optional and parameter meta is allowed.
     /// </summary>
     /// <example>"{} is a {1}".Format("this", "test")</example>
     public static string Format(this string format, params object[] args)
@@ -116,33 +114,30 @@ public static class StringExtension
                     i += 2;
                     continue;
                 }
-                else
-                {
-                    break;
-                }
+
+                break;
             }
+
             // stop at '{'
             if (buffer[i] != '{')
             {
                 i++;
                 continue;
             }
+
             // skip escaped curly "{{"
             if (i + 1 < buffer.Length && buffer[i + 1] == '{')
             {
                 i += 2;
                 continue;
             }
+
             var start = i;
             while (i < buffer.Length && buffer[i] != '}')
-            {
                 i++;
-            }
             // open curly is not matched, break
             if (i == buffer.Length)
-            {
                 break;
-            }
             var end = i;
             //// at this point buffer[start..end] has format field
             //// insert parameter index only if not present
@@ -156,9 +151,7 @@ public static class StringExtension
             var metastart = start + 1;
             var metaend = metastart;
             while (buffer[metaend] != '}' && buffer[metaend] != ':' && buffer[metaend] != ',')
-            {
                 metaend++;
-            }
             var paramMeta = buffer.ToString(metastart, metaend - metastart).Trim();
             // insert param only if meta is not int
             if (!int.TryParse(paramMeta, out _))
@@ -180,9 +173,11 @@ public static class StringExtension
                         paramMetaToIndexMap[paramMeta] = param.ToString();
                         param++;
                     }
+
                     // do not increment param as param index is reused
                     paramIndex = paramMetaToIndexMap[paramMeta];
                 }
+
                 // insert index
                 buffer.Insert(metastart, paramIndex);
                 // adjust end as buffer is removed from and inserted into
@@ -192,82 +187,81 @@ public static class StringExtension
             {
                 param++;
             }
+
             i = end + 1; // i++ does not work
         }
+
         var formatConverted = buffer.ToString();
         return string.Format(formatConverted, args);
     }
 
     /// <summary>
-    /// Try-parses string to bool, else default value.
+    ///     Try-parses string to bool, else default value.
     /// </summary>
     public static bool ToBool(this string value, bool defaultValue)
     {
         bool result;
         if (bool.TryParse(value, out result))
-        {
             return result;
-        }
         return defaultValue;
     }
 
     /// <summary>
-    /// Munges substitutions.
+    ///     Munges substitutions.
     /// </summary>
-    private static List<KeyValuePair<string, string>> mungeUnmungeSubstitutions =
+    private static readonly List<KeyValuePair<string, string>> mungeUnmungeSubstitutions =
         GetMungeUnmungeSubstitutions();
 
     private static List<KeyValuePair<string, string>> GetMungeUnmungeSubstitutions()
     {
         var mungeSubstitutions = new List<KeyValuePair<string, string>>();
-        new[]
-        {
-            new[] { "a", "@" },
-            new[] { "b", "8" },
-            new[] { "c", "(" },
-            new[] { "d", "6" },
-            new[] { "e", "3" },
-            new[] { "f", "#" },
-            new[] { "g", "9" },
-            new[] { "h", "#" },
-            new[] { "i", "1" },
-            new[] { "i", "!" },
-            new[] { "k", "<" },
-            new[] { "l", "1" },
-            new[] { "l", "i" },
-            new[] { "o", "0" },
-            new[] { "q", "9" },
-            new[] { "s", "$" },
-            new[] { "s", "5" },
-            new[] { "t", "+" },
-            new[] { "v", ">" },
-            new[] { "v", "<" },
-            new[] { "w", "uu" },
-            new[] { "w", "2u" },
-            new[] { "x", "%" },
-            new[] { "y", "?" },
-        }
+        new[] {
+                new[] { "a", "@" },
+                new[] { "b", "8" },
+                new[] { "c", "(" },
+                new[] { "d", "6" },
+                new[] { "e", "3" },
+                new[] { "f", "#" },
+                new[] { "g", "9" },
+                new[] { "h", "#" },
+                new[] { "i", "1" },
+                new[] { "i", "!" },
+                new[] { "k", "<" },
+                new[] { "l", "1" },
+                new[] { "l", "i" },
+                new[] { "o", "0" },
+                new[] { "q", "9" },
+                new[] { "s", "$" },
+                new[] { "s", "5" },
+                new[] { "t", "+" },
+                new[] { "v", ">" },
+                new[] { "v", "<" },
+                new[] { "w", "uu" },
+                new[] { "w", "2u" },
+                new[] { "x", "%" },
+                new[] { "y", "?" }
+            }
             .ToList()
             .ForEach(x => mungeSubstitutions.Add(new KeyValuePair<string, string>(x[0], x[1])));
         return mungeSubstitutions;
     }
 
     /// <summary>
-    /// key->value[] map.
+    ///     key->value[] map.
     /// </summary>
-    private static IDictionary<string, string[]> mungeMap = mungeUnmungeSubstitutions
+    private static readonly IDictionary<string, string[]> mungeMap = mungeUnmungeSubstitutions
         .GroupBy(x => x.Key)
         .ToDictionary(g => g.Key, g => g.Select(x => x.Value).ToArray());
 
     /// <summary>
-    /// value->key[] map.
+    ///     value->key[] map.
     /// </summary>
-    private static IDictionary<string, string[]> unmungeMap = mungeUnmungeSubstitutions
+    private static readonly IDictionary<string, string[]> unmungeMap = mungeUnmungeSubstitutions
         .GroupBy(x => x.Value)
         .ToDictionary(g => g.Key, g => g.Select(x => x.Key).ToArray());
 
     /// <summary>
-    /// Munges or unmunges password as per substitution map.
+    ///     Munges or unmunges password as per substitution map.
     /// </summary>
     private static IList<string> MungeUnmunge(
         this string password,
@@ -289,7 +283,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Munges or unmunges recursively.
+    ///     Munges or unmunges recursively.
     /// </summary>
     /// <param name="password">Password to munge/unmunge.</param>
     /// <param name="muMap">Substitution map.</param>
@@ -313,16 +307,15 @@ public static class StringExtension
             items.Add(buffer.ToString());
             return;
         }
+
         Func<string, int, int, string> substring = (pwd, idx, len) =>
         {
             if (idx + len > pwd.Length)
-            {
                 return null;
-            }
             return pwd.Substring(idx, len);
         };
         // look ahead 1, 2 chars only
-        for (int length = 1; length <= 2; length++)
+        for (var length = 1; length <= 2; length++)
         {
             var part = substring(password, index, length);
             foreach (
@@ -347,7 +340,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns the munged/unmunged parts for part.
+    ///     Returns the munged/unmunged parts for part.
     /// </summary>
     /// <example>munge("o"), returns {"o", "0"}.</example>
     /// <example>Unmunge("0"), returns {"o"}.</example>
@@ -359,9 +352,7 @@ public static class StringExtension
     )
     {
         if (part == null)
-        {
             yield break;
-        }
         // yield same replacement for part as before
         if (partReplaceMap.ContainsKey(part))
         {
@@ -371,25 +362,19 @@ public static class StringExtension
         {
             // yield same part only if munging and length 1
             if (isMunging)
-            {
                 yield return part;
-            }
             // yield if in muMap
             string[] muParts;
             if (muMap.TryGetValue(part, out muParts))
             {
                 foreach (var muPart in muParts)
-                {
                     yield return muPart;
-                }
             }
             else
             {
                 // yield only if not munging and not in muMap
                 if (!isMunging)
-                {
                     yield return part;
-                }
             }
         }
         else if (part.Length == 2)
@@ -397,17 +382,13 @@ public static class StringExtension
             // yield only if in muMap
             string[] muParts;
             if (muMap.TryGetValue(part, out muParts))
-            {
                 foreach (var muPart in muParts)
-                {
                     yield return muPart;
-                }
-            }
         }
     }
 
     /// <summary>
-    /// Munges a password (up to two chars).
+    ///     Munges a password (up to two chars).
     /// </summary>
     /// <remarks>http://en.wikipedia.org/wiki/Munged_password</remarks>
     public static IEnumerable<string> Munge(this string password)
@@ -415,14 +396,12 @@ public static class StringExtension
         var items = MungeUnmunge(password, mungeMap, true);
         // 1st item is same as password
         if (items.Any() && items[0] == password)
-        {
             items.RemoveAt(0);
-        }
         return items.AsEnumerable();
     }
 
     /// <summary>
-    /// Unmunges a (munged) password (up to two chars).
+    ///     Unmunges a (munged) password (up to two chars).
     /// </summary>
     /// <remarks>http://en.wikipedia.org/wiki/Munged_password</remarks>
     public static IEnumerable<string> Unmunge(this string password)
@@ -430,14 +409,12 @@ public static class StringExtension
         var items = MungeUnmunge(password, unmungeMap, false);
         // remove 1st item if same as password
         if (items.Any() && items[0] == password)
-        {
             items.RemoveAt(0);
-        }
         return items.AsEnumerable();
     }
 
     /// <summary>
-    /// Parses a string in UTC format as DateTime.
+    ///     Parses a string in UTC format as DateTime.
     /// </summary>
     public static DateTime ParseAsUtc(this string s)
     {
@@ -445,7 +422,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Converts a string to title case.
+    ///     Converts a string to title case.
     /// </summary>
     /// <example>"war and peace" -> "War And Peace"</example>
     public static string ToTitleCase(this string s)
@@ -454,7 +431,7 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Splits csv string using common delimiters.
+    ///     Splits csv string using common delimiters.
     /// </summary>
     public static IEnumerable<string> SplitCsv(this string s)
     {
@@ -462,31 +439,27 @@ public static class StringExtension
     }
 
     /// <summary>
-    /// Returns substring from start of length <paramref name="n"/>.
+    ///     Returns substring from start of length <paramref name="n" />.
     /// </summary>
     public static string SubstringFromStart(this string source, int n)
     {
         if (n >= source.Length)
-        {
             return source;
-        }
         return source.Substring(0, n);
     }
 
     /// <summary>
-    /// Returns substring till end of length <paramref name="n"/>.
+    ///     Returns substring till end of length <paramref name="n" />.
     /// </summary>
     public static string SubstringTillEnd(this string source, int n)
     {
         if (n >= source.Length)
-        {
             return source;
-        }
         return source.Substring(source.Length - n);
     }
 
     /// <summary>
-    /// Returns substring by specifying start index and end index.
+    ///     Returns substring by specifying start index and end index.
     /// </summary>
     public static string SubstringByIndex(this string source, int startIndex, int endIndex)
     {

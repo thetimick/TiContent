@@ -13,7 +13,6 @@ using Microsoft.Extensions.Logging;
 using TiContent.UI.WPF.Components.Extensions;
 using TiContent.UI.WPF.Components.Helpers;
 using TiContent.UI.WPF.Components.Wrappers;
-using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Jacred;
 using Wpf.Ui.Violeta.Controls;
@@ -22,21 +21,17 @@ namespace TiContent.UI.WPF.ViewModels.Jacred;
 
 public partial class JacredWindowViewModel
     : ObservableRecipient,
-        IRecipient<JacredWindowViewModel.RecipientModel>
+      IRecipient<JacredWindowViewModel.RecipientModel>
 {
     // Observable
 
-    [ObservableProperty]
-    public partial string Title { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Title { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial string Description { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Description { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<JacredEntity> Items { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<JacredEntity> Items { get; set; } = [];
 
     // Private Props
 

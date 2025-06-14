@@ -30,24 +30,19 @@ namespace TiContent.UI.WinUI.UI.Pages.GamesSource;
 
 public partial class GamesSourcePageViewModel
     : ObservableObject,
-        IRecipient<GamesSourcePageViewModel.InitialDataEntity>
+      IRecipient<GamesSourcePageViewModel.InitialDataEntity>
 {
     // Observable
 
-    [ObservableProperty]
-    public partial string Title { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Title { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial string Description { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Description { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial AdvancedCollectionView Items { get; set; } = [];
+    [ObservableProperty] public partial AdvancedCollectionView Items { get; set; } = [];
 
-    [ObservableProperty]
-    public partial int SortOrder { get; set; }
+    [ObservableProperty] public partial int SortOrder { get; set; }
 
-    [ObservableProperty]
-    public partial FiltersEntity Filters { get; set; } = new();
+    [ObservableProperty] public partial FiltersEntity Filters { get; set; } = new();
 
     // Private Props
 
@@ -87,8 +82,7 @@ public partial class GamesSourcePageViewModel
     partial void OnSortOrderChanged(int value)
     {
         ApplySort();
-        if (_storage.Cached != null)
-            _storage.Cached.GamesSource.SortOrder = value;
+        _storage.Cached.GamesSource.SortOrder = value;
     }
 
     private void FiltersOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -110,7 +104,7 @@ public partial class GamesSourcePageViewModel
     public void Receive(InitialDataEntity message)
     {
         Title = message.Query;
-        SortOrder = _storage.Cached?.GamesSource.SortOrder ?? 0;
+        SortOrder = _storage.Cached.GamesSource.SortOrder;
 
         ObtainItems();
     }
@@ -187,10 +181,10 @@ public partial class GamesSourcePageViewModel
             {
                 case 1:
                     passed &= item.Link.Contains("magnet");
-                    break;
+                break;
                 case 2:
                     passed &= !item.Link.Contains("magnet");
-                    break;
+                break;
             }
 
             return passed;
@@ -201,8 +195,7 @@ public partial class GamesSourcePageViewModel
 
     private void ApplySort()
     {
-        var description = SortOrder switch
-        {
+        var description = SortOrder switch {
             0 => new SortDescription(
                 nameof(GamesSourcePageItemEntity.Date),
                 SortDirection.Descending
@@ -219,7 +212,7 @@ public partial class GamesSourcePageViewModel
                 nameof(GamesSourcePageItemEntity.Size),
                 SortDirection.Descending
             ),
-            _ => null,
+            _ => null
         };
 
         if (description == null)
@@ -247,13 +240,10 @@ public partial class GamesSourcePageViewModel
 {
     public partial class FiltersEntity : ObservableObject
     {
-        [ObservableProperty]
-        public partial ObservableCollection<string> Owners { get; set; } = [];
+        [ObservableProperty] public partial ObservableCollection<string> Owners { get; set; } = [];
 
-        [ObservableProperty]
-        public partial int OwnersIndex { get; set; }
+        [ObservableProperty] public partial int OwnersIndex { get; set; }
 
-        [ObservableProperty]
-        public partial int LinksIndex { get; set; }
+        [ObservableProperty] public partial int LinksIndex { get; set; }
     }
 }

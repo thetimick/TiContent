@@ -13,14 +13,12 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ThrottleDebounce;
-using TiContent.UI.WPF.Application;
 using TiContent.UI.WPF.Components.Abstractions;
 using TiContent.UI.WPF.Components.Extensions;
 using TiContent.UI.WPF.Components.Wrappers;
 using TiContent.UI.WPF.DataSources;
 using TiContent.UI.WPF.Entities.API.TMDB;
 using TiContent.UI.WPF.Entities.ViewModel;
-using TiContent.UI.WPF.Providers;
 using TiContent.UI.WPF.ViewModels.Jacred;
 using TiContent.UI.WPF.Windows.Jacred;
 using Wpf.Ui.Violeta.Controls;
@@ -31,17 +29,13 @@ public partial class FilmsPageViewModel : ObservableObject
 {
     // Observable
 
-    [ObservableProperty]
-    public partial ViewStateEnum ViewState { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty] public partial ViewStateEnum ViewState { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty]
-    public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial int FilterByContentSelectedIndex { get; set; } = 0;
+    [ObservableProperty] public partial int FilterByContentSelectedIndex { get; set; } = 0;
 
-    [ObservableProperty]
-    public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
 
     // Private Props
 
@@ -85,7 +79,7 @@ public partial class FilmsPageViewModel : ObservableObject
     public void OnScrollChanged(double offset, double height)
     {
         if (!_dataSource.InProgress && !Items.IsEmpty() && height - offset < 100)
-            ObtainItemsFromDataSource(pagination: true);
+            ObtainItemsFromDataSource(true);
     }
 
     // Observable Methods
@@ -150,7 +144,7 @@ public partial class FilmsPageViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                _logger.LogError("{ex}", ex);
+                _logger.LogError("{Exception}", ex);
                 DispatcherWrapper.InvokeOnMain(() =>
                 {
                     Toast.Error("Ошибка при попытке получения данных", ToastLocation.BottomRight);

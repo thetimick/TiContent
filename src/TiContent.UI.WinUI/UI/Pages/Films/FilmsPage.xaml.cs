@@ -94,7 +94,6 @@ public partial class FilmsPage
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
         if (sender is Image { Tag: string url } image)
-        {
             Task.Run(async () =>
             {
                 try
@@ -119,7 +118,6 @@ public partial class FilmsPage
                     throw;
                 }
             });
-        }
     }
 
     // AutoSuggestBox

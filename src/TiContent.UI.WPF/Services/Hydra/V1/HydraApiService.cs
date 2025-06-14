@@ -75,12 +75,11 @@ public class HydraApiService(IRestClient client, IStorageService storage) : IHyd
 
         await Task.WhenAll(genres, tags, developers, publishers);
 
-        return new HydraFiltersEntity
-        {
+        return new HydraFiltersEntity {
             Genres = genres.Result.Data ?? new HydraFiltersEntity.HydraFiltersGenresEntity(),
             Tags = tags.Result.Data ?? new HydraFiltersEntity.HydraFiltersTagsEntity(),
             Developers = developers.Result.Data ?? [],
-            Publishers = publishers.Result.Data ?? [],
+            Publishers = publishers.Result.Data ?? []
         };
     }
 }

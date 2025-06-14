@@ -22,6 +22,7 @@ public static class ByteArrayExtensions
             await dataWriter.StoreAsync();
             dataWriter.DetachStream();
         }
+
         randomAccessStream.Seek(0);
         return randomAccessStream;
     }

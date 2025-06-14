@@ -32,26 +32,19 @@ public partial class FilmsPageViewModel : ObservableObject
 {
     // Observable
 
-    [ObservableProperty]
-    public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty] public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
 
-    [ObservableProperty]
-    public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
 
-    [ObservableProperty]
-    public partial int ContentType { get; set; }
+    [ObservableProperty] public partial int ContentType { get; set; }
 
-    [ObservableProperty]
-    public partial bool ContentTypeIsEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool ContentTypeIsEnabled { get; set; } = true;
 
-    [ObservableProperty]
-    public partial double ScrollViewOffset { get; set; } = 0;
+    [ObservableProperty] public partial double ScrollViewOffset { get; set; } = 0;
 
     // Private Props
 
@@ -146,7 +139,7 @@ public partial class FilmsPageViewModel
             && Items.Count >= 20
             && height - offset < 1
         )
-            ObtainItemsFromDataSource(pagination: true);
+            ObtainItemsFromDataSource(true);
     }
 
     public void TapOnOpenFilmsSourceButton(string id)

@@ -16,25 +16,19 @@ namespace TiContent.Foundation.Entities.Api.HydraLinks;
 
 public record HydraLinksResponseEntity
 {
-    [JsonPropertyName("name")]
-    public string? Name { get; set; }
+    [JsonPropertyName("name")] public string? Name { get; set; }
 
-    [JsonPropertyName("downloads")]
-    public List<ItemsEntity>? Items { get; set; }
+    [JsonPropertyName("downloads")] public List<ItemsEntity>? Items { get; set; }
 
     public record ItemsEntity
     {
-        [JsonPropertyName("title")]
-        public string Title { get; set; } = string.Empty;
+        [JsonPropertyName("title")] public string Title { get; set; } = string.Empty;
 
-        [JsonPropertyName("uploadDate")]
-        public string? UploadDate { get; set; }
+        [JsonPropertyName("uploadDate")] public string? UploadDate { get; set; }
 
-        [JsonPropertyName("fileSize")]
-        public string FileSize { get; set; } = string.Empty;
+        [JsonPropertyName("fileSize")] public string FileSize { get; set; } = string.Empty;
 
-        [JsonPropertyName("uris")]
-        public IList<string>? Links { get; set; }
+        [JsonPropertyName("uris")] public IList<string>? Links { get; set; }
     }
 }
 

@@ -14,12 +14,10 @@ namespace TiContent.UI.WPF.ViewModels.Main.Pages;
 
 public partial class AboutPageViewModel : ObservableObject
 {
-    [ObservableProperty]
-    public partial string Version { get; set; } =
+    [ObservableProperty] public partial string Version { get; set; } =
         $"v.{Assembly.GetExecutingAssembly().GetName().Version?.ToString(2)}";
 
-    [ObservableProperty]
-    public partial string Licences { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Licences { get; set; } = string.Empty;
 
     [RelayCommand]
     private void OnLoaded()

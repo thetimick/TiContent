@@ -29,9 +29,7 @@ public partial class HydraLinksService : IHydraLinksService
             return [];
 
         var sourceRequest = new RestRequest(storage.Cached.Urls.HydraLinksSources);
-        var sourceResponse = await client.ExecuteAsync<HydraLinksSourcesResponseEntity>(
-            sourceRequest
-        );
+        var sourceResponse = await client.ExecuteAsync<HydraLinksSourcesResponseEntity>(sourceRequest);
 
         if (sourceResponse is not { IsSuccessful: true, Data: { } data })
             return [];
@@ -43,9 +41,6 @@ public partial class HydraLinksService : IHydraLinksService
 
         await Parallel.ForEachAsync(tasks, async (task, token) => await task.WaitAsync(token));
 
-        return tasks
-            .Where(task => task.Result.IsSuccessful)
-            .Select(task => task.Result.Data)
-            .ToList();
+        return tasks.Where(task => task.Result.IsSuccessful).Select(task => task.Result.Data).ToList();
     }
 }

@@ -7,7 +7,6 @@
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -21,33 +20,26 @@ using TiContent.UI.WPF.DataSources;
 using TiContent.UI.WPF.Entities.Legacy.HydraLinks;
 using TiContent.UI.WPF.Resources.Localization;
 using Wpf.Ui.Violeta.Controls;
-using Process = System.Diagnostics.Process;
 
 namespace TiContent.UI.WPF.ViewModels.HydraLinks;
 
 public partial class HydraLinksWindowViewModel
     : ObservableRecipient,
-        IRecipient<HydraLinksWindowViewModel.MessageEntity>
+      IRecipient<HydraLinksWindowViewModel.MessageEntity>
 {
     // Observable
 
-    [ObservableProperty]
-    public partial string Title { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Title { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial string Description { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Description { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial SortModel Sort { get; set; } = new();
+    [ObservableProperty] public partial SortModel Sort { get; set; } = new();
 
-    [ObservableProperty]
-    public partial FiltersModel Filters { get; set; } = new();
+    [ObservableProperty] public partial FiltersModel Filters { get; set; } = new();
 
-    [ObservableProperty]
-    public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<HydraLinksEntity> Items { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<HydraLinksEntity> Items { get; set; } = [];
 
     // Private Props
 
@@ -104,10 +96,9 @@ public partial class HydraLinksWindowViewModel
         if (_items.IsEmpty())
             return;
 
-        Items = e.PropertyName switch
-        {
+        Items = e.PropertyName switch {
             nameof(Sort.SortItemsSelectedIndex) => SortAndFilterItems(_items).ToObservable(),
-            _ => Items,
+            _                                   => Items
         };
     }
 
@@ -116,10 +107,9 @@ public partial class HydraLinksWindowViewModel
         if (_items.IsEmpty())
             return;
 
-        Items = e.PropertyName switch
-        {
+        Items = e.PropertyName switch {
             nameof(FiltersModel.FilterSelectedIndex) => SortAndFilterItems(_items).ToObservable(),
-            _ => Items,
+            _                                        => Items
         };
     }
 }
@@ -191,12 +181,11 @@ public partial class HydraLinksWindowViewModel
             listItems = listItems.Where(entity => entity.Owner == filter).ToList();
 
         // Сортировка
-        listItems = sort switch
-        {
+        listItems = sort switch {
             0 => listItems.OrderByDescending(entity => entity.Title).ToList(),
             1 => listItems.OrderByDescending(entity => entity.UploadDate).ToList(),
             2 => listItems.OrderByDescending(entity => entity.FileSize).ToList(),
-            _ => listItems.ToList(),
+            _ => listItems.ToList()
         };
 
         Sort.SortIsEnabled = listItems.Count > 1;
@@ -214,30 +203,23 @@ public partial class HydraLinksWindowViewModel
 
     public partial class SortModel : ObservableObject
     {
-        [ObservableProperty]
-        public partial ObservableCollection<object> SortItems { get; set; } =
-            [
-                new ComboBoxItem { Content = "По Названию" },
-                new ComboBoxItem { Content = "По Дате" },
-                new ComboBoxItem { Content = "По Размеру" },
-            ];
+        [ObservableProperty] public partial ObservableCollection<object> SortItems { get; set; } = [
+            new ComboBoxItem { Content = "По Названию" },
+            new ComboBoxItem { Content = "По Дате" },
+            new ComboBoxItem { Content = "По Размеру" }
+        ];
 
-        [ObservableProperty]
-        public partial int SortItemsSelectedIndex { get; set; } = 1;
+        [ObservableProperty] public partial int SortItemsSelectedIndex { get; set; } = 1;
 
-        [ObservableProperty]
-        public partial bool SortIsEnabled { get; set; } = false;
+        [ObservableProperty] public partial bool SortIsEnabled { get; set; } = false;
     }
 
     public partial class FiltersModel : ObservableObject
     {
-        [ObservableProperty]
-        public partial ObservableCollection<object> FilterItems { get; set; } = [];
+        [ObservableProperty] public partial ObservableCollection<object> FilterItems { get; set; } = [];
 
-        [ObservableProperty]
-        public partial int FilterSelectedIndex { get; set; }
+        [ObservableProperty] public partial int FilterSelectedIndex { get; set; }
 
-        [ObservableProperty]
-        public partial bool FilterIsEnabled { get; set; } = false;
+        [ObservableProperty] public partial bool FilterIsEnabled { get; set; } = false;
     }
 }

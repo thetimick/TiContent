@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using System.Text.Json;
 using TiContent.UI.WPF.Entities;
-using TiContent.UI.WPF.Entities.Legacy;
 
 namespace TiContent.UI.WPF.Services.Storage;
 

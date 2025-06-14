@@ -39,10 +39,7 @@ public partial record GamesPageItemEntity
                 .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.LibraryImageUrl))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Shop, opt => opt.MapFrom(src => src.Shop.Humanize()))
-                .ForMember(
-                    dest => dest.Publisher,
-                    opt => opt.MapFrom(src => src.Publisher.Humanize())
-                )
+                .ForMember(dest => dest.Publisher, opt => opt.MapFrom(src => src.Publisher.Humanize()))
                 .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Genres.Humanize()));
         }
     }

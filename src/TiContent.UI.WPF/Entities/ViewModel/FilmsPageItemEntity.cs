@@ -29,24 +29,12 @@ public partial record FilmsPageItemEntity
         {
             CreateMap<TMDBResponseEntity.ItemEntity, FilmsPageItemEntity>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                .ForMember(
-                    dest => dest.ImageUrl,
-                    opt =>
-                        opt.MapFrom(src =>
-                            $"{AppConstants.Urls.TMDBAssetsApi}/t/p/w200{src.PosterPath}"
-                        )
-                )
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => $"{AppConstants.Urls.TMDBAssetsApi}/t/p/w200{src.PosterPath}"))
                 .ForMember(
                     dest => dest.Title,
-                    opt =>
-                        opt.MapFrom(src =>
-                            src.Title ?? src.OriginalTitle ?? src.Name ?? src.OriginalName ?? "n/n"
-                        )
+                    opt => opt.MapFrom(src => src.Title ?? src.OriginalTitle ?? src.Name ?? src.OriginalName ?? "n/n")
                 )
-                .ForMember(
-                    dest => dest.OriginalTitle,
-                    opt => opt.MapFrom(src => src.OriginalTitle ?? src.OriginalName ?? "n/n")
-                )
+                .ForMember(dest => dest.OriginalTitle, opt => opt.MapFrom(src => src.OriginalTitle ?? src.OriginalName ?? "n/n"))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Overview));
         }
     }

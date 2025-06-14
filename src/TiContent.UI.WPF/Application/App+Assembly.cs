@@ -49,10 +49,9 @@ public partial class App
             var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
             var interceptor = new RestClientLoggerInterceptor(logger);
 
-            var options = new RestClientOptions
-            {
+            var options = new RestClientOptions {
                 Interceptors = [interceptor],
-                Timeout = new TimeSpan(0, 0, 0, 10),
+                Timeout = new TimeSpan(0, 0, 0, 10)
             };
 
             return new RestClient(options);
@@ -99,8 +98,7 @@ public partial class App
                 .ForMember(
                     dest => dest.FileSize,
                     opt =>
-                        opt.MapFrom(
-                            (src, _) =>
+                        opt.MapFrom((src, _) =>
                             {
                                 var raw = src
                                     .FileSize.Replace("МБ", "MB")

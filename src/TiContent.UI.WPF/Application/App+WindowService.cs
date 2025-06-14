@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using TiContent.UI.WPF.Components.Converters;
 using TiContent.UI.WPF.Components.Wrappers;
 using TiContent.UI.WPF.Entities;
-using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Storage;
 using TiContent.UI.WPF.Windows.Main;
 
@@ -17,8 +16,10 @@ public partial class App
         // Private Props
 
         private readonly AppDataBaseContext _db = provider.GetRequiredService<AppDataBaseContext>();
+
         private readonly IStorageService _storageService =
             provider.GetRequiredService<IStorageService>();
+
         private readonly MainWindow _mainWindow = provider.GetRequiredService<MainWindow>();
 
         // IHostedService

@@ -26,7 +26,7 @@ public interface IGamesPageContentDataSource
     public enum ContentTypeEnum
     {
         Catalogue,
-        Popularity,
+        Popularity
     }
 
     public record ParamsEntity(
@@ -89,10 +89,10 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
                     pagination,
                     _tokenSource.Token
                 );
-                break;
+            break;
             case IGamesPageContentDataSource.ContentTypeEnum.Popularity:
                 await ObtainCatalogueItemsAsync(pagination, _tokenSource.Token);
-                break;
+            break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(@params));
         }
@@ -126,11 +126,10 @@ public partial class GamesPageContentDataSource
 {
     private async Task ObtainCatalogueItemsAsync(bool pagination, CancellationToken token = default)
     {
-        var parameters = new HydraApiCatalogueRequestParamsEntity
-        {
+        var parameters = new HydraApiCatalogueRequestParamsEntity {
             Take = _pagination.Take,
             Skip = _pagination.Skip,
-            Type = HydraApiCatalogueRequestParamsEntity.ContentType.Weekly,
+            Type = HydraApiCatalogueRequestParamsEntity.ContentType.Weekly
         };
 
         var items = await api.ObtainCatalogueAsync(parameters, token);
@@ -147,13 +146,12 @@ public partial class GamesPageContentDataSource
     {
         query = query.Trim().Humanize(LetterCasing.LowerCase);
 
-        var parameters = new HydraApiSearchRequestParamsEntity
-        {
+        var parameters = new HydraApiSearchRequestParamsEntity {
             Take = _pagination.Take,
             Skip = _pagination.Skip,
             Title = query,
             Genres = genres,
-            Tags = tags,
+            Tags = tags
         };
 
         var items = await api.ObtainSearchAsync(parameters, token);
