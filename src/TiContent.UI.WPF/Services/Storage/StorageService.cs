@@ -33,10 +33,7 @@ public class StorageService : IStorageService
     {
         Cached ??= new StorageEntity();
         var json = JsonSerializer.Serialize(Cached, _options);
-        File.WriteAllText(
-            Path.Combine(AppContext.BaseDirectory, AppConstants.FileNames.StorageFileName),
-            json
-        );
+        File.WriteAllText(Path.Combine(AppContext.BaseDirectory, AppConstants.FileNames.StorageFileName), json);
         return Cached;
     }
 }

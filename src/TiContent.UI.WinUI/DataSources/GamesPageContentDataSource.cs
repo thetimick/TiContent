@@ -20,8 +20,7 @@ using TiContent.UI.WinUI.Services.DB;
 
 namespace TiContent.UI.WinUI.DataSources;
 
-public interface IGamesPageContentDataSource
-    : IDataSource<GamesPageItemEntity, IGamesPageContentDataSource.ParamsEntity>
+public interface IGamesPageContentDataSource : IDataSource<GamesPageItemEntity, IGamesPageContentDataSource.ParamsEntity>
 {
     public enum ContentTypeEnum
     {
@@ -29,16 +28,9 @@ public interface IGamesPageContentDataSource
         Popularity,
     }
 
-    public record ParamsEntity(
-        string Query,
-        ContentTypeEnum ContentType,
-        List<string> Genres,
-        List<int> Tags
-    );
+    public record ParamsEntity(string Query, ContentTypeEnum ContentType, List<string> Genres, List<int> Tags);
 
-    public Task<List<GamesPageFilterItemEntity>> ObtainFiltersAsync(
-        CancellationToken token = default
-    );
+    public Task<List<GamesPageFilterItemEntity>> ObtainFiltersAsync(CancellationToken token = default);
 }
 
 public partial class GamesPageContentDataSource(
@@ -64,10 +56,7 @@ public partial class GamesPageContentDataSource(
 
 public partial class GamesPageContentDataSource : IGamesPageContentDataSource
 {
-    public async Task<List<GamesPageItemEntity>> ObtainAsync(
-        IGamesPageContentDataSource.ParamsEntity @params,
-        bool pagination
-    )
+    public async Task<List<GamesPageItemEntity>> ObtainAsync(IGamesPageContentDataSource.ParamsEntity @params, bool pagination)
     {
         if (pagination && IsCompleted)
             return Cache;
@@ -82,13 +71,7 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
         switch (@params.ContentType)
         {
             case IGamesPageContentDataSource.ContentTypeEnum.Catalogue:
-                await ObtainSearchItemsAsync(
-                    @params.Query,
-                    @params.Genres,
-                    @params.Tags,
-                    pagination,
-                    _tokenSource.Token
-                );
+                await ObtainSearchItemsAsync(@params.Query, @params.Genres, @params.Tags, pagination, _tokenSource.Token);
                 break;
             case IGamesPageContentDataSource.ContentTypeEnum.Popularity:
                 await ObtainCatalogueItemsAsync(pagination, _tokenSource.Token);
@@ -116,9 +99,7 @@ public partial class GamesPageContentDataSource : IGamesPageContentDataSource
     public async Task<List<GamesPageFilterItemEntity>> ObtainFiltersAsync(CancellationToken token)
     {
         var filters = await dbHydraHydraFiltersService.ObtainIfNeededAsync(token);
-        return mapper.Map<List<DataBaseHydraFilterItemEntity>, List<GamesPageFilterItemEntity>>(
-            filters
-        );
+        return mapper.Map<List<DataBaseHydraFilterItemEntity>, List<GamesPageFilterItemEntity>>(filters);
     }
 }
 

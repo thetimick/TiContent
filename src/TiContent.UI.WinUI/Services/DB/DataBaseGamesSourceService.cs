@@ -25,10 +25,7 @@ namespace TiContent.UI.WinUI.Services.DB;
 public interface IDataBaseGamesSourceService
 {
     Task ObtainIfNeededAsync(CancellationToken token = default);
-    Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(
-        string query,
-        CancellationToken token = default
-    );
+    Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query, CancellationToken token = default);
 }
 
 public partial class DataBaseGamesSourceService(
@@ -45,10 +42,7 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
         await ObtainAllLinksAsync(false, token);
     }
 
-    public async Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(
-        string query,
-        CancellationToken token
-    )
+    public async Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query, CancellationToken token)
     {
         var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
         if (cleanQuery.IsNullOrEmpty())
@@ -63,10 +57,7 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
 
 public partial class DataBaseGamesSourceService
 {
-    private async Task ObtainAllLinksAsync(
-        bool forceRefresh = false,
-        CancellationToken token = default
-    )
+    private async Task ObtainAllLinksAsync(bool forceRefresh = false, CancellationToken token = default)
     {
         if (!IsEmptyOrExpiredDataBaseAsync() && !forceRefresh)
             return;
@@ -94,7 +85,6 @@ public partial class DataBaseGamesSourceService
 
     private bool IsEmptyOrExpiredDataBaseAsync()
     {
-        return db.HydraLinksItems.AsNoTracking().IsEmpty()
-            || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+        return db.HydraLinksItems.AsNoTracking().IsEmpty() || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
     }
 }

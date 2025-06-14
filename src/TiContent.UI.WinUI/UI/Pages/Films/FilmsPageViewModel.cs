@@ -141,11 +141,7 @@ public partial class FilmsPageViewModel
     public void OnScrollChanged(double offset, double height)
     {
         ScrollViewOffset = offset;
-        if (
-            _dataSource is { InProgress: false, IsCompleted: false }
-            && Items.Count >= 20
-            && height - offset < 1
-        )
+        if (_dataSource is { InProgress: false, IsCompleted: false } && Items.Count >= 20 && height - offset < 1)
             ObtainItemsFromDataSource(pagination: true);
     }
 
@@ -155,9 +151,7 @@ public partial class FilmsPageViewModel
             return;
 
         _navigationService.NavigateTo(NavigationPath.FilmsSource);
-        WeakReferenceMessenger.Default.Send(
-            new FilmsSourcesPageViewModel.InitialDataEntity(item.Title)
-        );
+        WeakReferenceMessenger.Default.Send(new FilmsSourcesPageViewModel.InitialDataEntity(item.Title));
     }
 
     public void TapOnHistoryItem(string query)
@@ -186,11 +180,7 @@ public partial class FilmsPageViewModel
             ScrollViewOffset = 0;
         }
 
-        Task.WhenAll(
-            ObtainItemsTaskAsync(pagination),
-            ObtainHistoryAsync(),
-            AddQueryToHistoryAsync()
-        );
+        Task.WhenAll(ObtainItemsTaskAsync(pagination), ObtainHistoryAsync(), AddQueryToHistoryAsync());
     }
 
     private void ApplyItems(List<FilmsPageItemEntity> items)
@@ -213,10 +203,7 @@ public partial class FilmsPageViewModel
     {
         try
         {
-            var items = await _dataSource.ObtainAsync(
-                new IFilmsPageContentDataSource.ParamsEntity(Query, ContentType),
-                pagination
-            );
+            var items = await _dataSource.ObtainAsync(new IFilmsPageContentDataSource.ParamsEntity(Query, ContentType), pagination);
 
             _dispatcherQueue.TryEnqueue(() => ApplyItems(items));
         }
@@ -234,12 +221,9 @@ public partial class FilmsPageViewModel
 
     private async Task ObtainHistoryAsync()
     {
-        var items = (
-            await _queryHistoryService.ObtainHistoryAsync(
-                DataBaseHistoryEntity.HistoryType.Films,
-                Query
-            )
-        ).Select(entity => entity.Query);
+        var items = (await _queryHistoryService.ObtainHistoryAsync(DataBaseHistoryEntity.HistoryType.Films, Query)).Select(entity =>
+            entity.Query
+        );
         _dispatcherQueue.TryEnqueue(() => ApplyQueryHistoryItems(items));
     }
 
@@ -247,10 +231,7 @@ public partial class FilmsPageViewModel
     {
         if (Query.Trim().IsNullOrEmpty())
             return;
-        await _queryHistoryService.AddValueToHistoryAsync(
-            DataBaseHistoryEntity.HistoryType.Films,
-            Query.Trim()
-        );
+        await _queryHistoryService.AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType.Films, Query.Trim());
     }
 
     private async Task ClearQueryInHistoryAsync(string query)

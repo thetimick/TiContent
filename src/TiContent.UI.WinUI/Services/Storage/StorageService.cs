@@ -82,12 +82,7 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService
         }
         catch (Exception ex)
         {
-            logger.LogError(
-                ex,
-                "Failed to save storage entity to file {Path}. Error: {Message}",
-                path,
-                ex.Message
-            );
+            logger.LogError(ex, "Failed to save storage entity to file {Path}. Error: {Message}", path, ex.Message);
             return Cached;
         }
     }

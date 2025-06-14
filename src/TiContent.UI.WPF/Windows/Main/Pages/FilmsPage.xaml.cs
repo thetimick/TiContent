@@ -27,9 +27,6 @@ public partial class FilmsPage
 
     private void ScrollViewer_OnScrollChanged(object sender, ScrollChangedEventArgs e)
     {
-        ViewModel.OnScrollChanged(
-            e.VerticalOffset,
-            (sender as ScrollViewer)?.ScrollableHeight ?? 0
-        );
+        ViewModel.OnScrollChanged(e.VerticalOffset, (sender as ScrollViewer)?.ScrollableHeight ?? 0);
     }
 }

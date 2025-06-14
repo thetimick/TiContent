@@ -23,8 +23,7 @@ using TiContent.UI.WinUI.Services.DB;
 
 namespace TiContent.UI.WinUI.DataSources;
 
-public interface IFilmsPageContentDataSource
-    : IDataSource<FilmsPageItemEntity, IFilmsPageContentDataSource.ParamsEntity>
+public interface IFilmsPageContentDataSource : IDataSource<FilmsPageItemEntity, IFilmsPageContentDataSource.ParamsEntity>
 {
     public record ParamsEntity(string Query, int Content);
 }
@@ -45,10 +44,7 @@ public partial class FilmsPageContentDataSource(ITMDBService api, IMapper mapper
 
 public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 {
-    public async Task<List<FilmsPageItemEntity>> ObtainAsync(
-        IFilmsPageContentDataSource.ParamsEntity @params,
-        bool pagination
-    )
+    public async Task<List<FilmsPageItemEntity>> ObtainAsync(IFilmsPageContentDataSource.ParamsEntity @params, bool pagination)
     {
         if (pagination && IsCompleted)
             return Cache;
@@ -133,9 +129,7 @@ public partial class FilmsPageContentDataSource
         if (items == null)
             return;
 
-        var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(
-            items
-        );
+        var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(items);
 
         if (!pagination)
             Cache.Clear();

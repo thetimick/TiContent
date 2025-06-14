@@ -48,16 +48,10 @@ public partial record FilmsSourcePageItemEntity
         {
             CreateMap<JacredEntity, FilmsSourcePageItemEntity>()
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title ?? "n/n"))
-                .ForMember(
-                    dest => dest.Description,
-                    opt => opt.MapFrom(src => src.AggregatedDescription)
-                )
+                .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.AggregatedDescription))
                 .ForMember(dest => dest.TrackerUrl, opt => opt.MapFrom(src => src.Url))
                 .ForMember(dest => dest.TorrentUrl, opt => opt.MapFrom(src => src.Magnet))
-                .ForMember(
-                    dest => dest.SidPir,
-                    opt => opt.MapFrom(src => new Tuple<int, int>(src.Sid ?? -1, src.Pir ?? -1))
-                )
+                .ForMember(dest => dest.SidPir, opt => opt.MapFrom(src => new Tuple<int, int>(src.Sid ?? -1, src.Pir ?? -1)))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.CreateTime))
                 .ForMember(dest => dest.Quality, opt => opt.MapFrom(src => $"{src.Quality}p"))
                 .ForMember(dest => dest.Tracker, opt => opt.MapFrom(src => src.Tracker.Humanize()))

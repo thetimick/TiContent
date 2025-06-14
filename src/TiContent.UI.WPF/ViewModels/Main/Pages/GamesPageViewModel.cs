@@ -37,8 +37,7 @@ public partial class GamesPageViewModel : ObservableObject
     public partial string Query { get; set; } = string.Empty;
 
     [ObservableProperty]
-    public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } =
-        [];
+    public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } = [];
 
     [ObservableProperty]
     public partial HydraFiltersEntity Filters { get; set; } = new();
@@ -73,10 +72,7 @@ public partial class GamesPageViewModel : ObservableObject
         _provider = provider;
         _logger = logger;
 
-        _debounceOnQueryChangedAction = Debouncer.Debounce(
-            () => ObtainItems(true),
-            TimeSpan.FromSeconds(1)
-        );
+        _debounceOnQueryChangedAction = Debouncer.Debounce(() => ObtainItems(true), TimeSpan.FromSeconds(1));
     }
 
     public void OnLoaded()
@@ -152,12 +148,7 @@ public partial class GamesPageViewModel : ObservableObject
         );
     }
 
-    private void LoadItems(
-        int take = 24,
-        int skip = 0,
-        bool pagination = false,
-        CancellationToken token = default
-    )
+    private void LoadItems(int take = 24, int skip = 0, bool pagination = false, CancellationToken token = default)
     {
         Task.Run(
             async () =>
@@ -179,9 +170,7 @@ public partial class GamesPageViewModel : ObservableObject
                     DispatcherWrapper.InvokeOnMain(() =>
                     {
                         if (ViewState != ViewStateEnum.Content)
-                            ViewState = Items.IsEmpty()
-                                ? ViewStateEnum.Empty
-                                : ViewStateEnum.InProgress;
+                            ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.InProgress;
                         ExceptionReport.Show(ex);
                     });
                 }
@@ -201,9 +190,7 @@ public partial class GamesPageViewModel : ObservableObject
             {
                 try
                 {
-                    var filters = await _hydraFiltersDataSource.ObtainAsync(
-                        _filtersCancellationToken.Token
-                    );
+                    var filters = await _hydraFiltersDataSource.ObtainAsync(_filtersCancellationToken.Token);
                     DispatcherWrapper.InvokeOnMain(() => Filters = filters);
                 }
                 catch (Exception ex)

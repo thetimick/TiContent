@@ -20,9 +20,7 @@ using Wpf.Ui.Violeta.Controls;
 
 namespace TiContent.UI.WPF.ViewModels.Jacred;
 
-public partial class JacredWindowViewModel
-    : ObservableRecipient,
-        IRecipient<JacredWindowViewModel.RecipientModel>
+public partial class JacredWindowViewModel : ObservableRecipient, IRecipient<JacredWindowViewModel.RecipientModel>
 {
     // Observable
 
@@ -49,10 +47,7 @@ public partial class JacredWindowViewModel
 
     // Lifecycle
 
-    public JacredWindowViewModel(
-        IJacredService jacredService,
-        ILogger<JacredWindowViewModel> logger
-    )
+    public JacredWindowViewModel(IJacredService jacredService, ILogger<JacredWindowViewModel> logger)
     {
         _jacredService = jacredService;
         _logger = logger;
@@ -94,10 +89,7 @@ public partial class JacredWindowViewModel
             try
             {
                 _cancellationToken = new CancellationTokenSource();
-                var entity = await _jacredService.ObtainTorrentsAsync(
-                    _globalQuery,
-                    _cancellationToken.Token
-                );
+                var entity = await _jacredService.ObtainTorrentsAsync(_globalQuery, _cancellationToken.Token);
                 DispatcherWrapper.InvokeOnMain(() => SetItems(entity));
             }
             catch (Exception ex)

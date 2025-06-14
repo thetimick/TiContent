@@ -15,10 +15,7 @@ using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.UI.Pages.Settings;
 
-public partial class SettingsPageViewModel(
-    IStorageService storageService,
-    IThemeService themeService
-) : ObservableObject
+public partial class SettingsPageViewModel(IStorageService storageService, IThemeService themeService) : ObservableObject
 {
     [ObservableProperty]
     public partial int ThemeIndex { get; set; }
@@ -42,20 +39,14 @@ public partial class SettingsPageViewModel(
 
     partial void OnIsWindowSizePersistentChanged(bool value)
     {
-        if (
-            storageService.Cached == null
-            || storageService.Cached.Window.IsWindowSizePersistent == value
-        )
+        if (storageService.Cached == null || storageService.Cached.Window.IsWindowSizePersistent == value)
             return;
         storageService.Cached.Window.IsWindowSizePersistent = value;
     }
 
     partial void OnIsWindowOnCenterScreenChanged(bool value)
     {
-        if (
-            storageService.Cached == null
-            || storageService.Cached.Window.IsWindowOnCenterScreen == value
-        )
+        if (storageService.Cached == null || storageService.Cached.Window.IsWindowOnCenterScreen == value)
             return;
         storageService.Cached.Window.IsWindowOnCenterScreen = value;
     }
@@ -81,11 +72,6 @@ public partial class SettingsPageViewModel(
     [RelayCommand]
     private void TapOnOpenStorageButton()
     {
-        Process.Start(
-            new ProcessStartInfo(
-                "explorer.exe",
-                $"/select,\"{AppConstants.FileNames.DataBaseFileName}\""
-            )
-        );
+        Process.Start(new ProcessStartInfo("explorer.exe", $"/select,\"{AppConstants.FileNames.DataBaseFileName}\""));
     }
 }

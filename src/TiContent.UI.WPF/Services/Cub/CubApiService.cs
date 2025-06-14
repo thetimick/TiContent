@@ -15,8 +15,7 @@ namespace TiContent.UI.WPF.Services.Cub;
 
 public partial class CubApiService(IRestClient client, IStorageService storage)
 {
-    private string CubApiBaseUrl =>
-        storage.Cached?.Urls.CubApiBaseUrl ?? AppConstants.Urls.CubApiBaseUrl;
+    private string CubApiBaseUrl => storage.Cached?.Urls.CubApiBaseUrl ?? AppConstants.Urls.CubApiBaseUrl;
 }
 
 // ICubApiService

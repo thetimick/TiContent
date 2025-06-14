@@ -25,14 +25,8 @@
     <PackageReference Include="CommunityToolkit.WinUI.Behaviors" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Collections" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Controls.Segmented" Version="8.2.250402" />
-    <PackageReference
-      Include="CommunityToolkit.WinUI.Controls.SettingsControls"
-      Version="8.2.250402"
-    />
-    <PackageReference
-      Include="CommunityToolkit.WinUI.Controls.TokenizingTextBox"
-      Version="8.2.250402"
-    />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.250402" />
+    <PackageReference Include="CommunityToolkit.WinUI.Controls.TokenizingTextBox" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Converters" Version="8.2.250402" />
     <PackageReference Include="CommunityToolkit.WinUI.Extensions" Version="8.2.250402" />
     <PackageReference Include="EFCore.BulkExtensions.Core" Version="9.0.1" />

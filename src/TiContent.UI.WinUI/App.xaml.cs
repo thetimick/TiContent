@@ -16,9 +16,7 @@ public partial class App
 {
     // Static
 
-    private static readonly IHost AppHost = Host.CreateDefaultBuilder()
-        .ConfigureServices(ConfigureServices)
-        .Build();
+    private static readonly IHost AppHost = Host.CreateDefaultBuilder().ConfigureServices(ConfigureServices).Build();
 
     // LifeCycle
 

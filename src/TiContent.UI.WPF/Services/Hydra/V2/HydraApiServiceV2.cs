@@ -25,14 +25,9 @@ public partial class HydraApiServiceV2 : IHydraApiServiceV2
     )
     {
         var url = UrlHelper.Combine(HydraApiBaseUrl, "catalogue", @params.PathType);
-        var request = new RestRequest(url)
-            .AddParameter("take", @params.Take)
-            .AddParameter("skip", @params.Skip);
+        var request = new RestRequest(url).AddParameter("take", @params.Take).AddParameter("skip", @params.Skip);
 
-        var response = await client.ExecuteAsync<IList<HydraApiCatalogueResponseEntity>>(
-            request,
-            token
-        );
+        var response = await client.ExecuteAsync<IList<HydraApiCatalogueResponseEntity>>(request, token);
         if (response is { IsSuccessful: true, Data: { } entity })
             return entity;
 

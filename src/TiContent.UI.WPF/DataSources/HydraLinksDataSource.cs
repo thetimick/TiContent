@@ -94,7 +94,6 @@ public partial class HydraLinksDataSource
 
     private bool IsEmptyOrExpiredDataBaseAsync()
     {
-        return db.HydraLinksItems.AsNoTracking().IsEmpty()
-            || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+        return db.HydraLinksItems.AsNoTracking().IsEmpty() || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
     }
 }

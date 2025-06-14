@@ -20,49 +20,49 @@ namespace TiContent.UI.WinUI.Migrations
                     CleanTitle = table.Column<string>(type: "TEXT", nullable: false),
                     FileSize = table.Column<double>(type: "REAL", nullable: false),
                     UploadDate = table.Column<DateTime>(type: "TEXT", nullable: false),
-                    Link = table.Column<string>(type: "TEXT", nullable: false)
+                    Link = table.Column<string>(type: "TEXT", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HydraLinksItems", x => x.Title);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "ImageItems",
                 columns: table => new
                 {
                     Url = table.Column<string>(type: "TEXT", nullable: false),
-                    Data = table.Column<byte[]>(type: "BLOB", nullable: false)
+                    Data = table.Column<byte[]>(type: "BLOB", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ImageItems", x => x.Url);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "QueryHistoryItems",
                 columns: table => new
                 {
                     Query = table.Column<string>(type: "TEXT", nullable: false),
-                    Type = table.Column<int>(type: "INTEGER", nullable: false)
+                    Type = table.Column<int>(type: "INTEGER", nullable: false),
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_QueryHistoryItems", x => x.Query);
-                });
+                }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "HydraLinksItems");
+            migrationBuilder.DropTable(name: "HydraLinksItems");
 
-            migrationBuilder.DropTable(
-                name: "ImageItems");
+            migrationBuilder.DropTable(name: "ImageItems");
 
-            migrationBuilder.DropTable(
-                name: "QueryHistoryItems");
+            migrationBuilder.DropTable(name: "QueryHistoryItems");
         }
     }
 }

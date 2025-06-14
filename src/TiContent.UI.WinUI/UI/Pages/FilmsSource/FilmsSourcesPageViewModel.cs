@@ -31,9 +31,7 @@ using TiContent.UI.WinUI.Services.UI.Navigation;
 
 namespace TiContent.UI.WinUI.UI.Pages.FilmsSource;
 
-public partial class FilmsSourcesPageViewModel
-    : ObservableObject,
-        IRecipient<FilmsSourcesPageViewModel.InitialDataEntity>
+public partial class FilmsSourcesPageViewModel : ObservableObject, IRecipient<FilmsSourcesPageViewModel.InitialDataEntity>
 {
     // Observable
 
@@ -168,10 +166,7 @@ public partial class FilmsSourcesPageViewModel
             try
             {
                 var rawItems = await _dataSource.ObtainItemsAsync(query);
-                var mappedItems = _mapper.Map<
-                    List<JacredEntity>,
-                    ObservableCollection<FilmsSourcePageItemEntity>
-                >(rawItems);
+                var mappedItems = _mapper.Map<List<JacredEntity>, ObservableCollection<FilmsSourcePageItemEntity>>(rawItems);
 
                 await _dispatcherQueue.EnqueueAsync(() =>
                 {
@@ -217,12 +212,7 @@ public partial class FilmsSourcesPageViewModel
             .Prepend("Не задано")
             .ToObservable();
 
-        Filters.Trackers = source
-            .Select(entity => entity.Tracker)
-            .Distinct()
-            .OrderByDescending(s => s)
-            .Prepend("Не задано")
-            .ToObservable();
+        Filters.Trackers = source.Select(entity => entity.Tracker).Distinct().OrderByDescending(s => s).Prepend("Не задано").ToObservable();
 
         Filters.Years = source
             .Select(entity => entity.Date.Year.ToString())
@@ -251,9 +241,7 @@ public partial class FilmsSourcesPageViewModel
             if (Filters.ContentTypeIndex > 0)
                 passed &=
                     entity.ContentType
-                    == Enum.Parse<FilmsSourcePageItemEntity.ContentTypeEnum>(
-                        Filters.ContentType[Filters.ContentTypeIndex]
-                    );
+                    == Enum.Parse<FilmsSourcePageItemEntity.ContentTypeEnum>(Filters.ContentType[Filters.ContentTypeIndex]);
 
             if (Filters.VoicesIndex > 0)
                 passed &= entity.Voices.Contains(Filters.Voices[Filters.VoicesIndex]);
@@ -270,21 +258,11 @@ public partial class FilmsSourcesPageViewModel
         // Сортировка
         Items = SortOrder switch
         {
-            0 => new ObservableCollection<FilmsSourcePageItemEntity>(
-                filtered.OrderByDescending(entity => entity.Date)
-            ),
-            1 => new ObservableCollection<FilmsSourcePageItemEntity>(
-                filtered.OrderByDescending(entity => entity.Title)
-            ),
-            2 => new ObservableCollection<FilmsSourcePageItemEntity>(
-                filtered.OrderByDescending(entity => entity.SidPir.Item1)
-            ),
-            3 => new ObservableCollection<FilmsSourcePageItemEntity>(
-                filtered.OrderByDescending(entity => entity.SidPir.Item2)
-            ),
-            4 => new ObservableCollection<FilmsSourcePageItemEntity>(
-                filtered.OrderByDescending(entity => entity.Size)
-            ),
+            0 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.Date)),
+            1 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.Title)),
+            2 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.SidPir.Item1)),
+            3 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.SidPir.Item2)),
+            4 => new ObservableCollection<FilmsSourcePageItemEntity>(filtered.OrderByDescending(entity => entity.Size)),
             _ => Items,
         };
 

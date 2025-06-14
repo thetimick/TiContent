@@ -12,11 +12,7 @@ namespace TiContent.Foundation.Entities.Api.Converters;
 
 public class CustomDateTimeOffsetConverter : JsonConverter<DateTimeOffset?>
 {
-    public override DateTimeOffset? Read(
-        ref Utf8JsonReader reader,
-        Type typeToConvert,
-        JsonSerializerOptions options
-    )
+    public override DateTimeOffset? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var value = reader.GetString();
         if (string.IsNullOrWhiteSpace(value))
@@ -26,11 +22,7 @@ public class CustomDateTimeOffsetConverter : JsonConverter<DateTimeOffset?>
         return null;
     }
 
-    public override void Write(
-        Utf8JsonWriter writer,
-        DateTimeOffset? value,
-        JsonSerializerOptions options
-    )
+    public override void Write(Utf8JsonWriter writer, DateTimeOffset? value, JsonSerializerOptions options)
     {
         if (value.HasValue)
             writer.WriteStringValue(value.Value.ToString("O"));

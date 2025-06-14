@@ -30,31 +30,15 @@ public partial class MainWindowViewModel(INavigationService navigation) : Observ
                 FontWeight = FontWeights.SemiBold,
                 Margin = new Thickness(6, 4, 0, 5),
             },
-            new NavigationViewItem(
-                Strings.FilmsPage_Title,
-                SymbolRegular.Filmstrip24,
-                typeof(FilmsPage)
-            ),
-            new NavigationViewItem(
-                Strings.GamesPage_Title,
-                SymbolRegular.Games24,
-                typeof(GamesPage)
-            ),
+            new NavigationViewItem(Strings.FilmsPage_Title, SymbolRegular.Filmstrip24, typeof(FilmsPage)),
+            new NavigationViewItem(Strings.GamesPage_Title, SymbolRegular.Games24, typeof(GamesPage)),
         ];
 
     [ObservableProperty]
     public partial ObservableCollection<object> FooterItems { get; set; } =
         [
-            new NavigationViewItem(
-                Strings.SettingsPage_Title,
-                SymbolRegular.Settings24,
-                typeof(SettingsPage)
-            ),
-            new NavigationViewItem(
-                Strings.AboutPage_Title,
-                SymbolRegular.Info24,
-                typeof(AboutPage)
-            ),
+            new NavigationViewItem(Strings.SettingsPage_Title, SymbolRegular.Settings24, typeof(SettingsPage)),
+            new NavigationViewItem(Strings.AboutPage_Title, SymbolRegular.Info24, typeof(AboutPage)),
         ];
 
     // Public Methods

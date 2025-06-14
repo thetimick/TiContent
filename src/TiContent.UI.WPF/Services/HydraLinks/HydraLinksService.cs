@@ -35,12 +35,8 @@ public partial class HydraLinksService : IHydraLinksService
 {
     public async Task<List<HydraLinksResponseEntity?>> ObtainLinksAsync()
     {
-        var requests = Types
-            .Split('|')
-            .Select(type => new RestRequest(UrlHelper.Combine(HydraLinksBaseUrl, "sources", type)));
-        var responses = requests
-            .Select(request => client.ExecuteAsync<HydraLinksResponseEntity>(request))
-            .ToList();
+        var requests = Types.Split('|').Select(type => new RestRequest(UrlHelper.Combine(HydraLinksBaseUrl, "sources", type)));
+        var responses = requests.Select(request => client.ExecuteAsync<HydraLinksResponseEntity>(request)).ToList();
 
         await Task.WhenAll(responses);
 

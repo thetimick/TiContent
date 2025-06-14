@@ -17,8 +17,7 @@ public partial class App
         // Private Props
 
         private readonly AppDataBaseContext _db = provider.GetRequiredService<AppDataBaseContext>();
-        private readonly IStorageService _storageService =
-            provider.GetRequiredService<IStorageService>();
+        private readonly IStorageService _storageService = provider.GetRequiredService<IStorageService>();
         private readonly MainWindow _mainWindow = provider.GetRequiredService<MainWindow>();
 
         // IHostedService
@@ -55,8 +54,7 @@ public partial class App
             }
 
             // Добавляем динамические ресурсы
-            _mainWindow.Resources["StringToImageCacheConverter"] =
-                new StringToImageCacheConverter();
+            _mainWindow.Resources["StringToImageCacheConverter"] = new StringToImageCacheConverter();
 
             // Показываем окно
             _mainWindow.Show();

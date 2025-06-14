@@ -32,33 +32,20 @@ public partial record DataBaseHydraLinkItemEntity
         public MapProfile()
         {
             CreateMap<HydraLinksResponseEntity.ItemsEntity, DataBaseHydraLinkItemEntity>()
-                .ForMember(
-                    dest => dest.CleanTitle,
-                    opt => opt.MapFrom(src => CleanRegex().Replace(src.Title.Trim().ToLower(), ""))
-                )
-                .ForMember(
-                    dest => dest.UploadDate,
-                    opt => opt.MapFrom(src => src.ParseDateTimeOrDefault())
-                )
+                .ForMember(dest => dest.CleanTitle, opt => opt.MapFrom(src => CleanRegex().Replace(src.Title.Trim().ToLower(), "")))
+                .ForMember(dest => dest.UploadDate, opt => opt.MapFrom(src => src.ParseDateTimeOrDefault()))
                 .ForMember(
                     dest => dest.FileSize,
                     opt =>
                         opt.MapFrom(
                             (src, _) =>
                             {
-                                var raw = src
-                                    .FileSize.Replace("МБ", "MB")
-                                    .Replace("ГБ", "GB")
-                                    .Replace(".", ",")
-                                    .Replace("+", "");
+                                var raw = src.FileSize.Replace("МБ", "MB").Replace("ГБ", "GB").Replace(".", ",").Replace("+", "");
                                 return ByteSize.TryParse(raw, out var size) ? size.Bytes : 0;
                             }
                         )
                 )
-                .ForMember(
-                    dest => dest.Link,
-                    opt => opt.MapFrom((src, _) => src.Links?.FirstOrDefault() ?? string.Empty)
-                );
+                .ForMember(dest => dest.Link, opt => opt.MapFrom((src, _) => src.Links?.FirstOrDefault() ?? string.Empty));
         }
 
         [GeneratedRegex("[^a-zA-Z0-9\u0400-\u04FF]")]

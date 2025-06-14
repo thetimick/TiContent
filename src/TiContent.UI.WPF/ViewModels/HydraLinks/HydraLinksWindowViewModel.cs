@@ -25,9 +25,7 @@ using Process = System.Diagnostics.Process;
 
 namespace TiContent.UI.WPF.ViewModels.HydraLinks;
 
-public partial class HydraLinksWindowViewModel
-    : ObservableRecipient,
-        IRecipient<HydraLinksWindowViewModel.MessageEntity>
+public partial class HydraLinksWindowViewModel : ObservableRecipient, IRecipient<HydraLinksWindowViewModel.MessageEntity>
 {
     // Observable
 
@@ -58,10 +56,7 @@ public partial class HydraLinksWindowViewModel
 
     // Lifecycle
 
-    public HydraLinksWindowViewModel(
-        IHydraLinksDataSource hydraLinksDataSource,
-        ILogger<HydraLinksWindowViewModel> logger
-    )
+    public HydraLinksWindowViewModel(IHydraLinksDataSource hydraLinksDataSource, ILogger<HydraLinksWindowViewModel> logger)
     {
         _hydraLinksDataSource = hydraLinksDataSource;
         _logger = logger;
@@ -179,11 +174,7 @@ public partial class HydraLinksWindowViewModel
         if (listItems.IsEmpty())
             return [];
 
-        var filter = listItems
-            .FirstOrDefault(entity =>
-                entity.Owner == Filters.FilterItems[Filters.FilterSelectedIndex].ToString()
-            )
-            ?.Owner;
+        var filter = listItems.FirstOrDefault(entity => entity.Owner == Filters.FilterItems[Filters.FilterSelectedIndex].ToString())?.Owner;
         var sort = Sort.SortItemsSelectedIndex;
 
         // Фильтрация

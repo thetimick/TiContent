@@ -28,9 +28,7 @@ using TiContent.UI.WinUI.Services.UI.Navigation;
 
 namespace TiContent.UI.WinUI.UI.Pages.GamesSource;
 
-public partial class GamesSourcePageViewModel
-    : ObservableObject,
-        IRecipient<GamesSourcePageViewModel.InitialDataEntity>
+public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<GamesSourcePageViewModel.InitialDataEntity>
 {
     // Observable
 
@@ -158,12 +156,7 @@ public partial class GamesSourcePageViewModel
     {
         Items = new AdvancedCollectionView(items);
 
-        Filters.Owners = items
-            .Select(entity => entity.Owner)
-            .Distinct()
-            .OrderBy(s => s)
-            .Prepend("Не задано")
-            .ToObservable();
+        Filters.Owners = items.Select(entity => entity.Owner).Distinct().OrderBy(s => s).Prepend("Не задано").ToObservable();
 
         Filters.OwnersIndex = 0;
     }
@@ -178,10 +171,7 @@ public partial class GamesSourcePageViewModel
             var passed = true;
 
             if (Filters.OwnersIndex > 0)
-                passed &= item.Owner.Contains(
-                    Filters.Owners[Filters.OwnersIndex],
-                    StringComparison.InvariantCultureIgnoreCase
-                );
+                passed &= item.Owner.Contains(Filters.Owners[Filters.OwnersIndex], StringComparison.InvariantCultureIgnoreCase);
 
             switch (Filters.LinksIndex)
             {
@@ -203,22 +193,10 @@ public partial class GamesSourcePageViewModel
     {
         var description = SortOrder switch
         {
-            0 => new SortDescription(
-                nameof(GamesSourcePageItemEntity.Date),
-                SortDirection.Descending
-            ),
-            1 => new SortDescription(
-                nameof(GamesSourcePageItemEntity.Title),
-                SortDirection.Descending
-            ),
-            2 => new SortDescription(
-                nameof(GamesSourcePageItemEntity.Owner),
-                SortDirection.Descending
-            ),
-            3 => new SortDescription(
-                nameof(GamesSourcePageItemEntity.Size),
-                SortDirection.Descending
-            ),
+            0 => new SortDescription(nameof(GamesSourcePageItemEntity.Date), SortDirection.Descending),
+            1 => new SortDescription(nameof(GamesSourcePageItemEntity.Title), SortDirection.Descending),
+            2 => new SortDescription(nameof(GamesSourcePageItemEntity.Owner), SortDirection.Descending),
+            3 => new SortDescription(nameof(GamesSourcePageItemEntity.Size), SortDirection.Descending),
             _ => null,
         };
 

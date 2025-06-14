@@ -15,8 +15,5 @@ public interface IHydraApiServiceV2
         HydraApiCatalogueRequestParamsEntity @params,
         CancellationToken token = default
     );
-    Task<HydraApiSearchResponseEntity> ObtainSearchAsync(
-        HydraApiSearchRequestParamsEntity @params,
-        CancellationToken token = default
-    );
+    Task<HydraApiSearchResponseEntity> ObtainSearchAsync(HydraApiSearchRequestParamsEntity @params, CancellationToken token = default);
 }

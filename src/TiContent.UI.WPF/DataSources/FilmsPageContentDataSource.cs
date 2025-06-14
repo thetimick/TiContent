@@ -33,10 +33,7 @@ public partial class FilmsPageContentDataSource(ITMDBService contentService)
 
 public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 {
-    public async Task<List<TMDBResponseEntity.ItemEntity>> ObtainItemsAsync(
-        int content,
-        string query
-    )
+    public async Task<List<TMDBResponseEntity.ItemEntity>> ObtainItemsAsync(int content, string query)
     {
         if (query.IsNullOrEmpty())
             return await ObtainTrendingAsync(content);
@@ -55,10 +52,7 @@ public partial class FilmsPageContentDataSource
 {
     private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainTrendingAsync(int content)
     {
-        if (
-            _pagination?.InProgress == true
-            || _pagination is { HasMorePage: false, HasBeenInit: true }
-        )
+        if (_pagination?.InProgress == true || _pagination is { HasMorePage: false, HasBeenInit: true })
             return _items;
 
         _pagination ??= new TMDBPagination();
@@ -80,15 +74,9 @@ public partial class FilmsPageContentDataSource
         return _items;
     }
 
-    private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainSearchAsync(
-        int content,
-        string query
-    )
+    private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainSearchAsync(int content, string query)
     {
-        if (
-            _pagination?.InProgress == true
-            || _pagination is { HasMorePage: false, HasBeenInit: true }
-        )
+        if (_pagination?.InProgress == true || _pagination is { HasMorePage: false, HasBeenInit: true })
             return _items;
 
         query = query.Trim().Humanize(LetterCasing.LowerCase);

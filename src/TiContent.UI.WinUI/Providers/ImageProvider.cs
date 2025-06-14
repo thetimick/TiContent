@@ -31,8 +31,7 @@ public partial class ImageProvider : IImageProvider
         try
         {
             await using var db = new App.AppDataBaseContext();
-            var item = await db.ImageItems.FindAsync(url);
-            if (item != null)
+            if (await db.ImageItems.FindAsync(url) is { } item)
                 return item;
 
             var imageData = await LoadImageAsync(url);

@@ -141,8 +141,7 @@ public partial class GamesPageViewModel : ObservableObject
         switch (e.PropertyName)
         {
             case nameof(Filters.GenresQuery):
-                Filters.Genres.Filter += o =>
-                    Filter(o, Filters.GenresQuery, Filters.GenresSelectedItems);
+                Filters.Genres.Filter += o => Filter(o, Filters.GenresQuery, Filters.GenresSelectedItems);
                 Filters.Genres.RefreshFilter();
                 Filters.Genres.RefreshSorting();
                 break;
@@ -155,11 +154,7 @@ public partial class GamesPageViewModel : ObservableObject
 
         return;
 
-        bool Filter(
-            object o,
-            string query,
-            ObservableCollection<GamesPageFilterItemEntity> selectedItems
-        )
+        bool Filter(object o, string query, ObservableCollection<GamesPageFilterItemEntity> selectedItems)
         {
             var pass = true;
             if (o is not GamesPageFilterItemEntity value)
@@ -167,9 +162,7 @@ public partial class GamesPageViewModel : ObservableObject
             var cleanValue = value.Title.Trim().Humanize(LetterCasing.LowerCase);
             var cleanQuery = query.Trim().Humanize(LetterCasing.LowerCase);
             pass &= cleanValue.Contains(cleanQuery);
-            pass &= selectedItems.All(s =>
-                s.Title.Trim().Humanize(LetterCasing.LowerCase) != cleanValue
-            );
+            pass &= selectedItems.All(s => s.Title.Trim().Humanize(LetterCasing.LowerCase) != cleanValue);
             return pass;
         }
     }
@@ -188,11 +181,7 @@ public partial class GamesPageViewModel
     public void OnScrollChanged(double offset, double height)
     {
         ScrollViewOffset = offset;
-        if (
-            _dataSource is { InProgress: false, IsCompleted: false }
-            && Items.Count >= 20
-            && height - offset < 1
-        )
+        if (_dataSource is { InProgress: false, IsCompleted: false } && Items.Count >= 20 && height - offset < 1)
             ObtainItemsFromDataSource(true);
     }
 
@@ -202,9 +191,7 @@ public partial class GamesPageViewModel
             return;
 
         _navigationService.NavigateTo(NavigationPath.GamesSource);
-        WeakReferenceMessenger.Default.Send(
-            new GamesSourcePageViewModel.InitialDataEntity(item.Title)
-        );
+        WeakReferenceMessenger.Default.Send(new GamesSourcePageViewModel.InitialDataEntity(item.Title));
     }
 
     public void TapOnHistoryItem(string query)
@@ -234,12 +221,7 @@ public partial class GamesPageViewModel
             ScrollViewOffset = 0;
         }
 
-        Task.WhenAll(
-            ObtainItemsTaskAsync(pagination),
-            ObtainHistoryAsync(),
-            AddQueryToHistoryAsync(),
-            ObtainFiltersAsync()
-        );
+        Task.WhenAll(ObtainItemsTaskAsync(pagination), ObtainHistoryAsync(), AddQueryToHistoryAsync(), ObtainFiltersAsync());
     }
 
     private void ApplyQueryHistoryItems(IEnumerable<string> items)
@@ -250,25 +232,15 @@ public partial class GamesPageViewModel
     private void ApplyFilters(List<GamesPageFilterItemEntity> filters)
     {
         Filters.Genres = new AdvancedCollectionView(
-            filters
-                .Where(entity =>
-                    entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Genre
-                )
-                .ToList()
+            filters.Where(entity => entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Genre).ToList()
         );
-        Filters.Genres.SortDescriptions.Add(
-            new SortDescription(nameof(GamesPageFilterItemEntity.Title), SortDirection.Ascending)
-        );
+        Filters.Genres.SortDescriptions.Add(new SortDescription(nameof(GamesPageFilterItemEntity.Title), SortDirection.Ascending));
         Filters.Genres.RefreshSorting();
 
         Filters.Tags = new AdvancedCollectionView(
-            filters
-                .Where(entity => entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Tags)
-                .ToList()
+            filters.Where(entity => entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Tags).ToList()
         );
-        Filters.Tags.SortDescriptions.Add(
-            new SortDescription(nameof(GamesPageFilterItemEntity.Title), SortDirection.Ascending)
-        );
+        Filters.Tags.SortDescriptions.Add(new SortDescription(nameof(GamesPageFilterItemEntity.Title), SortDirection.Ascending));
         Filters.Tags.RefreshSorting();
     }
 }
@@ -291,11 +263,7 @@ public partial class GamesPageViewModel
                     Query,
                     type,
                     Filters.GenresSelectedItems.Select(entity => entity.Title).ToList(),
-                    Filters
-                        .TagsSelectedItems.Select(entity =>
-                            int.Parse(entity.Title.Split("|").GetSafe(1) ?? "0")
-                        )
-                        .ToList()
+                    Filters.TagsSelectedItems.Select(entity => int.Parse(entity.Title.Split("|").GetSafe(1) ?? "0")).ToList()
                 ),
                 pagination
             );
@@ -321,12 +289,9 @@ public partial class GamesPageViewModel
 
     private async Task ObtainHistoryAsync()
     {
-        var items = (
-            await _queryHistoryService.ObtainHistoryAsync(
-                DataBaseHistoryEntity.HistoryType.Games,
-                Query
-            )
-        ).Select(entity => entity.Query);
+        var items = (await _queryHistoryService.ObtainHistoryAsync(DataBaseHistoryEntity.HistoryType.Games, Query)).Select(entity =>
+            entity.Query
+        );
         _dispatcherQueue.TryEnqueue(() => ApplyQueryHistoryItems(items));
     }
 
@@ -334,10 +299,7 @@ public partial class GamesPageViewModel
     {
         if (Query.Trim().IsNullOrEmpty())
             return;
-        await _queryHistoryService.AddValueToHistoryAsync(
-            DataBaseHistoryEntity.HistoryType.Games,
-            Query.Trim()
-        );
+        await _queryHistoryService.AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType.Games, Query.Trim());
     }
 
     private async Task ClearQueryInHistoryAsync(string query)
@@ -355,9 +317,7 @@ public partial class GamesPageViewModel
         }
         catch (Exception ex)
         {
-            await _dispatcherQueue.EnqueueAsync(() =>
-                _notificationService.ShowErrorNotification(ex)
-            );
+            await _dispatcherQueue.EnqueueAsync(() => _notificationService.ShowErrorNotification(ex));
             _logger.LogError(ex, "{msg}", ex.Message);
         }
     }
@@ -374,8 +334,7 @@ public partial class GamesPageViewModel
         public partial AdvancedCollectionView Genres { get; set; } = [];
 
         [ObservableProperty]
-        public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
-            [];
+        public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } = [];
 
         [ObservableProperty]
         public partial string GenresQuery { get; set; } = string.Empty;
@@ -384,8 +343,7 @@ public partial class GamesPageViewModel
         public partial AdvancedCollectionView Tags { get; set; } = [];
 
         [ObservableProperty]
-        public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
-            [];
+        public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } = [];
 
         [ObservableProperty]
         public partial string TagsQuery { get; set; } = string.Empty;

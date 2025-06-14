@@ -31,10 +31,7 @@ public partial record GamesSourcePageItemEntity
                 .ForMember(dest => dest.Owner, opt => opt.MapFrom(src => src.Owner))
                 .ForMember(dest => dest.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(dest => dest.Date, opt => opt.MapFrom(src => src.UploadDate))
-                .ForMember(
-                    dest => dest.Size,
-                    opt => opt.MapFrom(src => ByteSize.FromBytes(src.FileSize))
-                )
+                .ForMember(dest => dest.Size, opt => opt.MapFrom(src => ByteSize.FromBytes(src.FileSize)))
                 .ForMember(dest => dest.Link, opt => opt.MapFrom(src => src.Link))
                 .ForMember(dest => dest.TrackerLink, opt => opt.MapFrom(src => src.Link));
         }

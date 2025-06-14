@@ -29,20 +29,14 @@ public partial class App
     {
         // Dependencies
 
-        private readonly IStorageService _storageService =
-            provider.GetRequiredService<IStorageService>();
-        private readonly IDataBaseGamesSourceService _dbGamesSourceService =
-            provider.GetRequiredService<IDataBaseGamesSourceService>();
-        private readonly IDataBaseHydraFiltersService _dbHydraFiltersService =
-            provider.GetRequiredService<IDataBaseHydraFiltersService>();
-        private readonly ILogger<ConfigureService> _logger = provider.GetRequiredService<
-            ILogger<ConfigureService>
-        >();
+        private readonly IStorageService _storageService = provider.GetRequiredService<IStorageService>();
+        private readonly IDataBaseGamesSourceService _dbGamesSourceService = provider.GetRequiredService<IDataBaseGamesSourceService>();
+        private readonly IDataBaseHydraFiltersService _dbHydraFiltersService = provider.GetRequiredService<IDataBaseHydraFiltersService>();
+        private readonly ILogger<ConfigureService> _logger = provider.GetRequiredService<ILogger<ConfigureService>>();
         private readonly IThemeService _themeService = provider.GetRequiredService<IThemeService>();
         private readonly MainWindow _window = provider.GetRequiredService<MainWindow>();
         private readonly AppDataBaseContext _db = provider.GetRequiredService<AppDataBaseContext>();
-        private readonly INotificationService _notificationService =
-            provider.GetRequiredService<INotificationService>();
+        private readonly INotificationService _notificationService = provider.GetRequiredService<INotificationService>();
 
         // IHostedService
 
@@ -81,8 +75,7 @@ public partial class App
             if (_storageService.Cached is { } cached)
             {
                 _window.AppWindow.Resize(
-                    cached.Window
-                        is { IsWindowSizePersistent: true, Width: { } width, Height: { } height }
+                    cached.Window is { IsWindowSizePersistent: true, Width: { } width, Height: { } height }
                         ? new SizeInt32(Convert.ToInt32(width), Convert.ToInt32(height))
                         : new SizeInt32(1280, 720)
                 );
@@ -103,16 +96,11 @@ public partial class App
             {
                 await _db.Database.MigrateAsync(token);
 
-                await Task.WhenAll(
-                    _dbGamesSourceService.ObtainIfNeededAsync(token),
-                    _dbHydraFiltersService.ObtainIfNeededAsync(token)
-                );
+                await Task.WhenAll(_dbGamesSourceService.ObtainIfNeededAsync(token), _dbHydraFiltersService.ObtainIfNeededAsync(token));
             }
             catch (Exception ex)
             {
-                await _window.DispatcherQueue.EnqueueAsync(() =>
-                    _notificationService.ShowErrorNotification(ex)
-                );
+                await _window.DispatcherQueue.EnqueueAsync(() => _notificationService.ShowErrorNotification(ex));
                 _logger.LogError(ex, "{ex}", ex.Message);
             }
         }

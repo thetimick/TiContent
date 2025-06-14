@@ -21,20 +21,13 @@ namespace TiContent.UI.WinUI.Services.DB;
 
 public interface IDataBaseHydraFiltersService
 {
-    public Task<List<DataBaseHydraFilterItemEntity>> ObtainIfNeededAsync(
-        CancellationToken token = default
-    );
+    public Task<List<DataBaseHydraFilterItemEntity>> ObtainIfNeededAsync(CancellationToken token = default);
 }
 
-public class DataBaseHydraFiltersService(
-    IHydraApiService api,
-    App.AppDataBaseContext db,
-    IStorageService storage
-) : IDataBaseHydraFiltersService
+public class DataBaseHydraFiltersService(IHydraApiService api, App.AppDataBaseContext db, IStorageService storage)
+    : IDataBaseHydraFiltersService
 {
-    public async Task<List<DataBaseHydraFilterItemEntity>> ObtainIfNeededAsync(
-        CancellationToken token = default
-    )
+    public async Task<List<DataBaseHydraFilterItemEntity>> ObtainIfNeededAsync(CancellationToken token = default)
     {
         if (!IsEmptyOrExpiredDataBase())
             return await db.HydraFiltersItems.AsNoTracking().ToListAsync(cancellationToken: token);
@@ -65,7 +58,6 @@ public class DataBaseHydraFiltersService(
 
     private bool IsEmptyOrExpiredDataBase()
     {
-        return db.HydraFiltersItems.AsNoTracking().IsEmpty()
-            || storage.Obtain().DataBaseTimestamp.HydraFilters < DateTime.Now.AddHours(-3);
+        return db.HydraFiltersItems.AsNoTracking().IsEmpty() || storage.Obtain().DataBaseTimestamp.HydraFilters < DateTime.Now.AddHours(-3);
     }
 }

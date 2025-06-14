@@ -138,10 +138,7 @@ public partial class FilmsPageViewModel : ObservableObject
                 var items = await _dataSource.ObtainItemsAsync(FilterByContentSelectedIndex, Query);
                 DispatcherWrapper.InvokeOnMain(() =>
                 {
-                    var preparedItems = _mapper.Map<
-                        List<TMDBResponseEntity.ItemEntity>,
-                        ObservableCollection<FilmsPageItemEntity>
-                    >(items);
+                    var preparedItems = _mapper.Map<List<TMDBResponseEntity.ItemEntity>, ObservableCollection<FilmsPageItemEntity>>(items);
                     if (Items == preparedItems)
                         return;
                     Items = preparedItems;

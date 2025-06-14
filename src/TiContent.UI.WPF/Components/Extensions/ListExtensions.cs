@@ -246,11 +246,7 @@ public static class ListExtensions
     /// <summary>
     /// Checks if two collections contain the same items in any order.
     /// </summary>
-    public static bool IsListEqual<T>(
-        this IEnumerable<T> source,
-        IEnumerable<T> target,
-        IEqualityComparer<T> comparer
-    )
+    public static bool IsListEqual<T>(this IEnumerable<T> source, IEnumerable<T> target, IEqualityComparer<T> comparer)
     {
         if (source == null && target == null)
         {
@@ -373,9 +369,7 @@ public static class ListExtensions
         }
 
         var listsCounts = lists.Count();
-        return new HashSet<T>(
-            set.GroupBy(a => a).Where(a => a.Count() < listsCounts).Select(a => a.Key)
-        );
+        return new HashSet<T>(set.GroupBy(a => a).Where(a => a.Count() < listsCounts).Select(a => a.Key));
     }
 
     /// <summary>

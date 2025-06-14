@@ -17,12 +17,7 @@ public interface INotificationService
 {
     public void Setup(InfoBarPanel stack);
 
-    public void ShowNotification(
-        string title,
-        string message,
-        InfoBarSeverity severity,
-        TimeSpan? duration = null
-    );
+    public void ShowNotification(string title, string message, InfoBarSeverity severity, TimeSpan? duration = null);
 
     public void ShowErrorNotification(Exception ex, TimeSpan? duration = null);
 }
@@ -38,12 +33,7 @@ public class NotificationService : INotificationService
         _stack = stack;
     }
 
-    public void ShowNotification(
-        string title,
-        string message,
-        InfoBarSeverity severity,
-        TimeSpan? duration
-    )
+    public void ShowNotification(string title, string message, InfoBarSeverity severity, TimeSpan? duration)
     {
         var bar = MakeNotification(title, message, severity);
         if (duration is { } unwrapped)

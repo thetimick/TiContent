@@ -60,9 +60,6 @@ public static class StorageEntityExtensions
 {
     public static bool IsFirstLaunch(this StorageEntity.WindowEntity entity)
     {
-        return entity.Width == null
-            || entity.Height == null
-            || entity.X == null
-            || entity.Y == null;
+        return entity.Width == null || entity.Height == null || entity.X == null || entity.Y == null;
     }
 }

@@ -34,8 +34,7 @@ public interface IHydraApiService
 public partial class HydraApiService(IRestClient client, IStorageService storage)
 {
     private string HydraApiBaseUrl => storage.Cached?.Urls.HydraApiBaseUrl ?? string.Empty;
-    private string HydraAssetsApiBaseUrl =>
-        storage.Cached?.Urls.HydraApiAssetsBaseUrl ?? string.Empty;
+    private string HydraAssetsApiBaseUrl => storage.Cached?.Urls.HydraApiAssetsBaseUrl ?? string.Empty;
 }
 
 public partial class HydraApiService : IHydraApiService
@@ -46,14 +45,9 @@ public partial class HydraApiService : IHydraApiService
     )
     {
         var path = UrlHelper.Combine(HydraApiBaseUrl, "catalogue", @params.PathType);
-        var request = new RestRequest(path)
-            .AddParameter("take", @params.Take ?? 12)
-            .AddParameter("skip", @params.Skip ?? 0);
+        var request = new RestRequest(path).AddParameter("take", @params.Take ?? 12).AddParameter("skip", @params.Skip ?? 0);
 
-        var response = await client.ExecuteAsync<List<HydraApiCatalogueResponseEntity>>(
-            request,
-            token
-        );
+        var response = await client.ExecuteAsync<List<HydraApiCatalogueResponseEntity>>(request, token);
         if (response is { IsSuccessful: true, Data: { } entity })
             return entity;
 

@@ -8,11 +8,7 @@ public partial class MainWindow
 {
     private MainWindowViewModel ViewModel { get; }
 
-    public MainWindow(
-        MainWindowViewModel viewModel,
-        INavigationService navigation,
-        IStorageService storageService
-    )
+    public MainWindow(MainWindowViewModel viewModel, INavigationService navigation, IStorageService storageService)
     {
         ViewModel = viewModel;
         DataContext = viewModel;

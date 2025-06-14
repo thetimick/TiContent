@@ -35,10 +35,7 @@ public sealed partial class MainWindow
     }
 
     // Private Methods
-    private void OnSelectionChanged(
-        NavigationView sender,
-        NavigationViewSelectionChangedEventArgs args
-    )
+    private void OnSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
         if (args.IsSettingsSelected)
             _navigationService.NavigateTo(NavigationPath.Settings);

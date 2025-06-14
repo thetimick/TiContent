@@ -42,11 +42,7 @@ public partial class GamesPage
 
             _scrollView = DependencyObjectHelper.FindVisualChild<ScrollView>(ItemsControl);
             if (ViewModel.Items.Count > 0 && ViewModel.ScrollViewOffset > 0)
-                _scrollView?.ScrollTo(
-                    0,
-                    ViewModel.ScrollViewOffset,
-                    new ScrollingScrollOptions(ScrollingAnimationMode.Disabled)
-                );
+                _scrollView?.ScrollTo(0, ViewModel.ScrollViewOffset, new ScrollingScrollOptions(ScrollingAnimationMode.Disabled));
         };
     }
 
@@ -136,10 +132,7 @@ public partial class GamesPage
         ShowSuggestionListIfNeeded();
     }
 
-    private void AutoSuggestBox_OnSuggestionChosen(
-        AutoSuggestBox sender,
-        AutoSuggestBoxSuggestionChosenEventArgs args
-    )
+    private void AutoSuggestBox_OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
     {
         if (args.SelectedItem is string item)
             ViewModel.TapOnHistoryItem(item);

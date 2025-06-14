@@ -214,8 +214,7 @@ public static class StringExtension
     /// <summary>
     /// Munges substitutions.
     /// </summary>
-    private static List<KeyValuePair<string, string>> mungeUnmungeSubstitutions =
-        GetMungeUnmungeSubstitutions();
+    private static List<KeyValuePair<string, string>> mungeUnmungeSubstitutions = GetMungeUnmungeSubstitutions();
 
     private static List<KeyValuePair<string, string>> GetMungeUnmungeSubstitutions()
     {
@@ -269,22 +268,10 @@ public static class StringExtension
     /// <summary>
     /// Munges or unmunges password as per substitution map.
     /// </summary>
-    private static IList<string> MungeUnmunge(
-        this string password,
-        IDictionary<string, string[]> muMap,
-        bool isMunging
-    )
+    private static IList<string> MungeUnmunge(this string password, IDictionary<string, string[]> muMap, bool isMunging)
     {
         var items = new List<string>();
-        MungeUnmunge(
-            password,
-            muMap,
-            isMunging,
-            items,
-            0,
-            new StringBuilder(password.Length),
-            new Dictionary<string, string>()
-        );
+        MungeUnmunge(password, muMap, isMunging, items, 0, new StringBuilder(password.Length), new Dictionary<string, string>());
         return items;
     }
 
@@ -325,21 +312,11 @@ public static class StringExtension
         for (int length = 1; length <= 2; length++)
         {
             var part = substring(password, index, length);
-            foreach (
-                var muSubstitute in GetMungeUnmungeParts(part, muMap, isMunging, partReplaceMap)
-            )
+            foreach (var muSubstitute in GetMungeUnmungeParts(part, muMap, isMunging, partReplaceMap))
             {
                 buffer.Insert(index, muSubstitute);
                 partReplaceMap[part] = muSubstitute;
-                MungeUnmunge(
-                    password,
-                    muMap,
-                    isMunging,
-                    items,
-                    index + length,
-                    buffer,
-                    partReplaceMap
-                );
+                MungeUnmunge(password, muMap, isMunging, items, index + length, buffer, partReplaceMap);
                 buffer.Length -= muSubstitute.Length;
                 partReplaceMap.Remove(part);
             }

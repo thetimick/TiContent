@@ -126,11 +126,7 @@ public record JacredEntity
 
 internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
 {
-    public override JacredEntity.TrackerEntity Read(
-        ref Utf8JsonReader reader,
-        Type typeToConvert,
-        JsonSerializerOptions options
-    )
+    public override JacredEntity.TrackerEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
         return value switch
@@ -145,11 +141,7 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
         };
     }
 
-    public override void Write(
-        Utf8JsonWriter writer,
-        JacredEntity.TrackerEntity value,
-        JsonSerializerOptions options
-    )
+    public override void Write(Utf8JsonWriter writer, JacredEntity.TrackerEntity value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }
@@ -157,11 +149,7 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
 
 public class ByteSizeConverter : JsonConverter<ByteSize>
 {
-    public override ByteSize Read(
-        ref Utf8JsonReader reader,
-        Type typeToConvert,
-        JsonSerializerOptions options
-    )
+    public override ByteSize Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var size = reader.GetInt64();
         return ByteSize.FromBytes(size);
@@ -175,22 +163,14 @@ public class ByteSizeConverter : JsonConverter<ByteSize>
 
 public class DateTimeConverter : JsonConverter<DateTime?>
 {
-    public override DateTime? Read(
-        ref Utf8JsonReader reader,
-        Type typeToConvert,
-        JsonSerializerOptions options
-    )
+    public override DateTime? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         if (reader.GetString() is { } value)
             return DateTime.Parse(value);
         return null;
     }
 
-    public override void Write(
-        Utf8JsonWriter writer,
-        DateTime? value,
-        JsonSerializerOptions options
-    )
+    public override void Write(Utf8JsonWriter writer, DateTime? value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }
@@ -198,11 +178,7 @@ public class DateTimeConverter : JsonConverter<DateTime?>
 
 internal class VideoTypeConverter : JsonConverter<JacredEntity.VideoTypeEntity>
 {
-    public override JacredEntity.VideoTypeEntity Read(
-        ref Utf8JsonReader reader,
-        Type typeToConvert,
-        JsonSerializerOptions options
-    )
+    public override JacredEntity.VideoTypeEntity Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
         return value switch
@@ -213,11 +189,7 @@ internal class VideoTypeConverter : JsonConverter<JacredEntity.VideoTypeEntity>
         };
     }
 
-    public override void Write(
-        Utf8JsonWriter writer,
-        JacredEntity.VideoTypeEntity value,
-        JsonSerializerOptions options
-    )
+    public override void Write(Utf8JsonWriter writer, JacredEntity.VideoTypeEntity value, JsonSerializerOptions options)
     {
         throw new NotImplementedException();
     }

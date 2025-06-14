@@ -13,10 +13,7 @@ namespace TiContent.UI.WPF.Components.Interceptors;
 
 public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> logger) : Interceptor
 {
-    public override ValueTask BeforeRequest(
-        RestRequest request,
-        CancellationToken cancellationToken
-    )
+    public override ValueTask BeforeRequest(RestRequest request, CancellationToken cancellationToken)
     {
         var resource = request.Resource;
         var query = GetQueryString(request);
@@ -35,22 +32,14 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
         return base.BeforeRequest(request, cancellationToken);
     }
 
-    public override ValueTask AfterRequest(
-        RestResponse response,
-        CancellationToken cancellationToken
-    )
+    public override ValueTask AfterRequest(RestResponse response, CancellationToken cancellationToken)
     {
         var request = response.Request;
         var resource = request.Resource;
         var queryString = GetQueryString(request);
         var url = $"{resource}{queryString}";
 
-        logger.LogInformation(
-            "RESPONSE: {StatusCode} {Method} {Url}",
-            (int)response.StatusCode,
-            request.Method,
-            url
-        );
+        logger.LogInformation("RESPONSE: {StatusCode} {Method} {Url}", (int)response.StatusCode, request.Method, url);
 
         if (!response.IsSuccessful)
         {
@@ -67,20 +56,14 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
 
     private static string GetQueryString(RestRequest request)
     {
-        var queryParams = request
-            .Parameters.Where(p => p.Type == ParameterType.GetOrPost)
-            .Select(p => $"{p.Name}={p.Value}")
-            .ToList();
+        var queryParams = request.Parameters.Where(p => p.Type == ParameterType.GetOrPost).Select(p => $"{p.Name}={p.Value}").ToList();
 
         return queryParams.Count != 0 ? "?" + string.Join("&", queryParams) : string.Empty;
     }
 
     private static string GetHeaders(RestRequest request)
     {
-        var headers = request
-            .Parameters.Where(p => p.Type == ParameterType.HttpHeader)
-            .Select(p => $"{p.Name}: {p.Value}")
-            .ToList();
+        var headers = request.Parameters.Where(p => p.Type == ParameterType.HttpHeader).Select(p => $"{p.Name}: {p.Value}").ToList();
 
         return headers.Count != 0 ? string.Join("; ", headers) : "None";
     }
@@ -89,9 +72,7 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
     {
         if (request.Method == Method.Get)
             return "None";
-        var body = request
-            .Parameters.FirstOrDefault(p => p.Type == ParameterType.RequestBody)
-            ?.Value;
+        var body = request.Parameters.FirstOrDefault(p => p.Type == ParameterType.RequestBody)?.Value;
         return body?.ToString() ?? "None";
     }
 }
