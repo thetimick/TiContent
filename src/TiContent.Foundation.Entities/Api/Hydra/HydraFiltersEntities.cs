@@ -23,31 +23,23 @@ public record HydraFiltersEntity
 
     public record HydraFiltersGenresEntity
     {
-        [JsonPropertyName("en")]
-        public List<string> En { get; set; } = [];
+        [JsonPropertyName("en")] public List<string> En { get; set; } = [];
 
-        [JsonPropertyName("es")]
-        public List<string> Es { get; set; } = [];
+        [JsonPropertyName("es")] public List<string> Es { get; set; } = [];
 
-        [JsonPropertyName("pt")]
-        public List<string> Pt { get; set; } = [];
+        [JsonPropertyName("pt")] public List<string> Pt { get; set; } = [];
 
-        [JsonPropertyName("ru")]
-        public List<string> Ru { get; set; } = [];
+        [JsonPropertyName("ru")] public List<string> Ru { get; set; } = [];
     }
 
     public record HydraFiltersTagsEntity
     {
-        [JsonPropertyName("ru")]
-        public Dictionary<string, long> Ru { get; set; } = [];
+        [JsonPropertyName("ru")] public Dictionary<string, long> Ru { get; set; } = [];
 
-        [JsonPropertyName("en")]
-        public Dictionary<string, long> En { get; set; } = [];
+        [JsonPropertyName("en")] public Dictionary<string, long> En { get; set; } = [];
 
-        [JsonPropertyName("pt")]
-        public Dictionary<string, long> Pt { get; set; } = [];
+        [JsonPropertyName("pt")] public Dictionary<string, long> Pt { get; set; } = [];
 
-        [JsonPropertyName("es")]
-        public Dictionary<string, long> Es { get; set; } = [];
+        [JsonPropertyName("es")] public Dictionary<string, long> Es { get; set; } = [];
     }
 }

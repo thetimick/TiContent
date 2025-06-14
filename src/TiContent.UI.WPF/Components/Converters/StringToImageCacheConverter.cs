@@ -7,8 +7,6 @@
 
 using System.Globalization;
 using System.Windows.Data;
-using TiContent.UI.WPF.Application;
-using TiContent.UI.WPF.Providers;
 
 namespace TiContent.UI.WPF.Components.Converters;
 
@@ -24,7 +22,12 @@ public class StringToImageCacheConverter : IValueConverter
         return value;
     }
 
-    public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+    public object? ConvertBack(
+        object? value,
+        Type targetType,
+        object? parameter,
+        CultureInfo culture
+    )
     {
         throw new NotImplementedException();
     }

@@ -33,7 +33,10 @@ public partial class FilmsPageContentDataSource(ITMDBService contentService)
 
 public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 {
-    public async Task<List<TMDBResponseEntity.ItemEntity>> ObtainItemsAsync(int content, string query)
+    public async Task<List<TMDBResponseEntity.ItemEntity>> ObtainItemsAsync(
+        int content,
+        string query
+    )
     {
         if (query.IsNullOrEmpty())
             return await ObtainTrendingAsync(content);
@@ -52,17 +55,19 @@ public partial class FilmsPageContentDataSource
 {
     private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainTrendingAsync(int content)
     {
-        if (_pagination?.InProgress == true || _pagination is { HasMorePage: false, HasBeenInit: true })
+        if (
+            _pagination?.InProgress == true
+            || _pagination is { HasMorePage: false, HasBeenInit: true }
+        )
             return _items;
 
         _pagination ??= new TMDBPagination();
         _pagination.NextPage();
 
-        var request = new TMDBTrendingRequestEntity
-        {
+        var request = new TMDBTrendingRequestEntity {
             Period = TMDBTrendingRequestEntity.PeriodType.Week,
             Content = content.MapToContentType(),
-            Page = _pagination.Page,
+            Page = _pagination.Page
         };
 
         var response = await contentService.ObtainTrendingAsync(request);
@@ -74,9 +79,15 @@ public partial class FilmsPageContentDataSource
         return _items;
     }
 
-    private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainSearchAsync(int content, string query)
+    private async Task<List<TMDBResponseEntity.ItemEntity>> ObtainSearchAsync(
+        int content,
+        string query
+    )
     {
-        if (_pagination?.InProgress == true || _pagination is { HasMorePage: false, HasBeenInit: true })
+        if (
+            _pagination?.InProgress == true
+            || _pagination is { HasMorePage: false, HasBeenInit: true }
+        )
             return _items;
 
         query = query.Trim().Humanize(LetterCasing.LowerCase);
@@ -84,11 +95,10 @@ public partial class FilmsPageContentDataSource
         _pagination ??= new TMDBPagination();
         _pagination.NextPage();
 
-        var request = new TMDBSearchRequestEntity
-        {
+        var request = new TMDBSearchRequestEntity {
             Content = content.MapToContentType(),
             Query = query,
-            Page = _pagination.Page,
+            Page = _pagination.Page
         };
 
         var response = await contentService.ObtainSearchAsync(request);
@@ -118,12 +128,11 @@ internal static class IntExtensions
 {
     public static TMDBRequestContentType MapToContentType(this int index)
     {
-        return index switch
-        {
+        return index switch {
             0 => TMDBRequestContentType.Movies,
             1 => TMDBRequestContentType.Serials,
             2 => TMDBRequestContentType.Anime,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null),
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
         };
     }
 }

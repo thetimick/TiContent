@@ -14,14 +14,11 @@ namespace TiContent.UI.WPF.ViewModels.Main.Pages;
 
 public partial class SettingsPageViewModel(IStorageService storageService) : ObservableObject
 {
-    [ObservableProperty]
-    public partial int ThemeIndex { get; set; }
+    [ObservableProperty] public partial int ThemeIndex { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsWindowSizePersistent { get; set; }
+    [ObservableProperty] public partial bool IsWindowSizePersistent { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsWindowOnCenterScreen { get; set; }
+    [ObservableProperty] public partial bool IsWindowOnCenterScreen { get; set; }
 
     partial void OnThemeIndexChanged(int value)
     {

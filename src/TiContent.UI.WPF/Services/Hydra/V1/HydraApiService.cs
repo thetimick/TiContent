@@ -41,7 +41,10 @@ public class HydraApiService(IRestClient client, IStorageService storage) : IHyd
         CancellationToken token = default
     )
     {
-        var request = new RestRequest(BaseUrl + Endpoints.Catalogue.Search, Method.Post).AddBody(@params, ContentType.Json);
+        var request = new RestRequest(BaseUrl + Endpoints.Catalogue.Search, Method.Post).AddBody(
+            @params,
+            ContentType.Json
+        );
 
         var response = await client.ExecuteAsync<HydraApiSearchResponseEntity>(request, token);
         if (response is { IsSuccessful: true, Data: { } entity })
@@ -61,17 +64,22 @@ public class HydraApiService(IRestClient client, IStorageService storage) : IHyd
             new RestRequest(AssetsBaseUrl + Endpoints.Filters.Tags),
             token
         );
-        var developers = client.ExecuteAsync<List<string>>(new RestRequest(AssetsBaseUrl + Endpoints.Filters.Developers), token);
-        var publishers = client.ExecuteAsync<List<string>>(new RestRequest(AssetsBaseUrl + Endpoints.Filters.Publishers), token);
+        var developers = client.ExecuteAsync<List<string>>(
+            new RestRequest(AssetsBaseUrl + Endpoints.Filters.Developers),
+            token
+        );
+        var publishers = client.ExecuteAsync<List<string>>(
+            new RestRequest(AssetsBaseUrl + Endpoints.Filters.Publishers),
+            token
+        );
 
         await Task.WhenAll(genres, tags, developers, publishers);
 
-        return new HydraFiltersEntity
-        {
+        return new HydraFiltersEntity {
             Genres = genres.Result.Data ?? new HydraFiltersEntity.HydraFiltersGenresEntity(),
             Tags = tags.Result.Data ?? new HydraFiltersEntity.HydraFiltersTagsEntity(),
             Developers = developers.Result.Data ?? [],
-            Publishers = publishers.Result.Data ?? [],
+            Publishers = publishers.Result.Data ?? []
         };
     }
 }

@@ -14,11 +14,10 @@ public class DataBaseHistoryEntity
     public enum HistoryType
     {
         Films,
-        Games,
+        Games
     }
 
     public HistoryType Type { get; init; }
 
-    [Key]
-    public string Query { get; init; } = string.Empty;
+    [Key] public string Query { get; init; } = string.Empty;
 }

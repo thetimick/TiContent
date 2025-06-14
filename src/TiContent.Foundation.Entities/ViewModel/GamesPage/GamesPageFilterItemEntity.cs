@@ -15,7 +15,7 @@ public partial record GamesPageFilterItemEntity
     public enum FilterType
     {
         Genre,
-        Tags,
+        Tags
     }
 
     public string Title { get; init; } = string.Empty;

@@ -50,10 +50,10 @@ public partial class App
     // Public Methods
 
     /// <summary>
-    /// Gets registered service.
+    ///     Gets registered service.
     /// </summary>
     /// <typeparam name="T">Type of the service to get.</typeparam>
-    /// <returns>Instance of the service or <see langword="null"/>.</returns>
+    /// <returns>Instance of the service or <see langword="null" />.</returns>
     public static T GetRequiredService<T>()
         where T : class
     {

@@ -7,7 +7,6 @@
 
 using RestSharp;
 using TiContent.UI.WPF.Components.Helpers;
-using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Storage;
 
@@ -15,7 +14,8 @@ namespace TiContent.UI.WPF.Services.Cub;
 
 public partial class CubApiService(IRestClient client, IStorageService storage)
 {
-    private string CubApiBaseUrl => storage.Cached?.Urls.CubApiBaseUrl ?? AppConstants.Urls.CubApiBaseUrl;
+    private string CubApiBaseUrl =>
+        storage.Cached?.Urls.CubApiBaseUrl ?? AppConstants.Urls.CubApiBaseUrl;
 }
 
 // ICubApiService

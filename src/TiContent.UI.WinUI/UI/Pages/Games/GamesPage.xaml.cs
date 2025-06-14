@@ -8,6 +8,7 @@
 using System;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using Windows.Storage.Streams;
 using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.Extensions.Logging;
@@ -20,7 +21,6 @@ using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Components.Helpers;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.UI;
-using Windows.Storage.Streams;
 
 namespace TiContent.UI.WinUI.UI.Pages.Games;
 
@@ -42,7 +42,11 @@ public partial class GamesPage
 
             _scrollView = DependencyObjectHelper.FindVisualChild<ScrollView>(ItemsControl);
             if (ViewModel.Items.Count > 0 && ViewModel.ScrollViewOffset > 0)
-                _scrollView?.ScrollTo(0, ViewModel.ScrollViewOffset, new ScrollingScrollOptions(ScrollingAnimationMode.Disabled));
+                _scrollView?.ScrollTo(
+                    0,
+                    ViewModel.ScrollViewOffset,
+                    new ScrollingScrollOptions(ScrollingAnimationMode.Disabled)
+                );
         };
     }
 
@@ -90,7 +94,6 @@ public partial class GamesPage
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
         if (sender is Image { Tag: string url } image)
-        {
             Task.Run(async () =>
             {
                 try
@@ -117,7 +120,6 @@ public partial class GamesPage
                     throw;
                 }
             });
-        }
     }
 
     // AutoSuggestBox
@@ -132,7 +134,10 @@ public partial class GamesPage
         ShowSuggestionListIfNeeded();
     }
 
-    private void AutoSuggestBox_OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+    private void AutoSuggestBox_OnSuggestionChosen(
+        AutoSuggestBox sender,
+        AutoSuggestBoxSuggestionChosenEventArgs args
+    )
     {
         if (args.SelectedItem is string item)
             ViewModel.TapOnHistoryItem(item);

@@ -30,17 +30,14 @@ public partial class GamesPageViewModel : ObservableObject
 {
     // Observable
 
-    [ObservableProperty]
-    public partial ViewStateEnum ViewState { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty] public partial ViewStateEnum ViewState { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty]
-    public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } =
+        [];
 
-    [ObservableProperty]
-    public partial HydraFiltersEntity Filters { get; set; } = new();
+    [ObservableProperty] public partial HydraFiltersEntity Filters { get; set; } = new();
 
     // Private Props
 
@@ -72,7 +69,10 @@ public partial class GamesPageViewModel : ObservableObject
         _provider = provider;
         _logger = logger;
 
-        _debounceOnQueryChangedAction = Debouncer.Debounce(() => ObtainItems(true), TimeSpan.FromSeconds(1));
+        _debounceOnQueryChangedAction = Debouncer.Debounce(
+            () => ObtainItems(true),
+            TimeSpan.FromSeconds(1)
+        );
     }
 
     public void OnLoaded()
@@ -141,25 +141,29 @@ public partial class GamesPageViewModel : ObservableObject
         _debounceCancellationToken = new CancellationTokenSource();
 
         LoadItems(
-            take: _pagination.CurrentTakeValue,
-            skip: _pagination.CurrentSkipValue,
-            pagination: true,
-            token: _debounceCancellationToken.Token
+            _pagination.CurrentTakeValue,
+            _pagination.CurrentSkipValue,
+            true,
+            _debounceCancellationToken.Token
         );
     }
 
-    private void LoadItems(int take = 24, int skip = 0, bool pagination = false, CancellationToken token = default)
+    private void LoadItems(
+        int take = 24,
+        int skip = 0,
+        bool pagination = false,
+        CancellationToken token = default
+    )
     {
         Task.Run(
             async () =>
             {
                 try
                 {
-                    var request = new HydraApiSearchRequestParamsEntity
-                    {
+                    var request = new HydraApiSearchRequestParamsEntity {
                         Title = PreparedQuery,
                         Take = take,
-                        Skip = skip,
+                        Skip = skip
                     };
                     var entity = await _hydraService.ObtainSearchAsync(request, token);
                     DispatcherWrapper.InvokeOnMain(() => SetItems(entity, pagination));
@@ -170,7 +174,9 @@ public partial class GamesPageViewModel : ObservableObject
                     DispatcherWrapper.InvokeOnMain(() =>
                     {
                         if (ViewState != ViewStateEnum.Content)
-                            ViewState = Items.IsEmpty() ? ViewStateEnum.Empty : ViewStateEnum.InProgress;
+                            ViewState = Items.IsEmpty()
+                                ? ViewStateEnum.Empty
+                                : ViewStateEnum.InProgress;
                         ExceptionReport.Show(ex);
                     });
                 }
@@ -190,7 +196,9 @@ public partial class GamesPageViewModel : ObservableObject
             {
                 try
                 {
-                    var filters = await _hydraFiltersDataSource.ObtainAsync(_filtersCancellationToken.Token);
+                    var filters = await _hydraFiltersDataSource.ObtainAsync(
+                        _filtersCancellationToken.Token
+                    );
                     DispatcherWrapper.InvokeOnMain(() => Filters = filters);
                 }
                 catch (Exception ex)
@@ -213,9 +221,7 @@ public partial class GamesPageViewModel : ObservableObject
         }
 
         if (Items.IsEmpty())
-        {
             _pagination = new HydraPagination(entity.Count ?? 0);
-        }
 
         if (pagination)
         {

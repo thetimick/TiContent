@@ -16,7 +16,7 @@ public static class OpenLinkHelper
     {
         Google,
         Rutracker,
-        Rutor,
+        Rutor
     }
 
     public static void OpenUrl(string url)
@@ -31,13 +31,13 @@ public static class OpenLinkHelper
         {
             case Type.Google:
                 OpenUrl($"https://www.google.com/search?q={encoded}");
-                break;
+            break;
             case Type.Rutracker:
                 OpenUrl($"https://rutracker.org/forum/tracker.php?nm={encoded}");
-                break;
+            break;
             case Type.Rutor:
                 OpenUrl($"https://rutor.info/search/{encoded}");
-                break;
+            break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }

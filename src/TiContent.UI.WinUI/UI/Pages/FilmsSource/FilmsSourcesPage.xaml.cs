@@ -45,10 +45,10 @@ public sealed partial class FilmsSourcesPage
         {
             case "0":
                 ViewModel.TapOnTrackerButton(parameter);
-                break;
+            break;
             case "1":
                 ViewModel.TapOnTorrentButton(parameter);
-                break;
+            break;
         }
     }
 }

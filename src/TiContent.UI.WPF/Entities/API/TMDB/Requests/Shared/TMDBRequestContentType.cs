@@ -11,19 +11,18 @@ public enum TMDBRequestContentType
 {
     Movies,
     Serials,
-    Anime,
+    Anime
 }
 
 public static class TMDBSearchRequestEntityExtensions
 {
     public static string RawValue(this TMDBRequestContentType type)
     {
-        return type switch
-        {
-            TMDBRequestContentType.Movies => "movie",
+        return type switch {
+            TMDBRequestContentType.Movies  => "movie",
             TMDBRequestContentType.Serials => "tv",
-            TMDBRequestContentType.Anime => "anime",
-            _ => throw new ArgumentOutOfRangeException(nameof(type)),
+            TMDBRequestContentType.Anime   => "anime",
+            _                              => throw new ArgumentOutOfRangeException(nameof(type))
         };
     }
 }

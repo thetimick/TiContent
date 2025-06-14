@@ -11,5 +11,5 @@ public enum ViewStateEnum
 {
     Content,
     Empty,
-    InProgress,
+    InProgress
 }

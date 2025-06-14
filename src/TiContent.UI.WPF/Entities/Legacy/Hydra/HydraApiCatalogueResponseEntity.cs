@@ -16,26 +16,19 @@ namespace TiContent.UI.WPF.Entities.Legacy.Hydra;
 
 public record HydraApiCatalogueResponseEntity
 {
-    [JsonPropertyName("title")]
-    public string? Title { get; set; }
+    [JsonPropertyName("title")] public string? Title { get; set; }
 
-    [JsonPropertyName("shop")]
-    public string? Shop { get; set; }
+    [JsonPropertyName("shop")] public string? Shop { get; set; }
 
-    [JsonPropertyName("objectId")]
-    public string? ObjectId { get; set; }
+    [JsonPropertyName("objectId")] public string? ObjectId { get; set; }
 
-    [JsonPropertyName("iconUrl")]
-    public Uri? IconUrl { get; set; }
+    [JsonPropertyName("iconUrl")] public Uri? IconUrl { get; set; }
 
-    [JsonPropertyName("logoImageUrl")]
-    public Uri? LogoImageUrl { get; set; }
+    [JsonPropertyName("logoImageUrl")] public Uri? LogoImageUrl { get; set; }
 
-    [JsonPropertyName("coverImageUrl")]
-    public Uri? CoverImageUrl { get; set; }
+    [JsonPropertyName("coverImageUrl")] public Uri? CoverImageUrl { get; set; }
 
-    [JsonPropertyName("libraryImageUrl")]
-    public Uri? LibraryImageUrl { get; set; }
+    [JsonPropertyName("libraryImageUrl")] public Uri? LibraryImageUrl { get; set; }
 
     [JsonPropertyName("libraryHeroImageUrl")]
     public Uri? LibraryHeroImageUrl { get; set; }

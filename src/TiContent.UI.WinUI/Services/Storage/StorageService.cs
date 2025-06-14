@@ -30,7 +30,7 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService
     public StorageEntity Obtain()
     {
         if (!File.Exists(AppConstants.FileNames.StorageFileName))
-            return Save(force: true);
+            return Save(true);
 
         try
         {
@@ -45,7 +45,7 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService
         catch
         {
             logger.LogInformation("File not found, creating default");
-            return Save(force: true);
+            return Save(true);
         }
     }
 
@@ -68,7 +68,12 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Failed to save storage entity to file {Path}. Error: {Message}", path, ex.Message);
+            logger.LogError(
+                ex,
+                "Failed to save storage entity to file {Path}. Error: {Message}",
+                path,
+                ex.Message
+            );
             return Cached;
         }
     }

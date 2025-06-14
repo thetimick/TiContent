@@ -15,19 +15,18 @@ using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.UI.Pages.Settings;
 
-public partial class SettingsPageViewModel(IStorageService storageService, IThemeService themeService) : ObservableObject
+public partial class SettingsPageViewModel(
+    IStorageService storageService,
+    IThemeService themeService
+) : ObservableObject
 {
-    [ObservableProperty]
-    public partial int ThemeIndex { get; set; }
+    [ObservableProperty] public partial int ThemeIndex { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsWindowSizePersistent { get; set; }
+    [ObservableProperty] public partial bool IsWindowSizePersistent { get; set; }
 
-    [ObservableProperty]
-    public partial bool IsWindowOnCenterScreen { get; set; }
+    [ObservableProperty] public partial bool IsWindowOnCenterScreen { get; set; }
 
-    [ObservableProperty]
-    public partial string TMDBApiKey { get; set; } = string.Empty;
+    [ObservableProperty] public partial string TMDBApiKey { get; set; } = string.Empty;
 
     partial void OnThemeIndexChanged(int value)
     {
@@ -72,6 +71,11 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
     [RelayCommand]
     private void TapOnOpenStorageButton()
     {
-        Process.Start(new ProcessStartInfo("explorer.exe", $"/select,\"{AppConstants.FileNames.DataBaseFileName}\""));
+        Process.Start(
+            new ProcessStartInfo(
+                "explorer.exe",
+                $"/select,\"{AppConstants.FileNames.DataBaseFileName}\""
+            )
+        );
     }
 }

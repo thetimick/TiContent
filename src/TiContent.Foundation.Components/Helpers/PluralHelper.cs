@@ -17,11 +17,10 @@ public static class PluralHelper
         if (n is >= 11 and <= 14)
             return form5;
 
-        return (n % 10) switch
-        {
-            1 => form1,
+        return (n % 10) switch {
+            1           => form1,
             2 or 3 or 4 => form2,
-            _ => form5,
+            _           => form5
         };
     }
 }

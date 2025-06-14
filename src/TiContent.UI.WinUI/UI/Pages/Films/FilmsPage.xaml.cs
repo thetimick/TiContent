@@ -42,7 +42,11 @@ public partial class FilmsPage
 
             _scrollView = DependencyObjectHelper.FindVisualChild<ScrollView>(ItemsControl);
             if (ViewModel.Items.Count > 0 && ViewModel.ScrollViewOffset > 0)
-                _scrollView?.ScrollTo(0, ViewModel.ScrollViewOffset, new ScrollingScrollOptions(ScrollingAnimationMode.Disabled));
+                _scrollView?.ScrollTo(
+                    0,
+                    ViewModel.ScrollViewOffset,
+                    new ScrollingScrollOptions(ScrollingAnimationMode.Disabled)
+                );
         };
     }
 
@@ -90,14 +94,15 @@ public partial class FilmsPage
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
         if (sender is Image { Tag: string url } image)
-        {
             Task.Run(async () =>
             {
                 try
                 {
                     var entity = await ImageProvider.ObtainImageAsync(url);
                     var stream = await entity.Data.ToRandomAccessStreamAsync();
-                    await DispatcherQueue.EnqueueAsync(async () => image.Source = await stream.CreateBitmapAsync());
+                    await DispatcherQueue.EnqueueAsync(async () =>
+                        image.Source = await stream.CreateBitmapAsync()
+                    );
                 }
                 catch (Exception ex)
                 {
@@ -113,7 +118,6 @@ public partial class FilmsPage
                     throw;
                 }
             });
-        }
     }
 
     // AutoSuggestBox
@@ -142,7 +146,10 @@ public partial class FilmsPage
         }
     }
 
-    private void AutoSuggestBox_OnSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+    private void AutoSuggestBox_OnSuggestionChosen(
+        AutoSuggestBox sender,
+        AutoSuggestBoxSuggestionChosenEventArgs args
+    )
     {
         if (args.SelectedItem is string item)
             ViewModel.TapOnHistoryItem(item);

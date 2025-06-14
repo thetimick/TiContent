@@ -11,18 +11,13 @@ namespace TiContent.UI.WinUI.Services.UI.Navigation;
 
 public enum NavigationPath
 {
-    [Description("Фильмы & Сериалы")]
-    Films,
+    [Description("Фильмы & Сериалы")] Films,
 
-    [Description("Источники")]
-    FilmsSource,
+    [Description("Источники")] FilmsSource,
 
-    [Description("Игры")]
-    Games,
+    [Description("Игры")] Games,
 
-    [Description("Источники")]
-    GamesSource,
+    [Description("Источники")] GamesSource,
 
-    [Description("Параметры")]
-    Settings,
+    [Description("Параметры")] Settings
 }

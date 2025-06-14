@@ -11,7 +11,6 @@ using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
-using TiContent.UI.WinUI.UI.Windows.Main;
 
 namespace TiContent.UI.WinUI.Services.UI;
 
@@ -19,7 +18,12 @@ public interface INotificationService
 {
     public void Setup(InfoBarPanel stack, DispatcherQueue dispatcherQueue);
 
-    public void ShowNotification(string title, string message, InfoBarSeverity severity, TimeSpan? duration = null);
+    public void ShowNotification(
+        string title,
+        string message,
+        InfoBarSeverity severity,
+        TimeSpan? duration = null
+    );
 
     public void ShowErrorNotification(Exception ex, TimeSpan? duration = null);
 }
@@ -37,7 +41,12 @@ public class NotificationService : INotificationService
         _dispatcherQueue = dispatcherQueue;
     }
 
-    public void ShowNotification(string title, string message, InfoBarSeverity severity, TimeSpan? duration)
+    public void ShowNotification(
+        string title,
+        string message,
+        InfoBarSeverity severity,
+        TimeSpan? duration
+    )
     {
         _dispatcherQueue?.TryEnqueue(() =>
         {
@@ -65,12 +74,11 @@ public class NotificationService : INotificationService
 
     private InfoBar MakeNotification(string title, string message, InfoBarSeverity severity)
     {
-        var infoBar = new InfoBar
-        {
+        var infoBar = new InfoBar {
             Title = title,
             Message = message,
             Severity = severity,
-            IsOpen = true,
+            IsOpen = true
         };
         infoBar.CloseButtonClick += (_, _) => CloseButtonClick(infoBar);
         return infoBar;
@@ -91,6 +99,7 @@ public class NotificationService : INotificationService
             timer.Stop();
             _timers.Remove(bar);
         }
+
         bar.IsOpen = false;
         _stack?.Children.Remove(bar);
     }

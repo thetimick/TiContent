@@ -19,11 +19,11 @@ using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.UI.WinUI.DataSources.Abstraction;
 using TiContent.UI.WinUI.Services.Api.TMDB;
-using TiContent.UI.WinUI.Services.DB;
 
 namespace TiContent.UI.WinUI.DataSources;
 
-public interface IFilmsPageContentDataSource : IDataSource<FilmsPageItemEntity, IFilmsPageContentDataSource.ParamsEntity>
+public interface IFilmsPageContentDataSource
+    : IDataSource<FilmsPageItemEntity, IFilmsPageContentDataSource.ParamsEntity>
 {
     public record ParamsEntity(string Query, int Content);
 }
@@ -44,7 +44,10 @@ public partial class FilmsPageContentDataSource(ITMDBService api, IMapper mapper
 
 public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 {
-    public async Task<List<FilmsPageItemEntity>> ObtainAsync(IFilmsPageContentDataSource.ParamsEntity @params, bool pagination)
+    public async Task<List<FilmsPageItemEntity>> ObtainAsync(
+        IFilmsPageContentDataSource.ParamsEntity @params,
+        bool pagination
+    )
     {
         if (pagination && IsCompleted)
             return Cache;
@@ -72,11 +75,10 @@ public partial class FilmsPageContentDataSource
 {
     private async Task ObtainTrendingAsync(int content, bool pagination, CancellationToken token)
     {
-        var request = new TMDBTrendingRequestEntity
-        {
+        var request = new TMDBTrendingRequestEntity {
             Period = TMDBTrendingRequestEntity.PeriodType.Week,
             Content = content.MapToContentType(),
-            Page = _pagination.Page,
+            Page = _pagination.Page
         };
 
         var response = await api.ObtainTrendingAsync(request, token);
@@ -89,18 +91,16 @@ public partial class FilmsPageContentDataSource
     {
         query = query.Trim().Humanize(LetterCasing.LowerCase);
 
-        var requestForMovies = new TMDBSearchRequestEntity
-        {
+        var requestForMovies = new TMDBSearchRequestEntity {
             Content = TMDBRequestContentType.Movies,
             Query = query,
-            Page = _pagination.Page,
+            Page = _pagination.Page
         };
 
-        var requestForSerials = new TMDBSearchRequestEntity
-        {
+        var requestForSerials = new TMDBSearchRequestEntity {
             Content = TMDBRequestContentType.Serials,
             Query = query,
-            Page = _pagination.Page,
+            Page = _pagination.Page
         };
 
         var responseForMovies = api.ObtainSearchAsync(requestForMovies, token);
@@ -114,9 +114,7 @@ public partial class FilmsPageContentDataSource
             || responseForMovies.Result.TotalPages is not { } moviesTotalPages
             || responseForSerials.Result.TotalPages is not { } serialTotalPages
         )
-        {
             return;
-        }
 
         var items = movies.Concat(serials).OrderByDescending(entity => entity.Popularity).ToList();
         ApplyItems(items, pagination);
@@ -129,7 +127,9 @@ public partial class FilmsPageContentDataSource
         if (items == null)
             return;
 
-        var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(items);
+        var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(
+            items
+        );
 
         if (!pagination)
             Cache.Clear();
@@ -170,12 +170,11 @@ internal static class IntExtensions
 {
     public static TMDBRequestContentType MapToContentType(this int index)
     {
-        return index switch
-        {
+        return index switch {
             0 => TMDBRequestContentType.Movies,
             1 => TMDBRequestContentType.Serials,
             2 => TMDBRequestContentType.Anime,
-            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null),
+            _ => throw new ArgumentOutOfRangeException(nameof(index), index, null)
         };
     }
 }

@@ -49,7 +49,10 @@ public partial class App
             var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
             var interceptor = new RestClientLoggerInterceptor(logger);
 
-            var options = new RestClientOptions { Interceptors = [interceptor], Timeout = new TimeSpan(0, 0, 0, 10) };
+            var options = new RestClientOptions {
+                Interceptors = [interceptor],
+                Timeout = new TimeSpan(0, 0, 0, 10)
+            };
 
             return new RestClient(options);
         });
@@ -83,21 +86,33 @@ public partial class App
                 .CreateMap<HydraLinksResponseEntity.ItemsEntity, HydraLinksEntity>()
                 .ForMember(
                     dest => dest.CleanTitle,
-                    opt => opt.MapFrom(src => Regex.Replace(src.Title.Trim().ToLower(), "[^a-zA-Z0-9]", ""))
+                    opt =>
+                        opt.MapFrom(src =>
+                            Regex.Replace(src.Title.Trim().ToLower(), "[^a-zA-Z0-9]", "")
+                        )
                 )
-                .ForMember(dest => dest.UploadDate, opt => opt.MapFrom(src => src.ParseDateTimeOrDefault()))
+                .ForMember(
+                    dest => dest.UploadDate,
+                    opt => opt.MapFrom(src => src.ParseDateTimeOrDefault())
+                )
                 .ForMember(
                     dest => dest.FileSize,
                     opt =>
-                        opt.MapFrom(
-                            (src, _) =>
+                        opt.MapFrom((src, _) =>
                             {
-                                var raw = src.FileSize.Replace("МБ", "MB").Replace("ГБ", "GB").Replace(".", ",").Replace("+", "");
+                                var raw = src
+                                    .FileSize.Replace("МБ", "MB")
+                                    .Replace("ГБ", "GB")
+                                    .Replace(".", ",")
+                                    .Replace("+", "");
                                 return ByteSize.TryParse(raw, out var size) ? size.Bytes : 0;
                             }
                         )
                 )
-                .ForMember(dest => dest.Link, opt => opt.MapFrom((src, _) => src.Links?.FirstOrDefault() ?? string.Empty));
+                .ForMember(
+                    dest => dest.Link,
+                    opt => opt.MapFrom((src, _) => src.Links?.FirstOrDefault() ?? string.Empty)
+                );
         });
 
         // Windows & ViewModels

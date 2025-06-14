@@ -32,26 +32,19 @@ public partial class FilmsPageViewModel : ObservableObject
 {
     // Observable
 
-    [ObservableProperty]
-    public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty] public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
 
-    [ObservableProperty]
-    public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
+    [ObservableProperty] public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
 
-    [ObservableProperty]
-    public partial int ContentType { get; set; }
+    [ObservableProperty] public partial int ContentType { get; set; }
 
-    [ObservableProperty]
-    public partial bool ContentTypeIsEnabled { get; set; } = true;
+    [ObservableProperty] public partial bool ContentTypeIsEnabled { get; set; } = true;
 
-    [ObservableProperty]
-    public partial double ScrollViewOffset { get; set; } = 0;
+    [ObservableProperty] public partial double ScrollViewOffset { get; set; } = 0;
 
     // Private Props
 
@@ -141,8 +134,12 @@ public partial class FilmsPageViewModel
     public void OnScrollChanged(double offset, double height)
     {
         ScrollViewOffset = offset;
-        if (_dataSource is { InProgress: false, IsCompleted: false } && Items.Count >= 20 && height - offset < 1)
-            ObtainItemsFromDataSource(pagination: true);
+        if (
+            _dataSource is { InProgress: false, IsCompleted: false }
+            && Items.Count >= 20
+            && height - offset < 1
+        )
+            ObtainItemsFromDataSource(true);
     }
 
     public void TapOnOpenFilmsSourceButton(string id)
@@ -151,7 +148,9 @@ public partial class FilmsPageViewModel
             return;
 
         _navigationService.NavigateTo(NavigationPath.FilmsSource);
-        WeakReferenceMessenger.Default.Send(new FilmsSourcesPageViewModel.InitialDataEntity(item.Title));
+        WeakReferenceMessenger.Default.Send(
+            new FilmsSourcesPageViewModel.InitialDataEntity(item.Title)
+        );
     }
 
     public void TapOnHistoryItem(string query)
@@ -180,7 +179,11 @@ public partial class FilmsPageViewModel
             ScrollViewOffset = 0;
         }
 
-        Task.WhenAll(ObtainItemsTaskAsync(pagination), ObtainHistoryAsync(), AddQueryToHistoryAsync());
+        Task.WhenAll(
+            ObtainItemsTaskAsync(pagination),
+            ObtainHistoryAsync(),
+            AddQueryToHistoryAsync()
+        );
     }
 
     private void ApplyItems(List<FilmsPageItemEntity> items)
@@ -203,7 +206,10 @@ public partial class FilmsPageViewModel
     {
         try
         {
-            var items = await _dataSource.ObtainAsync(new IFilmsPageContentDataSource.ParamsEntity(Query, ContentType), pagination);
+            var items = await _dataSource.ObtainAsync(
+                new IFilmsPageContentDataSource.ParamsEntity(Query, ContentType),
+                pagination
+            );
 
             _dispatcherQueue.TryEnqueue(() => ApplyItems(items));
         }
@@ -221,9 +227,12 @@ public partial class FilmsPageViewModel
 
     private async Task ObtainHistoryAsync()
     {
-        var items = (await _queryHistoryService.ObtainHistoryAsync(DataBaseHistoryEntity.HistoryType.Films, Query)).Select(entity =>
-            entity.Query
-        );
+        var items = (
+            await _queryHistoryService.ObtainHistoryAsync(
+                DataBaseHistoryEntity.HistoryType.Films,
+                Query
+            )
+        ).Select(entity => entity.Query);
         _dispatcherQueue.TryEnqueue(() => ApplyQueryHistoryItems(items));
     }
 
@@ -231,7 +240,10 @@ public partial class FilmsPageViewModel
     {
         if (Query.Trim().IsNullOrEmpty())
             return;
-        await _queryHistoryService.AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType.Films, Query.Trim());
+        await _queryHistoryService.AddValueToHistoryAsync(
+            DataBaseHistoryEntity.HistoryType.Films,
+            Query.Trim()
+        );
     }
 
     private async Task ClearQueryInHistoryAsync(string query)

@@ -53,7 +53,10 @@ public partial class App
         {
             var logger = provider.GetRequiredService<ILogger<RestClientLoggerInterceptor>>();
             var interceptor = new RestClientLoggerInterceptor(logger);
-            var options = new RestClientOptions { Interceptors = [interceptor], Timeout = new TimeSpan(0, 0, 0, 10) };
+            var options = new RestClientOptions {
+                Interceptors = [interceptor],
+                Timeout = new TimeSpan(0, 0, 0, 10)
+            };
             return new RestClient(options);
         });
 
@@ -70,6 +73,8 @@ public partial class App
             configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
         });
 
+        services.AddSingleton(DispatcherQueue.GetForCurrentThread());
+
         // Internal
 
         services.AddHostedService<ConfigureService>();
@@ -84,9 +89,15 @@ public partial class App
 
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
         services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
-        services.AddSingleton<IFilmsSourcePageContentDataSource, FilmsSourcePageContentDataSource>();
+        services.AddSingleton<
+            IFilmsSourcePageContentDataSource,
+            FilmsSourcePageContentDataSource
+        >();
         services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
-        services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
+        services.AddSingleton<
+            IGamesSourcePageContentDataSource,
+            GamesSourcePageContentDataSource
+        >();
 
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IThemeService, ThemeService>();
@@ -108,6 +119,9 @@ public partial class App
 
     private static void ConfigureLogging()
     {
-        Log.Logger = new LoggerConfiguration().Enrich.FromLogContext().WriteTo.File(AppConstants.FileNames.LogFileName).CreateLogger();
+        Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
+            .WriteTo.File(AppConstants.FileNames.LogFileName)
+            .CreateLogger();
     }
 }

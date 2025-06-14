@@ -57,10 +57,13 @@ public class NavigationService(IServiceProvider provider) : INavigationService
                         provider.GetRequiredService<INotificationService>()
                     )
                 );
-                break;
+            break;
             case NavigationPath.FilmsSource:
-                _frame.Navigate(typeof(FilmsSource_FilmsSourcesPage), provider.GetRequiredService<FilmsSource_FilmsSourcesPageViewModel>());
-                break;
+                _frame.Navigate(
+                    typeof(FilmsSource_FilmsSourcesPage),
+                    provider.GetRequiredService<FilmsSource_FilmsSourcesPageViewModel>()
+                );
+            break;
 
             case NavigationPath.Games:
                 _frame.Navigate(
@@ -72,15 +75,21 @@ public class NavigationService(IServiceProvider provider) : INavigationService
                         provider.GetRequiredService<INotificationService>()
                     )
                 );
-                break;
+            break;
 
             case NavigationPath.GamesSource:
-                _frame.Navigate(typeof(GamesSourcePage), provider.GetRequiredService<GamesSourcePageViewModel>());
-                break;
+                _frame.Navigate(
+                    typeof(GamesSourcePage),
+                    provider.GetRequiredService<GamesSourcePageViewModel>()
+                );
+            break;
 
             case NavigationPath.Settings:
-                _frame.Navigate(typeof(SettingsPage), provider.GetRequiredService<SettingsPageViewModel>());
-                break;
+                _frame.Navigate(
+                    typeof(SettingsPage),
+                    provider.GetRequiredService<SettingsPageViewModel>()
+                );
+            break;
             default:
                 throw new ArgumentOutOfRangeException(nameof(path), path, null);
         }
@@ -98,13 +107,13 @@ public class NavigationService(IServiceProvider provider) : INavigationService
 
     private static NavigationPath? GetCurrentPath(Type? type)
     {
-        return type switch
-        {
+        return type switch {
             not null when type == typeof(FilmsPage) => NavigationPath.Films,
-            not null when type == typeof(FilmsSource_FilmsSourcesPage) => NavigationPath.FilmsSource,
-            not null when type == typeof(GamesPage) => NavigationPath.FilmsSource,
+            not null when type == typeof(FilmsSource_FilmsSourcesPage) =>
+                NavigationPath.FilmsSource,
+            not null when type == typeof(GamesPage)    => NavigationPath.FilmsSource,
             not null when type == typeof(SettingsPage) => NavigationPath.Settings,
-            _ => null,
+            _                                          => null
         };
     }
 }

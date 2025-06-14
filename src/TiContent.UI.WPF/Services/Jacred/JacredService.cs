@@ -1,12 +1,11 @@
 ﻿using RestSharp;
-using TiContent.UI.WPF.Entities;
 using TiContent.UI.WPF.Entities.Legacy;
 using TiContent.UI.WPF.Services.Storage;
 
 namespace TiContent.UI.WPF.Services.Jacred;
 
 /// <summary>
-/// Реализация сервиса для работы с торрентами
+///     Реализация сервиса для работы с торрентами
 /// </summary>
 public class JacredService(IRestClient client, IStorageService storage) : IJacredService
 {
@@ -18,12 +17,20 @@ public class JacredService(IRestClient client, IStorageService storage) : IJacre
 
     // Private Props
     private string BaseUrl => storage.Cached?.Urls.JacredApiBaseUrl ?? "";
-    private readonly IRestClient _client = client ?? throw new ArgumentNullException(nameof(client));
+
+    private readonly IRestClient _client =
+        client ?? throw new ArgumentNullException(nameof(client));
 
     // IJacredService
-    public async Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default)
+    public async Task<List<JacredEntity>> ObtainTorrentsAsync(
+        string search,
+        CancellationToken token = default
+    )
     {
-        var request = new RestRequest(BaseUrl + Endpoints.TorrentsEndpoint).AddQueryParameter("search", search);
+        var request = new RestRequest(BaseUrl + Endpoints.TorrentsEndpoint).AddQueryParameter(
+            "search",
+            search
+        );
         return (await _client.ExecuteAsync<List<JacredEntity>>(request, token)).Data ?? [];
     }
 }

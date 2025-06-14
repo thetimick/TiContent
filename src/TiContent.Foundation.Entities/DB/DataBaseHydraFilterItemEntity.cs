@@ -14,10 +14,9 @@ public record DataBaseHydraFilterItemEntity
     public enum FilterType
     {
         Genre,
-        Tag,
+        Tag
     }
 
-    [Key]
-    public string Title { get; init; } = string.Empty;
+    [Key] public string Title { get; init; } = string.Empty;
     public FilterType Type { get; init; }
 }

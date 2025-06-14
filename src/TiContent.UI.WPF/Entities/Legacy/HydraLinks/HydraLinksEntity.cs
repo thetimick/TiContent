@@ -13,8 +13,7 @@ public sealed record HydraLinksEntity
 {
     public string Owner { get; set; } = string.Empty;
 
-    [Key]
-    public string Title { get; init; } = string.Empty;
+    [Key] public string Title { get; init; } = string.Empty;
     public string CleanTitle { get; init; } = string.Empty;
     public double FileSize { get; init; } = -1;
     public DateTime UploadDate { get; init; } = DateTime.UnixEpoch;

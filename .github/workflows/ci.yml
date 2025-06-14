@@ -11,24 +11,24 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    # Check out the repository code
-    - name: Checkout code
-      uses: actions/checkout@v4
-
-    # Set up .NET SDK
-    - name: Setup .NET SDK
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '9.0.x' # Adjust to match your project's .NET version
-
-    # Set up MSBuild
-    - name: Setup MSBuild
-      uses: microsoft/setup-msbuild@v2
-
-    # Restore NuGet packages
-    - name: Restore NuGet packages
-      run: cd src && nuget restore TiContent.sln # Replace with your solution file name if different
-
-    # Build the solution
-    - name: Build project
-      run: cd src && msbuild TiContent.sln /p:Configuration=Release # Replace with your solution file name if different
+      # Check out the repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # Set up .NET SDK
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x' # Adjust to match your project's .NET version
+      
+      # Set up MSBuild
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+      
+      # Restore NuGet packages
+      - name: Restore NuGet packages
+        run: cd src && nuget restore TiContent.sln # Replace with your solution file name if different
+      
+      # Build the solution
+      - name: Build project
+        run: cd src && msbuild TiContent.sln /p:Configuration=Release # Replace with your solution file name if different

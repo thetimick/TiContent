@@ -28,24 +28,21 @@ using TiContent.UI.WinUI.Services.UI.Navigation;
 
 namespace TiContent.UI.WinUI.UI.Pages.GamesSource;
 
-public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<GamesSourcePageViewModel.InitialDataEntity>
+public partial class GamesSourcePageViewModel
+    : ObservableObject,
+      IRecipient<GamesSourcePageViewModel.InitialDataEntity>
 {
     // Observable
 
-    [ObservableProperty]
-    public partial string Title { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Title { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial string Description { get; set; } = string.Empty;
+    [ObservableProperty] public partial string Description { get; set; } = string.Empty;
 
-    [ObservableProperty]
-    public partial AdvancedCollectionView Items { get; set; } = [];
+    [ObservableProperty] public partial AdvancedCollectionView Items { get; set; } = [];
 
-    [ObservableProperty]
-    public partial int SortOrder { get; set; }
+    [ObservableProperty] public partial int SortOrder { get; set; }
 
-    [ObservableProperty]
-    public partial FiltersEntity Filters { get; set; } = new();
+    [ObservableProperty] public partial FiltersEntity Filters { get; set; } = new();
 
     // Private Props
 
@@ -155,7 +152,12 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
     {
         Items = new AdvancedCollectionView(items);
 
-        Filters.Owners = items.Select(entity => entity.Owner).Distinct().OrderBy(s => s).Prepend("Не задано").ToObservable();
+        Filters.Owners = items
+            .Select(entity => entity.Owner)
+            .Distinct()
+            .OrderBy(s => s)
+            .Prepend("Не задано")
+            .ToObservable();
 
         Filters.OwnersIndex = 0;
     }
@@ -170,16 +172,19 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
             var passed = true;
 
             if (Filters.OwnersIndex > 0)
-                passed &= item.Owner.Contains(Filters.Owners[Filters.OwnersIndex], StringComparison.InvariantCultureIgnoreCase);
+                passed &= item.Owner.Contains(
+                    Filters.Owners[Filters.OwnersIndex],
+                    StringComparison.InvariantCultureIgnoreCase
+                );
 
             switch (Filters.LinksIndex)
             {
                 case 1:
                     passed &= item.Link.Contains("magnet");
-                    break;
+                break;
                 case 2:
                     passed &= !item.Link.Contains("magnet");
-                    break;
+                break;
             }
 
             return passed;
@@ -190,13 +195,24 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
 
     private void ApplySort()
     {
-        var description = SortOrder switch
-        {
-            0 => new SortDescription(nameof(GamesSourcePageItemEntity.Date), SortDirection.Descending),
-            1 => new SortDescription(nameof(GamesSourcePageItemEntity.Title), SortDirection.Descending),
-            2 => new SortDescription(nameof(GamesSourcePageItemEntity.Owner), SortDirection.Descending),
-            3 => new SortDescription(nameof(GamesSourcePageItemEntity.Size), SortDirection.Descending),
-            _ => null,
+        var description = SortOrder switch {
+            0 => new SortDescription(
+                nameof(GamesSourcePageItemEntity.Date),
+                SortDirection.Descending
+            ),
+            1 => new SortDescription(
+                nameof(GamesSourcePageItemEntity.Title),
+                SortDirection.Descending
+            ),
+            2 => new SortDescription(
+                nameof(GamesSourcePageItemEntity.Owner),
+                SortDirection.Descending
+            ),
+            3 => new SortDescription(
+                nameof(GamesSourcePageItemEntity.Size),
+                SortDirection.Descending
+            ),
+            _ => null
         };
 
         if (description == null)
@@ -224,13 +240,10 @@ public partial class GamesSourcePageViewModel
 {
     public partial class FiltersEntity : ObservableObject
     {
-        [ObservableProperty]
-        public partial ObservableCollection<string> Owners { get; set; } = [];
+        [ObservableProperty] public partial ObservableCollection<string> Owners { get; set; } = [];
 
-        [ObservableProperty]
-        public partial int OwnersIndex { get; set; }
+        [ObservableProperty] public partial int OwnersIndex { get; set; }
 
-        [ObservableProperty]
-        public partial int LinksIndex { get; set; }
+        [ObservableProperty] public partial int LinksIndex { get; set; }
     }
 }

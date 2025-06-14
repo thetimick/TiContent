@@ -23,11 +23,10 @@ public record HydraApiCatalogueRequestParamsEntity
     {
         get
         {
-            return Type switch
-            {
-                ContentType.Hot => "hot",
+            return Type switch {
+                ContentType.Hot    => "hot",
                 ContentType.Weekly => "weekly",
-                _ => throw new ArgumentOutOfRangeException(),
+                _                  => throw new ArgumentOutOfRangeException()
             };
         }
     }
@@ -35,6 +34,6 @@ public record HydraApiCatalogueRequestParamsEntity
     public enum ContentType
     {
         Hot,
-        Weekly,
+        Weekly
     }
 }
