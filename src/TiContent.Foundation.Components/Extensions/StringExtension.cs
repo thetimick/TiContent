@@ -11,17 +11,17 @@ public static class StringExtension
         return string.IsNullOrEmpty(s);
     }
 
-    public static bool IsNullOrWhiteSpace(this string s)
+    public static bool IsNullOrWhiteSpace([NotNullWhen(false)] this string? s)
     {
         return string.IsNullOrWhiteSpace(s);
     }
 
-    public static string Or(this string s, string or)
+    public static string Or(this string? s, string or)
     {
         return s.IsNullOrWhiteSpace() ? or : s;
     }
 
-    public static string OrEmpty(this string s)
+    public static string OrEmpty(this string? s)
     {
         return s.Or(string.Empty);
     }
