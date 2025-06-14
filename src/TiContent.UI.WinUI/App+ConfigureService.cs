@@ -8,6 +8,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using CommunityToolkit.WinUI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -40,6 +41,8 @@ public partial class App
         private readonly IThemeService _themeService = provider.GetRequiredService<IThemeService>();
         private readonly MainWindow _window = provider.GetRequiredService<MainWindow>();
         private readonly AppDataBaseContext _db = provider.GetRequiredService<AppDataBaseContext>();
+        private readonly INotificationService _notificationService =
+            provider.GetRequiredService<INotificationService>();
 
         // IHostedService
 
@@ -48,22 +51,7 @@ public partial class App
             _storageService.Obtain();
             ConfigureWindow();
 
-            Task.Run(
-                async () =>
-                {
-                    try
-                    {
-                        await _db.Database.MigrateAsync(cancellationToken);
-                        await _dbGamesSourceService.ObtainItemsIfNeededAsync();
-                        await _dbHydraFiltersService.ObtainIfNeededAsync(cancellationToken);
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogError(ex, "{ex}", ex.Message);
-                    }
-                },
-                cancellationToken
-            );
+            Task.Run(async () => await ConfigureDataBase(cancellationToken), cancellationToken);
 
             return Task.CompletedTask;
         }
@@ -107,6 +95,26 @@ public partial class App
 
             _window.Activate();
             _window.Closed += async (_, _) => await AppHost.StopAsync();
+        }
+
+        private async Task ConfigureDataBase(CancellationToken token)
+        {
+            try
+            {
+                await _db.Database.MigrateAsync(token);
+
+                await Task.WhenAll(
+                    _dbGamesSourceService.ObtainIfNeededAsync(token),
+                    _dbHydraFiltersService.ObtainIfNeededAsync(token)
+                );
+            }
+            catch (Exception ex)
+            {
+                await _window.DispatcherQueue.EnqueueAsync(() =>
+                    _notificationService.ShowErrorNotification(ex)
+                );
+                _logger.LogError(ex, "{ex}", ex.Message);
+            }
         }
     }
 }

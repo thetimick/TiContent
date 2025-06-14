@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.DB;
@@ -36,36 +37,35 @@ public class DataBaseHydraFiltersService(
     )
     {
         if (!IsEmptyOrExpiredDataBase())
-            return await db.FiltersItems.AsNoTracking().ToListAsync(cancellationToken: token);
+            return await db.HydraFiltersItems.AsNoTracking().ToListAsync(cancellationToken: token);
 
         var filters = await api.ObtainFiltersAsync(token);
         var genres = filters.Genres.En.Select(s => new DataBaseHydraFilterItemEntity
         {
-            Id = Guid.NewGuid().ToString(),
             Title = s,
             FilterType = DataBaseHydraFilterItemEntity.FilterTypeEnum.Genre,
         });
         var tags = filters.Tags.En.Select(pair => new DataBaseHydraFilterItemEntity
         {
-            Id = Guid.NewGuid().ToString(),
             Title = $"{pair.Key}|{pair.Value}",
             FilterType = DataBaseHydraFilterItemEntity.FilterTypeEnum.Tag,
         });
 
         var items = genres.Concat(tags);
-        await db.FiltersItems.AddRangeAsync(items, token);
+
+        await db.BulkDeleteAsync(db.HydraFiltersItems, cancellationToken: token);
+        await db.BulkInsertAsync(items, cancellationToken: token);
+        await db.BulkSaveChangesAsync(cancellationToken: token);
 
         if (storage.Cached != null)
             storage.Cached.DataBaseTimestamp.HydraFilters = DateTime.Now;
 
-        await db.SaveChangesAsync(token);
-
-        return await db.FiltersItems.ToListAsync(token);
+        return await db.HydraFiltersItems.ToListAsync(token);
     }
 
     private bool IsEmptyOrExpiredDataBase()
     {
-        return db.FiltersItems.AsNoTracking().IsEmpty()
+        return db.HydraFiltersItems.AsNoTracking().IsEmpty()
             || storage.Obtain().DataBaseTimestamp.HydraFilters < DateTime.Now.AddHours(-3);
     }
 }

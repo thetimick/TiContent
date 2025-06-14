@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
 using EFCore.BulkExtensions;
@@ -23,8 +24,11 @@ namespace TiContent.UI.WinUI.Services.DB;
 
 public interface IDataBaseGamesSourceService
 {
-    Task ObtainItemsIfNeededAsync();
-    Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query);
+    Task ObtainIfNeededAsync(CancellationToken token = default);
+    Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(
+        string query,
+        CancellationToken token = default
+    );
 }
 
 public partial class DataBaseGamesSourceService(
@@ -36,12 +40,15 @@ public partial class DataBaseGamesSourceService(
 
 public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
 {
-    public async Task ObtainItemsIfNeededAsync()
+    public async Task ObtainIfNeededAsync(CancellationToken token)
     {
-        await ObtainAllLinksAsync();
+        await ObtainAllLinksAsync(false, token);
     }
 
-    public async Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(string query)
+    public async Task<List<DataBaseHydraLinkItemEntity>> SearchAsync(
+        string query,
+        CancellationToken token
+    )
     {
         var cleanQuery = RegexHelper.Clean().Replace(query.Trim().ToLower(), "");
         if (cleanQuery.IsNullOrEmpty())
@@ -49,14 +56,17 @@ public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
         var items = await db
             .HydraLinksItems.AsNoTracking()
             .Where(entity => EF.Functions.Like(entity.CleanTitle, $"%{cleanQuery}%"))
-            .ToListAsync();
+            .ToListAsync(token);
         return items;
     }
 }
 
 public partial class DataBaseGamesSourceService
 {
-    private async Task ObtainAllLinksAsync(bool forceRefresh = false)
+    private async Task ObtainAllLinksAsync(
+        bool forceRefresh = false,
+        CancellationToken token = default
+    )
     {
         if (!IsEmptyOrExpiredDataBaseAsync() && !forceRefresh)
             return;
@@ -74,8 +84,9 @@ public partial class DataBaseGamesSourceService
             })
             .ToList();
 
-        await db.BulkInsertOrUpdateAsync(items);
-        await db.BulkSaveChangesAsync();
+        await db.BulkDeleteAsync(db.HydraLinksItems, cancellationToken: token);
+        await db.BulkInsertAsync(items, cancellationToken: token);
+        await db.BulkSaveChangesAsync(cancellationToken: token);
 
         if (storage.Cached != null)
             storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;

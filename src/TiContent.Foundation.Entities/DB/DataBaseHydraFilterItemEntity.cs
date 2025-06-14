@@ -18,7 +18,6 @@ public record DataBaseHydraFilterItemEntity
     }
 
     [Key]
-    public string Id { get; init; } = string.Empty;
-    public FilterTypeEnum FilterType { get; init; }
     public string Title { get; init; } = string.Empty;
+    public FilterTypeEnum FilterType { get; init; }
 }

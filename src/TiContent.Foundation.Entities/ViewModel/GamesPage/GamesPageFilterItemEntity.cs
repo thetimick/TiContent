@@ -18,7 +18,6 @@ public partial record GamesPageFilterItemEntity
         Tags,
     }
 
-    public string Id { get; init; } = string.Empty;
     public string Title { get; init; } = string.Empty;
     public FilterTypeEnum FilterType { get; init; }
 }
@@ -30,7 +29,6 @@ public partial record GamesPageFilterItemEntity
         public MapProfile()
         {
             CreateMap<DataBaseHydraFilterItemEntity, GamesPageFilterItemEntity>()
-                .ForMember(entity => entity.Id, opt => opt.MapFrom(src => src.Id))
                 .ForMember(entity => entity.Title, opt => opt.MapFrom(src => src.Title))
                 .ForMember(entity => entity.FilterType, opt => opt.MapFrom(src => src.FilterType));
         }
