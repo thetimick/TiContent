@@ -7,15 +7,17 @@
 
 using System;
 using System.Collections.Generic;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using TiContent.UI.WinUI.UI.Windows.Main;
 
 namespace TiContent.UI.WinUI.Services.UI;
 
 public interface INotificationService
 {
-    public void Setup(InfoBarPanel stack);
+    public void Setup(InfoBarPanel stack, DispatcherQueue dispatcherQueue);
 
     public void ShowNotification(string title, string message, InfoBarSeverity severity, TimeSpan? duration = null);
 
@@ -25,23 +27,25 @@ public interface INotificationService
 public class NotificationService : INotificationService
 {
     private InfoBarPanel? _stack;
+    private DispatcherQueue? _dispatcherQueue;
 
     private readonly Dictionary<InfoBar, DispatcherTimer> _timers = new();
 
-    public void Setup(InfoBarPanel stack)
+    public void Setup(InfoBarPanel stack, DispatcherQueue dispatcherQueue)
     {
         _stack = stack;
+        _dispatcherQueue = dispatcherQueue;
     }
 
     public void ShowNotification(string title, string message, InfoBarSeverity severity, TimeSpan? duration)
     {
-        var bar = MakeNotification(title, message, severity);
-        if (duration is { } unwrapped)
+        _dispatcherQueue?.TryEnqueue(() =>
         {
-            var timer = MakeTimer(bar, unwrapped);
-            _timers.Add(bar, timer);
-        }
-        _stack?.Children.Add(bar);
+            var bar = MakeNotification(title, message, severity);
+            if (duration is { } unwrapped)
+                _timers.Add(bar, MakeTimer(bar, unwrapped));
+            _stack?.Children.Add(bar);
+        });
     }
 
     public void ShowErrorNotification(Exception ex, TimeSpan? duration = null)

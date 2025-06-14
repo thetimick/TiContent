@@ -147,7 +147,7 @@ public partial class FilmsPageViewModel : ObservableObject
             }
             catch (Exception ex)
             {
-                _logger.LogError("{ex}", ex);
+                _logger.LogError("{Exception}", ex);
                 DispatcherWrapper.InvokeOnMain(() =>
                 {
                     Toast.Error("Ошибка при попытке получения данных", ToastLocation.BottomRight);

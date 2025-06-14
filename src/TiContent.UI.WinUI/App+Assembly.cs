@@ -10,6 +10,7 @@ using System.Net.Http;
 using AutoMapper.EquivalencyExpression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI.Dispatching;
 using RestSharp;
 using Serilog;
 using TiContent.Foundation.Components.Interceptors;

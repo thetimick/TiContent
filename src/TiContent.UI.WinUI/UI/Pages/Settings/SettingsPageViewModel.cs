@@ -31,7 +31,7 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
 
     partial void OnThemeIndexChanged(int value)
     {
-        if (storageService.Cached == null || storageService.Cached.Window.ThemeIndex == value)
+        if (storageService.Cached.Window.ThemeIndex == value)
             return;
         storageService.Cached.Window.ThemeIndex = value;
         themeService.ApplyTheme((ElementTheme)value);
@@ -39,21 +39,21 @@ public partial class SettingsPageViewModel(IStorageService storageService, IThem
 
     partial void OnIsWindowSizePersistentChanged(bool value)
     {
-        if (storageService.Cached == null || storageService.Cached.Window.IsWindowSizePersistent == value)
+        if (storageService.Cached.Window.IsWindowSizePersistent == value)
             return;
         storageService.Cached.Window.IsWindowSizePersistent = value;
     }
 
     partial void OnIsWindowOnCenterScreenChanged(bool value)
     {
-        if (storageService.Cached == null || storageService.Cached.Window.IsWindowOnCenterScreen == value)
+        if (storageService.Cached.Window.IsWindowOnCenterScreen == value)
             return;
         storageService.Cached.Window.IsWindowOnCenterScreen = value;
     }
 
     partial void OnTMDBApiKeyChanged(string value)
     {
-        if (storageService.Cached == null || storageService.Cached.Keys.TMDBApiKey == value)
+        if (storageService.Cached.Keys.TMDBApiKey == value)
             return;
         storageService.Cached.Keys.TMDBApiKey = value;
     }

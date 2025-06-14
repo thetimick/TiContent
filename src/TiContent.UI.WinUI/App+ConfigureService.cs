@@ -29,7 +29,7 @@ public partial class App
     {
         // Dependencies
 
-        private readonly IStorageService _storageService = provider.GetRequiredService<IStorageService>();
+        private readonly IStorageService _storage = provider.GetRequiredService<IStorageService>();
         private readonly IDataBaseGamesSourceService _dbGamesSourceService = provider.GetRequiredService<IDataBaseGamesSourceService>();
         private readonly IDataBaseHydraFiltersService _dbHydraFiltersService = provider.GetRequiredService<IDataBaseHydraFiltersService>();
         private readonly ILogger<ConfigureService> _logger = provider.GetRequiredService<ILogger<ConfigureService>>();
@@ -42,7 +42,7 @@ public partial class App
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _storageService.Obtain();
+            _storage.Obtain();
             ConfigureWindow();
 
             Task.Run(async () => await ConfigureDataBase(cancellationToken), cancellationToken);
@@ -52,16 +52,13 @@ public partial class App
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            if (_storageService.Cached != null)
-            {
-                _storageService.Cached.Window.Width = _window.AppWindow.Size.Width;
-                _storageService.Cached.Window.Height = _window.AppWindow.Size.Height;
-                _storageService.Cached.Window.X = _window.AppWindow.Position.X;
-                _storageService.Cached.Window.Y = _window.AppWindow.Position.Y;
-            }
+            _storage.Cached.Window.Width = _window.AppWindow.Size.Width;
+            _storage.Cached.Window.Height = _window.AppWindow.Size.Height;
+            _storage.Cached.Window.X = _window.AppWindow.Position.X;
+            _storage.Cached.Window.Y = _window.AppWindow.Position.Y;
 
             _db.SaveChanges();
-            _storageService.Save();
+            _storage.Save();
 
             return Task.CompletedTask;
         }
@@ -70,9 +67,9 @@ public partial class App
 
         private void ConfigureWindow()
         {
-            _themeService.ApplyTheme((ElementTheme)_storageService.Obtain().Window.ThemeIndex);
+            _themeService.ApplyTheme((ElementTheme)_storage.Obtain().Window.ThemeIndex);
 
-            if (_storageService.Cached is { } cached)
+            if (_storage.Cached is { } cached)
             {
                 _window.AppWindow.Resize(
                     cached.Window is { IsWindowSizePersistent: true, Width: { } width, Height: { } height }
@@ -95,7 +92,6 @@ public partial class App
             try
             {
                 await _db.Database.MigrateAsync(token);
-
                 await Task.WhenAll(_dbGamesSourceService.ObtainIfNeededAsync(token), _dbHydraFiltersService.ObtainIfNeededAsync(token));
             }
             catch (Exception ex)

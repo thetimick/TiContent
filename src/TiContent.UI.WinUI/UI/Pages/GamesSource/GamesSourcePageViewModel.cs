@@ -85,8 +85,7 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
     partial void OnSortOrderChanged(int value)
     {
         ApplySort();
-        if (_storage.Cached != null)
-            _storage.Cached.GamesSource.SortOrder = value;
+        _storage.Cached.GamesSource.SortOrder = value;
     }
 
     private void FiltersOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -108,7 +107,7 @@ public partial class GamesSourcePageViewModel : ObservableObject, IRecipient<Gam
     public void Receive(InitialDataEntity message)
     {
         Title = message.Query;
-        SortOrder = _storage.Cached?.GamesSource.SortOrder ?? 0;
+        SortOrder = _storage.Cached.GamesSource.SortOrder;
 
         ObtainItems();
     }

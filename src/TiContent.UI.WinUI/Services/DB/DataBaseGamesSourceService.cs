@@ -13,12 +13,15 @@ using System.Threading.Tasks;
 using AutoMapper;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.HydraLinks;
 using TiContent.Foundation.Entities.DB;
 using TiContent.UI.WinUI.Services.Api.HydraLinks;
 using TiContent.UI.WinUI.Services.Storage;
+using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.Services.DB;
 
@@ -31,8 +34,10 @@ public interface IDataBaseGamesSourceService
 public partial class DataBaseGamesSourceService(
     App.AppDataBaseContext db,
     IStorageService storage,
-    IHydraLinksService service,
-    IMapper mapper
+    IHydraLinksService api,
+    IMapper mapper,
+    INotificationService notifications,
+    ILogger<DataBaseGamesSourceService> logger
 );
 
 public partial class DataBaseGamesSourceService : IDataBaseGamesSourceService
@@ -62,7 +67,9 @@ public partial class DataBaseGamesSourceService
         if (!IsEmptyOrExpiredDataBaseAsync() && !forceRefresh)
             return;
 
-        var items = (await service.ObtainLinksAsync())
+        var oldItemsCount = db.HydraLinksItems.Count();
+
+        var items = (await api.ObtainLinksAsync())
             .SelectMany(rawEntity =>
             {
                 return rawEntity
@@ -75,16 +82,25 @@ public partial class DataBaseGamesSourceService
             })
             .ToList();
 
-        await db.BulkDeleteAsync(db.HydraLinksItems, cancellationToken: token);
-        await db.BulkInsertAsync(items, cancellationToken: token);
+        await db.BulkDeleteAsync(db.HydraLinksItems.AsNoTracking(), cancellationToken: token);
+        await db.BulkInsertOrUpdateAsync(items, cancellationToken: token);
         await db.BulkSaveChangesAsync(cancellationToken: token);
 
-        if (storage.Cached != null)
-            storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;
+        storage.Cached.DataBaseTimestamp.HydraLinks = DateTime.Now;
+
+        var newItemsCount = db.HydraLinksItems.Count();
+
+        notifications.ShowNotification(
+            "Обновление",
+            $"Обновлены источники HydraLinks!\n{oldItemsCount} => {newItemsCount}",
+            InfoBarSeverity.Success,
+            TimeSpan.FromSeconds(3)
+        );
+        logger.LogInformation("Обновлены источники HydraLinks! {OldItemsCount} => {NewItemsCount}", oldItemsCount, newItemsCount);
     }
 
     private bool IsEmptyOrExpiredDataBaseAsync()
     {
-        return db.HydraLinksItems.AsNoTracking().IsEmpty() || storage.Obtain().DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+        return db.HydraLinksItems.AsNoTracking().IsEmpty() || storage.Cached.DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
     }
 }

@@ -36,12 +36,12 @@ public class DataBaseHydraFiltersService(IHydraApiService api, App.AppDataBaseCo
         var genres = filters.Genres.En.Select(s => new DataBaseHydraFilterItemEntity
         {
             Title = s,
-            FilterType = DataBaseHydraFilterItemEntity.FilterTypeEnum.Genre,
+            Type = DataBaseHydraFilterItemEntity.FilterType.Genre,
         });
         var tags = filters.Tags.En.Select(pair => new DataBaseHydraFilterItemEntity
         {
             Title = $"{pair.Key}|{pair.Value}",
-            FilterType = DataBaseHydraFilterItemEntity.FilterTypeEnum.Tag,
+            Type = DataBaseHydraFilterItemEntity.FilterType.Tag,
         });
 
         var items = genres.Concat(tags);
@@ -50,8 +50,7 @@ public class DataBaseHydraFiltersService(IHydraApiService api, App.AppDataBaseCo
         await db.BulkInsertAsync(items, cancellationToken: token);
         await db.BulkSaveChangesAsync(cancellationToken: token);
 
-        if (storage.Cached != null)
-            storage.Cached.DataBaseTimestamp.HydraFilters = DateTime.Now;
+        storage.Cached.DataBaseTimestamp.HydraFilters = DateTime.Now;
 
         return await db.HydraFiltersItems.ToListAsync(token);
     }

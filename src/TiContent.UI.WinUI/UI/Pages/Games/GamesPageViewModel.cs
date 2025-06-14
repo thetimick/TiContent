@@ -232,13 +232,13 @@ public partial class GamesPageViewModel
     private void ApplyFilters(List<GamesPageFilterItemEntity> filters)
     {
         Filters.Genres = new AdvancedCollectionView(
-            filters.Where(entity => entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Genre).ToList()
+            filters.Where(entity => entity.Type == GamesPageFilterItemEntity.FilterType.Genre).ToList()
         );
         Filters.Genres.SortDescriptions.Add(new SortDescription(nameof(GamesPageFilterItemEntity.Title), SortDirection.Ascending));
         Filters.Genres.RefreshSorting();
 
         Filters.Tags = new AdvancedCollectionView(
-            filters.Where(entity => entity.FilterType == GamesPageFilterItemEntity.FilterTypeEnum.Tags).ToList()
+            filters.Where(entity => entity.Type == GamesPageFilterItemEntity.FilterType.Tags).ToList()
         );
         Filters.Tags.SortDescriptions.Add(new SortDescription(nameof(GamesPageFilterItemEntity.Title), SortDirection.Ascending));
         Filters.Tags.RefreshSorting();

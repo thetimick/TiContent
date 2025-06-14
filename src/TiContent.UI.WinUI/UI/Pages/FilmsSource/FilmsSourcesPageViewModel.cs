@@ -108,8 +108,7 @@ public partial class FilmsSourcesPageViewModel : ObservableObject, IRecipient<Fi
     partial void OnSortOrderChanged(int value)
     {
         ApplySortAndFilters(_allItems);
-        if (_storage.Cached != null)
-            _storage.Cached.FilmsSource.SortOrder = value;
+        _storage.Cached.FilmsSource.SortOrder = value;
     }
 
     // IRecipient

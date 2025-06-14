@@ -14,57 +14,42 @@ using TiContent.Foundation.Entities.Storage;
 
 namespace TiContent.UI.WinUI.Services.Storage;
 
-/// <summary>
-/// Сервис для хранения и получения данных приложения
-/// </summary>
 public interface IStorageService
 {
-    /// <summary>
-    /// Кэшированные данные хранилища
-    /// </summary>
-    public StorageEntity? Cached { get; }
+    public StorageEntity Cached { get; }
 
-    /// <summary>
-    /// Получить данные из хранилища
-    /// </summary>
-    /// <returns>Данные хранилища</returns>
     public StorageEntity Obtain();
-
-    /// <summary>
-    /// Сохранить текущие данные в хранилище
-    /// </summary>
-    /// <returns>Сохраненные данные</returns>
-    public StorageEntity Save();
+    public StorageEntity Save(bool force = false);
 }
 
 public class StorageService(ILogger<StorageService> logger) : IStorageService
 {
-    public StorageEntity? Cached { get; private set; }
-
+    public StorageEntity Cached { get; private set; } = null!;
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
-
-    #region IStorageService
 
     public StorageEntity Obtain()
     {
         if (!File.Exists(AppConstants.FileNames.StorageFileName))
-            return Save();
+            return Save(force: true);
 
         try
         {
             var json = File.ReadAllText(AppConstants.FileNames.StorageFileName);
-            Cached = JsonSerializer.Deserialize<StorageEntity>(json, _options);
-            ArgumentNullException.ThrowIfNull(Cached);
+            var cached = JsonSerializer.Deserialize<StorageEntity>(json, _options);
+
+            ArgumentNullException.ThrowIfNull(cached);
+
+            Cached = cached;
             return Cached;
         }
         catch
         {
             logger.LogInformation("File not found, creating default");
-            return Save();
+            return Save(force: true);
         }
     }
 
-    public StorageEntity Save()
+    public StorageEntity Save(bool force)
     {
         var path = Path.Combine(AppContext.BaseDirectory, AppConstants.FileNames.StorageFileName);
 
@@ -72,7 +57,8 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService
         if (directory != null && !Directory.Exists(directory))
             Directory.CreateDirectory(directory);
 
-        Cached ??= new StorageEntity();
+        if (force)
+            Cached = new StorageEntity();
 
         try
         {
@@ -86,6 +72,4 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService
             return Cached;
         }
     }
-
-    #endregion
 }

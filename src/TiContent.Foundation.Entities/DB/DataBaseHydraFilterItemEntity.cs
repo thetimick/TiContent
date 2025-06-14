@@ -11,7 +11,7 @@ namespace TiContent.Foundation.Entities.DB;
 
 public record DataBaseHydraFilterItemEntity
 {
-    public enum FilterTypeEnum
+    public enum FilterType
     {
         Genre,
         Tag,
@@ -19,5 +19,5 @@ public record DataBaseHydraFilterItemEntity
 
     [Key]
     public string Title { get; init; } = string.Empty;
-    public FilterTypeEnum FilterType { get; init; }
+    public FilterType Type { get; init; }
 }
