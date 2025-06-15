@@ -46,7 +46,7 @@ public partial class App
         ConfigureLogging();
         services.AddLogging(builder => builder.AddSerilog(dispose: true));
 
-        services.AddDbContext<AppDataBaseContext>();
+        services.AddDbContext<AppDataBaseContext>(ServiceLifetime.Transient);
 
         services.AddSingleton<HttpClient>();
         services.AddSingleton<IRestClient, RestClient>(provider =>

@@ -134,11 +134,7 @@ public partial class FilmsPageViewModel
     public void OnScrollChanged(double offset, double height)
     {
         ScrollViewOffset = offset;
-        if (
-            _dataSource is { InProgress: false, IsCompleted: false }
-            && Items.Count >= 20
-            && height - offset < 1
-        )
+        if (_dataSource is { InProgress: false, IsCompleted: false } && Items.Count >= 20 && height - offset < 1)
             ObtainItemsFromDataSource(true);
     }
 

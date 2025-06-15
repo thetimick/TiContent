@@ -75,22 +75,16 @@ public partial class DataBaseGamesSourceService
     )
     {
         if (!IsEmptyOrExpiredDataBaseAsync() && !forceRefresh)
+        {
+            logger.LogInformation("HydraLinks will be refreshed");
             return;
+        }
 
-        var items = (await api.ObtainLinksAsync())
-            .SelectMany(rawEntity =>
-            {
-                return rawEntity
-                    ?.Items?.OfType<HydraLinksResponseEntity.ItemsEntity>()
-                    .Select(rawItemEntity =>
-                        mapper
-                            .Map<DataBaseHydraLinkItemEntity>(rawItemEntity)
-                            .Do(entity => entity.Owner = rawEntity.Name ?? string.Empty)
-                    ) ?? [];
-            })
+        var response = await api.ObtainLinksAsync();
+        var items = response
+            .SelectMany(entity => MapToDataBaseHydraLinkItemEntity(entity?.Name, entity?.Items))
             .ToList();
 
-        await db.BulkDeleteAsync(db.HydraLinksItems.AsNoTracking(), cancellationToken: token);
         await db.BulkInsertOrUpdateAsync(items, cancellationToken: token);
         await db.BulkSaveChangesAsync(cancellationToken: token);
 
@@ -110,5 +104,19 @@ public partial class DataBaseGamesSourceService
     {
         return db.HydraLinksItems.AsNoTracking().IsEmpty() ||
                storage.Cached.DataBaseTimestamp.HydraLinks < DateTime.Now.AddHours(-3);
+    }
+
+    private IEnumerable<DataBaseHydraLinkItemEntity> MapToDataBaseHydraLinkItemEntity(
+        string? owner,
+        List<HydraLinksResponseEntity.ItemsEntity>? items
+    )
+    {
+        if (owner.IsNullOrEmpty() || items.IsEmpty())
+            return [];
+        return items.Select(entity =>
+            mapper
+                .Map<DataBaseHydraLinkItemEntity>(entity)
+                .Do(item => item.Owner = owner)
+        );
     }
 }

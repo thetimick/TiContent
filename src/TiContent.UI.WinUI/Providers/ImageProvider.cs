@@ -9,6 +9,7 @@ using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Web.Http;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using TiContent.Foundation.Entities.DB;
 
@@ -19,7 +20,7 @@ public interface IImageProvider
     public Task<DataBaseImageEntity> ObtainImageAsync(string url);
 }
 
-public partial class ImageProvider(ILogger<ImageProvider> logger)
+public partial class ImageProvider(IServiceProvider provider)
 {
     private readonly HttpClient _client = new();
 }
@@ -30,7 +31,7 @@ public partial class ImageProvider : IImageProvider
     {
         try
         {
-            await using var db = new App.AppDataBaseContext();
+            var db = provider.GetRequiredService<App.AppDataBaseContext>();
             if (await db.ImageItems.FindAsync(url) is { } item)
                 return item;
 
@@ -44,7 +45,8 @@ public partial class ImageProvider : IImageProvider
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "{msg}", ex.Message);
+            provider.GetRequiredService<ILogger<ImageProvider>>()
+                .LogError(ex, "{msg}", ex.Message);
             throw;
         }
     }

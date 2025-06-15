@@ -42,7 +42,10 @@ public class DataBaseHydraFiltersService(
     )
     {
         if (!IsEmptyOrExpiredDataBase())
+        {
+            logger.LogInformation("HydraFilters will be refreshed");
             return await db.HydraFiltersItems.AsNoTracking().ToListAsync(token);
+        }
 
         var filters = await api.ObtainFiltersAsync(token);
         var genres = filters.Genres.En.Select(s => new DataBaseHydraFilterItemEntity {
@@ -53,7 +56,6 @@ public class DataBaseHydraFiltersService(
             Title = $"{pair.Key}|{pair.Value}",
             Type = DataBaseHydraFilterItemEntity.FilterType.Tag
         });
-
         var items = genres.Concat(tags);
 
         await db.BulkDeleteAsync(db.HydraFiltersItems, cancellationToken: token);
@@ -71,7 +73,7 @@ public class DataBaseHydraFiltersService(
 
         logger.LogInformation("Обновлены источники HydraFilters!");
 
-        return await db.HydraFiltersItems.ToListAsync(token);
+        return await db.HydraFiltersItems.AsNoTracking().ToListAsync(token);
     }
 
     private bool IsEmptyOrExpiredDataBase()
