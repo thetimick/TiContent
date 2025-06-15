@@ -17,28 +17,38 @@ public record JacredEntity
 {
     public enum VideoTypeEntity
     {
-        [Description("SDR")] SDR,
+        [Description("SDR")]
+        SDR,
 
-        [Description("HDR")] HDR,
+        [Description("HDR")]
+        HDR,
 
-        [Description("n/n")] None
+        [Description("n/n")]
+        None
     }
 
     public enum TrackerEntity
     {
-        [Description("bitru")] Bitru,
+        [Description("bitru")]
+        Bitru,
 
-        [Description("kinozal")] Kinozal,
+        [Description("kinozal")]
+        Kinozal,
 
-        [Description("megapeer")] Megapeer,
+        [Description("megapeer")]
+        Megapeer,
 
-        [Description("nnmclub")] NNMClub,
+        [Description("nnmclub")]
+        NNMClub,
 
-        [Description("rutor")] Rutor,
+        [Description("rutor")]
+        Rutor,
 
-        [Description("rutracker")] Rutracker,
+        [Description("rutracker")]
+        Rutracker,
 
-        [Description("n/n")] None
+        [Description("n/n")]
+        None
     }
 
     [JsonPropertyName("tracker")] [JsonConverter(typeof(TrackerConverter))]
@@ -107,13 +117,13 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
         return value switch {
-            "bitru"     => JacredEntity.TrackerEntity.Bitru,
-            "kinozal"   => JacredEntity.TrackerEntity.Kinozal,
-            "megapeer"  => JacredEntity.TrackerEntity.Megapeer,
-            "nnmclub"   => JacredEntity.TrackerEntity.NNMClub,
-            "rutor"     => JacredEntity.TrackerEntity.Rutor,
+            "bitru" => JacredEntity.TrackerEntity.Bitru,
+            "kinozal" => JacredEntity.TrackerEntity.Kinozal,
+            "megapeer" => JacredEntity.TrackerEntity.Megapeer,
+            "nnmclub" => JacredEntity.TrackerEntity.NNMClub,
+            "rutor" => JacredEntity.TrackerEntity.Rutor,
             "rutracker" => JacredEntity.TrackerEntity.Rutracker,
-            _           => JacredEntity.TrackerEntity.None
+            _ => JacredEntity.TrackerEntity.None
         };
     }
 
@@ -180,7 +190,7 @@ internal class VideoTypeConverter : JsonConverter<JacredEntity.VideoTypeEntity>
         return value switch {
             "sdr" => JacredEntity.VideoTypeEntity.SDR,
             "hdr" => JacredEntity.VideoTypeEntity.HDR,
-            _     => JacredEntity.VideoTypeEntity.None
+            _ => JacredEntity.VideoTypeEntity.None
         };
     }
 

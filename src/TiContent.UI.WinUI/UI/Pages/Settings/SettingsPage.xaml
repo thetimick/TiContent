@@ -41,7 +41,8 @@
                         </ComboBox>
                     </controls:SettingsCard>
 
-                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущий размер окна" Header="Запоминать размер окна">
+                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущий размер окна"
+                                           Header="Запоминать размер окна">
                         <controls:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE78B;" />
                         </controls:SettingsCard.HeaderIcon>
@@ -49,12 +50,14 @@
                         <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowSizePersistent, Mode=TwoWay}" />
                     </controls:SettingsCard>
 
-                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущую позицию окна" Header="Запоминать позицию окна">
+                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущую позицию окна"
+                                           Header="Запоминать позицию окна">
                         <controls:SettingsCard.HeaderIcon>
                             <FontIcon Glyph="&#xE78B;" />
                         </controls:SettingsCard.HeaderIcon>
 
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowOnCenterScreen, Converter={StaticResource BoolNegationConverter}, Mode=TwoWay}" />
+                        <ToggleSwitch
+                            IsOn="{x:Bind ViewModel.IsWindowOnCenterScreen, Converter={StaticResource BoolNegationConverter}, Mode=TwoWay}" />
                     </controls:SettingsCard>
                 </StackPanel>
 
@@ -69,7 +72,8 @@
                         Header="TMDB"
                         HeaderIcon="{ui:FontIcon Glyph='&#xE8D7;'}">
 
-                        <TextBox PlaceholderText="Токен" Text="{x:Bind ViewModel.TMDBApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        <TextBox PlaceholderText="Токен"
+                                 Text="{x:Bind ViewModel.TMDBApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                     </controls:SettingsCard>
                 </StackPanel>
 

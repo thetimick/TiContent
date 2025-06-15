@@ -98,7 +98,7 @@ public partial class HydraLinksWindowViewModel
 
         Items = e.PropertyName switch {
             nameof(Sort.SortItemsSelectedIndex) => SortAndFilterItems(_items).ToObservable(),
-            _                                   => Items
+            _ => Items
         };
     }
 
@@ -109,7 +109,7 @@ public partial class HydraLinksWindowViewModel
 
         Items = e.PropertyName switch {
             nameof(FiltersModel.FilterSelectedIndex) => SortAndFilterItems(_items).ToObservable(),
-            _                                        => Items
+            _ => Items
         };
     }
 }

@@ -13,7 +13,7 @@ using TiContent.Foundation.Components.Extensions;
 
 namespace TiContent.UI.WinUI.Components.Extensions;
 
-public static class IRandomAccessStreamExtensions
+public static class RandomAccessStreamExtensions
 {
     public static async Task<BitmapImage> CreateBitmapAsync(this IRandomAccessStream stream)
     {

@@ -135,6 +135,7 @@ public static class StringExtension
             var start = i;
             while (i < buffer.Length && buffer[i] != '}')
                 i++;
+
             // open curly is not matched, break
             if (i == buffer.Length)
                 break;
@@ -153,10 +154,12 @@ public static class StringExtension
             while (buffer[metaend] != '}' && buffer[metaend] != ':' && buffer[metaend] != ',')
                 metaend++;
             var paramMeta = buffer.ToString(metastart, metaend - metastart).Trim();
+
             // insert param only if meta is not int
             if (!int.TryParse(paramMeta, out _))
             {
                 string paramIndex;
+
                 // do not insert "" into meta->index map
                 if (paramMeta == "")
                 {
@@ -167,6 +170,7 @@ public static class StringExtension
                 {
                     // remove meta
                     buffer.Remove(metastart, paramMeta.Length);
+
                     // insert param index into meta->index map if not exists
                     if (!paramMetaToIndexMap.ContainsKey(paramMeta))
                     {
@@ -180,6 +184,7 @@ public static class StringExtension
 
                 // insert index
                 buffer.Insert(metastart, paramIndex);
+
                 // adjust end as buffer is removed from and inserted into
                 end += -paramMeta.Length + paramIndex.Length;
             }
@@ -314,6 +319,7 @@ public static class StringExtension
                 return null;
             return pwd.Substring(idx, len);
         };
+
         // look ahead 1, 2 chars only
         for (var length = 1; length <= 2; length++)
         {
@@ -353,6 +359,7 @@ public static class StringExtension
     {
         if (part == null)
             yield break;
+
         // yield same replacement for part as before
         if (partReplaceMap.ContainsKey(part))
         {
@@ -363,6 +370,7 @@ public static class StringExtension
             // yield same part only if munging and length 1
             if (isMunging)
                 yield return part;
+
             // yield if in muMap
             string[] muParts;
             if (muMap.TryGetValue(part, out muParts))
@@ -394,6 +402,7 @@ public static class StringExtension
     public static IEnumerable<string> Munge(this string password)
     {
         var items = MungeUnmunge(password, mungeMap, true);
+
         // 1st item is same as password
         if (items.Any() && items[0] == password)
             items.RemoveAt(0);
@@ -407,6 +416,7 @@ public static class StringExtension
     public static IEnumerable<string> Unmunge(this string password)
     {
         var items = MungeUnmunge(password, unmungeMap, false);
+
         // remove 1st item if same as password
         if (items.Any() && items[0] == password)
             items.RemoveAt(0);

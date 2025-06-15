@@ -34,7 +34,8 @@ public partial class GamesPageViewModel : ObservableObject
 
     [ObservableProperty] public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty] public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } =
+    [ObservableProperty]
+    public partial ObservableCollection<HydraApiSearchResponseEntity.EdgesEntity> Items { get; set; } =
         [];
 
     [ObservableProperty] public partial HydraFiltersEntity Filters { get; set; } = new();
@@ -78,6 +79,7 @@ public partial class GamesPageViewModel : ObservableObject
     public void OnLoaded()
     {
         ObtainItems();
+
         // LoadFilters();
     }
 

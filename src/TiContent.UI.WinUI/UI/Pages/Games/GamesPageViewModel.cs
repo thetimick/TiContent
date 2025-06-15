@@ -361,14 +361,16 @@ public partial class GamesPageViewModel
 
         [ObservableProperty] public partial AdvancedCollectionView Genres { get; set; } = [];
 
-        [ObservableProperty] public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
+        [ObservableProperty]
+        public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
             [];
 
         [ObservableProperty] public partial string GenresQuery { get; set; } = string.Empty;
 
         [ObservableProperty] public partial AdvancedCollectionView Tags { get; set; } = [];
 
-        [ObservableProperty] public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
+        [ObservableProperty]
+        public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
             [];
 
         [ObservableProperty] public partial string TagsQuery { get; set; } = string.Empty;

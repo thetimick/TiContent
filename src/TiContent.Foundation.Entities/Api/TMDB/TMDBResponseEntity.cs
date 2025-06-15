@@ -72,9 +72,7 @@ public record TMDBResponseEntity
         [JsonPropertyName("kinopoisk_id")] public string? KinopoiskId { get; set; }
 
         [JsonPropertyName("imdb_rating")] public string? ImdbRating { get; set; }
-
         [JsonPropertyName("name")] public string? Name { get; set; }
-
         [JsonPropertyName("original_name")] public string? OriginalName { get; set; }
 
         [JsonPropertyName("origin_country")] public List<string>? OriginCountry { get; set; }

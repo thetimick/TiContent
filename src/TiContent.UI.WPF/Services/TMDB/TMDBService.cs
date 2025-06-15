@@ -35,7 +35,10 @@ public partial class TMDBService : ITMDBService
         throw new Exception();
     }
 
-    public async Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity requestEntity, CancellationToken token = default)
+    public async Task<TMDBResponseEntity> ObtainTrendingAsync(
+        TMDBTrendingRequestEntity requestEntity,
+        CancellationToken token = default
+    )
     {
         var request = MakeRequest($"/3/trending/{requestEntity.Content.RawValue()}/{requestEntity.Period.RawValue()}")
             .AddParameter("page", requestEntity.Page);
@@ -48,7 +51,10 @@ public partial class TMDBService : ITMDBService
         throw new Exception();
     }
 
-    public async Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity requestEntity, CancellationToken token = default)
+    public async Task<TMDBResponseEntity> ObtainSearchAsync(
+        TMDBSearchRequestEntity requestEntity,
+        CancellationToken token = default
+    )
     {
         var request = MakeRequest($"/3/search/{requestEntity.Content.RawValue()}")
             .AddParameter("query", requestEntity.Query)
@@ -70,6 +76,7 @@ public partial class TMDBService
     private RestRequest MakeRequest(string path)
     {
         var url = UrlHelper.Combine(TMDBApiBaseUrl, path);
-        return new RestRequest(url).AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey).AddParameter("language", "ru");
+        return new RestRequest(url).AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey)
+            .AddParameter("language", "ru");
     }
 }

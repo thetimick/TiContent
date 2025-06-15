@@ -36,9 +36,9 @@ public static class PluralHelper
         var word = n is >= 11 and <= 14
             ? form5
             : (n % 10) switch {
-                1           => form1,
+                1 => form1,
                 2 or 3 or 4 => form2,
-                _           => form5
+                _ => form5
             };
 
         return withValue ? $"{number} {word}" : word;

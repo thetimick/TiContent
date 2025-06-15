@@ -27,9 +27,9 @@ public static class TMDBTrendingRequestEntityExtensions
     public static string RawValue(this TMDBTrendingRequestEntity.PeriodType type)
     {
         return type switch {
-            TMDBTrendingRequestEntity.PeriodType.Day  => "day",
+            TMDBTrendingRequestEntity.PeriodType.Day => "day",
             TMDBTrendingRequestEntity.PeriodType.Week => "week",
-            _                                         => throw new ArgumentOutOfRangeException(nameof(type))
+            _ => throw new ArgumentOutOfRangeException(nameof(type))
         };
     }
 }

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Page
     x:Class="TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage"
@@ -110,7 +110,8 @@
 
                                         <Run Text="{x:Bind Quality}" />
                                         <Run Text="•" />
-                                        <Run Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
+                                        <Run
+                                            Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
                                         <Run Text="•" />
                                         <Run Text="{x:Bind Size, Converter={StaticResource ByteSizeToStringConverter}}" />
                                     </TextBlock>

@@ -111,9 +111,9 @@ public class NavigationService(IServiceProvider provider) : INavigationService
             not null when type == typeof(FilmsPage) => NavigationPath.Films,
             not null when type == typeof(FilmsSource_FilmsSourcesPage) =>
                 NavigationPath.FilmsSource,
-            not null when type == typeof(GamesPage)    => NavigationPath.FilmsSource,
+            not null when type == typeof(GamesPage) => NavigationPath.FilmsSource,
             not null when type == typeof(SettingsPage) => NavigationPath.Settings,
-            _                                          => null
+            _ => null
         };
     }
 }

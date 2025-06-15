@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Page
     x:Class="TiContent.UI.WinUI.UI.Pages.GamesSource.GamesSourcePage"
@@ -92,7 +92,8 @@
 
                                     <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="{x:Bind Title}" />
 
-                                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}" Style="{ThemeResource CaptionTextBlockStyle}">
+                                    <TextBlock Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                               Style="{ThemeResource CaptionTextBlockStyle}">
                                         <Run Text="{x:Bind Owner}" />
                                         <Run Text="•" />
                                         <Run Text="{x:Bind Size, Converter={StaticResource ByteSizeToStringConverter}}" />

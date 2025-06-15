@@ -21,16 +21,25 @@ namespace TiContent.UI.WinUI.Services.Api.TMDB;
 
 public interface ITMDBService
 {
-    public Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity entity, CancellationToken token = default);
+    public Task<TMDBResponseEntity> ObtainTrendingAsync(
+        TMDBTrendingRequestEntity entity,
+        CancellationToken token = default
+    );
 
-    public Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity entity, CancellationToken token = default);
+    public Task<TMDBResponseEntity> ObtainSearchAsync(
+        TMDBSearchRequestEntity entity,
+        CancellationToken token = default
+    );
 }
 
 public partial class TMDBService(IRestClient client, IStorageService storage, ILogger<TMDBService> logger);
 
 public partial class TMDBService : ITMDBService
 {
-    public async Task<TMDBResponseEntity> ObtainTrendingAsync(TMDBTrendingRequestEntity entity, CancellationToken token = default)
+    public async Task<TMDBResponseEntity> ObtainTrendingAsync(
+        TMDBTrendingRequestEntity entity,
+        CancellationToken token = default
+    )
     {
         var path = new StringBuilder()
             .Append("/trending")
@@ -48,7 +57,10 @@ public partial class TMDBService : ITMDBService
         return new TMDBResponseEntity();
     }
 
-    public async Task<TMDBResponseEntity> ObtainSearchAsync(TMDBSearchRequestEntity entity, CancellationToken token = default)
+    public async Task<TMDBResponseEntity> ObtainSearchAsync(
+        TMDBSearchRequestEntity entity,
+        CancellationToken token = default
+    )
     {
         var path = new StringBuilder().Append("/search").Append($"/{entity.Content.RawValue()}").ToString();
 
@@ -70,6 +82,7 @@ public partial class TMDBService
     private RestRequest MakeRequest(string path)
     {
         var url = UrlHelper.Combine(storage.Cached?.Urls.TMDBApiBaseUrl ?? AppConstants.Urls.TMDBApiBaseUrl, path);
-        return new RestRequest(url).AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey).AddParameter("language", "ru");
+        return new RestRequest(url).AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey)
+            .AddParameter("language", "ru");
     }
 }
