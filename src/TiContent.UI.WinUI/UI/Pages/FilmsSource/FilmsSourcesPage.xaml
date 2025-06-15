@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <Page
     x:Class="TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage"
@@ -59,7 +59,7 @@
         </Grid>
 
         <Grid
-            ColumnDefinitions="*, 0.35*"
+            ColumnDefinitions="*, 0.38*"
             ColumnSpacing="8"
             Row="1">
 
@@ -110,8 +110,7 @@
 
                                         <Run Text="{x:Bind Quality}" />
                                         <Run Text="•" />
-                                        <Run
-                                            Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
+                                        <Run Text="{x:Bind Date, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy'}" />
                                         <Run Text="•" />
                                         <Run Text="{x:Bind Size, Converter={StaticResource ByteSizeToStringConverter}}" />
                                     </TextBlock>
@@ -217,6 +216,14 @@
                     <ScrollViewer>
                         <StackPanel Spacing="4">
                             <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="Фильтрация" />
+
+                            <ToggleSwitch
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                Header="Содержит Оригинальное Название"
+                                IsOn="{x:Bind ViewModel.Filters.ContainsOriginalTitle, Mode=TwoWay}"
+                                OffContent="Необязательно"
+                                OnContent="Обязательно" />
 
                             <ComboBox
                                 HorizontalAlignment="Stretch"

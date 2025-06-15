@@ -145,7 +145,7 @@ public partial class FilmsPageViewModel
 
         _navigationService.NavigateTo(NavigationPath.FilmsSource);
         WeakReferenceMessenger.Default.Send(
-            new FilmsSourcesPageViewModel.InitialDataEntity(item.Title)
+            new FilmsSourcesPageViewModel.InitialDataEntity(item.Title, item.OriginalTitle)
         );
     }
 
