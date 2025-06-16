@@ -15,16 +15,11 @@ public partial class App
 {
     public sealed partial class AppDataBaseContext : DbContext
     {
-        // Data
+        // Tables
 
         public DbSet<DataBaseHistoryEntity> QueryHistoryItems => Set<DataBaseHistoryEntity>();
-
-        public DbSet<DataBaseHydraLinkItemEntity> HydraLinksItems =>
-            Set<DataBaseHydraLinkItemEntity>();
-
-        public DbSet<DataBaseHydraFilterItemEntity> HydraFiltersItems =>
-            Set<DataBaseHydraFilterItemEntity>();
-
+        public DbSet<DataBaseHydraLinkItemEntity> HydraLinksItems => Set<DataBaseHydraLinkItemEntity>();
+        public DbSet<DataBaseHydraFilterItemEntity> HydraFiltersItems => Set<DataBaseHydraFilterItemEntity>();
         public DbSet<DataBaseImageEntity> ImageItems => Set<DataBaseImageEntity>();
 
         // LifeCycle

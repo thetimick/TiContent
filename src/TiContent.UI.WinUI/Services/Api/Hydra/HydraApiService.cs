@@ -51,10 +51,7 @@ public partial class HydraApiService : IHydraApiService
             .AddParameter("take", @params.Take ?? 12)
             .AddParameter("skip", @params.Skip ?? 0);
 
-        var response = await client.ExecuteAsync<List<HydraApiCatalogueResponseEntity>>(
-            request,
-            token
-        );
+        var response = await client.ExecuteAsync<List<HydraApiCatalogueResponseEntity>>(request, token);
         if (response is { IsSuccessful: true, Data: { } entity })
             return entity;
 
