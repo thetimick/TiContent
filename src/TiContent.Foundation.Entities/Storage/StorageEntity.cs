@@ -51,6 +51,7 @@ public record StorageEntity
     public record GamesSourceEntity
     {
         public int SortOrder { get; set; }
+        public bool UseOnlyTrustedSources { get; set; } = true;
     }
 
     public DataBaseTimestampEntity DataBaseTimestamp { get; init; } = new();

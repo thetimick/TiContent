@@ -7,6 +7,11 @@
 
 using System.Text.Json.Serialization;
 
+// ReSharper disable AutoPropertyCanBeMadeGetOnly.Global
+// ReSharper disable NotAccessedPositionalProperty.Global
+// ReSharper disable CollectionNeverUpdated.Global
+// ReSharper disable ClassNeverInstantiated.Global
+
 namespace TiContent.Foundation.Entities.Api.HydraLinks;
 
 public record HydraLinksSourcesResponseEntity
@@ -26,5 +31,6 @@ public record HydraLinksSourcesResponseEntity
         string AddedDate
     );
 
-    [JsonPropertyName("sources")] public List<ItemEntity> Items { get; init; } = [];
+    [JsonPropertyName("sources")]
+    public List<ItemEntity> Items { get; init; } = [];
 }

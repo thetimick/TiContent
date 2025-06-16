@@ -9,6 +9,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
+using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.UI.Pages.Films;
 using TiContent.UI.WinUI.UI.Pages.Games;

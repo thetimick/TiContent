@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8" ?>
 
 <ResourceDictionary
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -12,4 +12,6 @@
     <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
     <converters:IntLimitToStringConverter x:Key="IntLimitToStringConverter" />
     <converters:SplitToStringConverter x:Key="SplitToStringConverter" />
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converters:InvertBoolToVisibilityConverter x:Key="InvertBoolToVisibilityConverter" />
 </ResourceDictionary>

@@ -220,7 +220,7 @@
                             <ToggleSwitch
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
-                                Header="Содержит Оригинальное Название"
+                                Header="Содержит оригинальное название"
                                 IsOn="{x:Bind ViewModel.Filters.ContainsOriginalTitle, Mode=TwoWay}"
                                 OffContent="Необязательно"
                                 OnContent="Обязательно" />
