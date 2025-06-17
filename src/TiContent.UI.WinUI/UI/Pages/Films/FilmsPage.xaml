@@ -57,8 +57,7 @@
                                 Content="Аниме"
                                 FontSize="14"
                                 FontWeight="SemiBold"
-                                Icon="{communityToolkit:FontIcon Glyph='&#xE7F4;'}"
-                                Visibility="Collapsed" />
+                                Icon="{communityToolkit:FontIcon Glyph='&#xE7F4;'}" />
                         </communityToolkitControls:Segmented>
 
                         <AutoSuggestBox
@@ -134,7 +133,11 @@
                                         </Border>
 
                                         <StackPanel Grid.Column="1" Orientation="Vertical">
-                                            <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{x:Bind Title}" />
+                                            <TextBlock
+                                                MaxLines="1"
+                                                Style="{StaticResource SubtitleTextBlockStyle}"
+                                                Text="{x:Bind Title}"
+                                                ToolTipService.ToolTip="{x:Bind Title}" />
 
                                             <TextBlock Style="{StaticResource BodyTextBlockStyle}">
                                                 <Run Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{x:Bind OriginalTitle}" />
@@ -151,6 +154,7 @@
                                                 Style="{StaticResource CaptionTextBlockStyle}"
                                                 Text="{x:Bind Description}"
                                                 TextWrapping="Wrap"
+                                                ToolTipService.ToolTip="{x:Bind Description}"
                                                 Visibility="{x:Bind Description, Converter={StaticResource NullToVisibilityConverter}}" />
 
                                             <TextBlock Margin="0,4,0,0" Style="{StaticResource BodyTextBlockStyle}">

@@ -20,9 +20,13 @@ public record StorageEntity
     public record UrlsEntity
     {
         public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
+
         public string HydraApiBaseUrl { get; init; } = AppConstants.Urls.HydraApi;
         public string HydraApiAssetsBaseUrl { get; init; } = AppConstants.Urls.HydraAssetsApi;
-        public string TMDBApiBaseUrl { get; init; } = AppConstants.Urls.TMDBApiBaseUrl;
+
+        public string TMDBApiBaseUrlV1 { get; init; } = AppConstants.Urls.TMDBApiBaseUrlV1;
+        public string TMDBApiBaseUrlV2 { get; init; } = AppConstants.Urls.TMDBApiBaseUrlV2;
+        public string TMDBApiAssetsBaseUrl { get; init; } = AppConstants.Urls.TMDBApiAssetsBaseUrl;
 
         public string HydraLinksSources { get; init; } = AppConstants.Urls.HydraLinksSources;
     }
@@ -43,6 +47,11 @@ public record StorageEntity
         public bool IsWindowOnCenterScreen { get; set; } = true;
     }
 
+    public record FilmsEntity
+    {
+        public int PosterQualityIndex { get; set; } = 2;
+    }
+
     public record FilmsSourceEntity
     {
         public int SortOrder { get; set; } = 2;
@@ -58,6 +67,7 @@ public record StorageEntity
     public UrlsEntity Urls { get; init; } = new();
     public KeysEntity Keys { get; init; } = new();
     public WindowEntity Window { get; init; } = new();
+    public FilmsEntity Films { get; init; } = new();
     public FilmsSourceEntity FilmsSource { get; init; } = new();
     public GamesSourceEntity GamesSource { get; init; } = new();
 }

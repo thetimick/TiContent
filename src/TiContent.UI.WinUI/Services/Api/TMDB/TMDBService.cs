@@ -5,13 +5,14 @@
 // Created by the_timick on 12.05.2025.
 // ⠀
 
+using System;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using TiContent.Foundation.Components.Helpers;
-using TiContent.Foundation.Constants;
 using TiContent.Foundation.Entities.Api.TMDB;
 using TiContent.Foundation.Entities.Api.TMDB.Requests;
 using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
@@ -21,6 +22,11 @@ namespace TiContent.UI.WinUI.Services.Api.TMDB;
 
 public interface ITMDBService
 {
+    public Task<TMDBResponseEntity> ObtainAsync(
+        TMDBRequestEntity entity,
+        CancellationToken token = default
+    );
+
     public Task<TMDBResponseEntity> ObtainTrendingAsync(
         TMDBTrendingRequestEntity entity,
         CancellationToken token = default
@@ -32,10 +38,33 @@ public interface ITMDBService
     );
 }
 
-public partial class TMDBService(IRestClient client, IStorageService storage, ILogger<TMDBService> logger);
+public partial class TMDBService(
+    IRestClient client,
+    IStorageService storage,
+    ILogger<TMDBService> logger
+);
 
 public partial class TMDBService : ITMDBService
 {
+    public async Task<TMDBResponseEntity> ObtainAsync(
+        TMDBRequestEntity entity,
+        CancellationToken token = default
+    )
+    {
+        var request = new RestRequest(storage.Cached.Urls.TMDBApiBaseUrlV1)
+            .AddParameter("cat", entity.Category.Humanize())
+            .AddParameter("sort", entity.Sort.Humanize())
+            .AddParameter("airdate", entity.Year)
+            .AddParameter("page", entity.Page);
+
+        var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
+        if (response is { IsSuccessful: true, Data: not null })
+            return response.Data;
+
+        response.ThrowIfError();
+        throw new InvalidOperationException();
+    }
+
     public async Task<TMDBResponseEntity> ObtainTrendingAsync(
         TMDBTrendingRequestEntity entity,
         CancellationToken token = default
@@ -47,7 +76,7 @@ public partial class TMDBService : ITMDBService
             .Append($"/{entity.Period.RawValue()}")
             .ToString();
 
-        var request = MakeRequest(path).AddParameter("page", entity.Page);
+        var request = MakeRequestV2(path).AddParameter("page", entity.Page);
 
         var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
         if (response is { IsSuccessful: true, Data: { } data })
@@ -62,9 +91,14 @@ public partial class TMDBService : ITMDBService
         CancellationToken token = default
     )
     {
-        var path = new StringBuilder().Append("/search").Append($"/{entity.Content.RawValue()}").ToString();
+        var path = new StringBuilder()
+            .Append("/search")
+            .Append($"/{entity.Content.RawValue()}")
+            .ToString();
 
-        var request = MakeRequest(path).AddParameter("query", entity.Query).AddParameter("page", entity.Page);
+        var request = MakeRequestV2(path)
+            .AddParameter("query", entity.Query)
+            .AddParameter("page", entity.Page);
 
         var response = await client.ExecuteAsync<TMDBResponseEntity>(request, token);
         if (response is { IsSuccessful: true, Data: { } data })
@@ -79,10 +113,11 @@ public partial class TMDBService : ITMDBService
 
 public partial class TMDBService
 {
-    private RestRequest MakeRequest(string path)
+    private RestRequest MakeRequestV2(string path)
     {
-        var url = UrlHelper.Combine(storage.Cached?.Urls.TMDBApiBaseUrl ?? AppConstants.Urls.TMDBApiBaseUrl, path);
-        return new RestRequest(url).AddParameter("api_key", storage.Cached?.Keys.TMDBApiKey)
+        var url = UrlHelper.Combine(storage.Cached.Urls.TMDBApiBaseUrlV2, "3", path);
+        return new RestRequest(url)
+            .AddParameter("api_key", storage.Cached.Keys.TMDBApiKey)
             .AddParameter("language", "ru");
     }
 }

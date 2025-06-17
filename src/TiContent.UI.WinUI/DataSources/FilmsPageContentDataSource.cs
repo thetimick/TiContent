@@ -60,9 +60,16 @@ public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
             _pagination.Reset();
 
         if (@params.Query.IsNullOrEmpty())
-            await ObtainTrendingAsync(@params.Content, pagination, _tokenSource.Token);
+        {
+            if (@params.Content != 2)
+                await ObtainTrendingAsync(@params.Content, pagination, _tokenSource.Token);
+            else
+                await ObtainAsync(@params.Content, pagination, _tokenSource.Token);
+        }
         else
+        {
             await ObtainSearchAsync(@params.Query, pagination, _tokenSource.Token);
+        }
 
         _pagination.NextPage();
         _tokenSource = null;
@@ -73,6 +80,21 @@ public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 
 public partial class FilmsPageContentDataSource
 {
+    private async Task ObtainAsync(int content, bool pagination, CancellationToken token)
+    {
+        var @params = new TMDBRequestEntity {
+            Category = (TMDBRequestEntity.CategoriesEnum)content,
+            Sort = TMDBRequestEntity.SortEnum.Top,
+            Year = 2025,
+            Page = _pagination.Page
+        };
+
+        var response = await api.ObtainAsync(@params, token);
+        ApplyItems(response.Results, pagination);
+
+        _pagination.SetTotalPages(response.TotalPages);
+    }
+
     private async Task ObtainTrendingAsync(int content, bool pagination, CancellationToken token)
     {
         var request = new TMDBTrendingRequestEntity {
@@ -127,9 +149,7 @@ public partial class FilmsPageContentDataSource
         if (items == null)
             return;
 
-        var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(
-            items
-        );
+        var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(items);
 
         if (!pagination)
             Cache.Clear();

@@ -65,11 +65,7 @@
                             Style="{ThemeResource BodyStrongTextBlockStyle}"
                             Text="Ключи" />
 
-                        <controls:SettingsCard
-                            Description="Токен доступа для TMDB"
-                            Header="TMDB"
-                            HeaderIcon="{ui:FontIcon Glyph='&#xE8D7;'}">
-
+                        <controls:SettingsCard Header="TMDB" HeaderIcon="{ui:FontIcon Glyph='&#xE8D7;'}">
                             <TextBox PlaceholderText="Токен" Text="{x:Bind ViewModel.TMDBApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                         </controls:SettingsCard>
                     </StackPanel>
@@ -92,7 +88,23 @@
                         <TextBlock
                             Margin="16,0,0,8"
                             Style="{ThemeResource BodyStrongTextBlockStyle}"
-                            Text="Источники" />
+                            Text="Фильмы &amp; Сериалы" />
+
+                        <controls:SettingsCard Header="Разрешение постеров TMDB" HeaderIcon="{ui:FontIcon Glyph='&#xE91B;'}">
+                            <ComboBox SelectedIndex="{x:Bind ViewModel.Films.PosterQualityIndex, Mode=TwoWay}">
+                                <ComboBoxItem Content="Наилучшее" />
+                                <ComboBoxItem Content="Высокое" />
+                                <ComboBoxItem Content="Среднее" />
+                                <ComboBoxItem Content="Низкое" />
+                            </ComboBox>
+                        </controls:SettingsCard>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock
+                            Margin="16,0,0,8"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="Игры" />
 
                         <controls:SettingsCard
                             Description="Избегать использование источников со статусами Use At Your Own Risk и NSFW"

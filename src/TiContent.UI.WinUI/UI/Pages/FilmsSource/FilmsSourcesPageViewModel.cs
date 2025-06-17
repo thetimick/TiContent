@@ -329,7 +329,7 @@ public partial class FilmsSourcesPageViewModel
     public partial class FiltersEntity : ObservableObject
     {
         [ObservableProperty]
-        public partial bool ContainsOriginalTitle { get; set; } = true;
+        public partial bool ContainsOriginalTitle { get; set; } = false;
 
         [ObservableProperty]
         public partial ObservableCollection<string> Qualities { get; set; } = [];

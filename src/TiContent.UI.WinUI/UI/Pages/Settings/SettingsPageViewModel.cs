@@ -34,6 +34,9 @@ public partial class SettingsPageViewModel : ObservableObject
     public partial string TMDBApiKey { get; set; } = string.Empty;
 
     [ObservableProperty]
+    public partial FilmsSettings Films { get; set; }
+
+    [ObservableProperty]
     public partial GamesSourcesSettings GamesSources { get; set; }
 
     partial void OnThemeIndexChanged(int value)
@@ -77,6 +80,7 @@ public partial class SettingsPageViewModel : ObservableObject
         _storageService = storageService;
         _themeService = themeService;
 
+        Films = new FilmsSettings(storageService);
         GamesSources = new GamesSourcesSettings(storageService, dbGamesSourceService);
     }
 
@@ -105,6 +109,17 @@ public partial class SettingsPageViewModel : ObservableObject
 
 public partial class SettingsPageViewModel
 {
+    public partial class FilmsSettings(IStorageService storageService) : ObservableObject
+    {
+        [ObservableProperty]
+        public partial int PosterQualityIndex { get; set; } = storageService.Cached.Films.PosterQualityIndex;
+
+        partial void OnPosterQualityIndexChanged(int value)
+        {
+            storageService.Cached.Films.PosterQualityIndex = value;
+        }
+    }
+
     public partial class GamesSourcesSettings : ObservableObject,
                                                 IRecipient<IDataBaseGamesSourceService.StateEventEntity>
     {

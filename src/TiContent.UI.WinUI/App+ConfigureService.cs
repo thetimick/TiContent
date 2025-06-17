@@ -58,7 +58,7 @@ public partial class App
         private void SetupWindow()
         {
             window.Activate();
-            window.Closed += async (_, _) => await AppHost.StopAsync();
+            window.Closed += (_, _) => AppHost.StopAsync().Wait();
         }
 
         private async Task ObtainDataIfNeeded(CancellationToken token)

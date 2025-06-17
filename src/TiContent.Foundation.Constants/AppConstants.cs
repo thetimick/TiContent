@@ -23,8 +23,9 @@ public static class AppConstants
         public const string HydraApi = "https://hydra-api-us-east-1.losbroxas.org";
         public const string HydraAssetsApi = "https://assets.hydralauncher.gg";
 
-        public const string TMDBApiBaseUrl = "https://apitmdb.cub.rip/3";
-        public const string TMDBAssetsApi = "https://imagetmdb.com/t/p/w200";
+        public const string TMDBApiBaseUrlV1 = "https://tmdb.cub.rip";
+        public const string TMDBApiBaseUrlV2 = "https://apitmdb.cub.rip";
+        public const string TMDBApiAssetsBaseUrl = "https://imagetmdb.com";
 
         public const string HydraLinksSources = "https://library.hydra.wiki/data/resources.json";
     }

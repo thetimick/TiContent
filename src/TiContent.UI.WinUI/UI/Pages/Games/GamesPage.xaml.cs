@@ -99,7 +99,7 @@ public partial class GamesPage
                 {
                     try
                     {
-                        var entity = await ImageProvider.ObtainImageAsync(url);
+                        var entity = await ImageProvider.ObtainImageAsync(url, false);
                         var stream = await entity.Data.ToRandomAccessStreamAsync();
                         DispatcherQueue.TryEnqueue(() =>
                         {
@@ -109,14 +109,6 @@ public partial class GamesPage
                     }
                     catch (Exception ex)
                     {
-                        await DispatcherQueue.EnqueueAsync(() =>
-                            NotificationService.ShowNotification(
-                                "Изображение не загрузилось =(",
-                                $"{url}\n{ex.Message}",
-                                InfoBarSeverity.Warning,
-                                TimeSpan.FromSeconds(3)
-                            )
-                        );
                         Logger.LogError(ex, "{msg}", ex.Message);
                         throw;
                     }

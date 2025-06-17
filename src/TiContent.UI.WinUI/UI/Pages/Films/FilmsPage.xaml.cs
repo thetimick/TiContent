@@ -138,7 +138,7 @@ public partial class FilmsPage
                 {
                     try
                     {
-                        var entity = await ImageProvider.ObtainImageAsync(url);
+                        var entity = await ImageProvider.ObtainImageAsync(url, true);
                         var stream = await entity.Data.ToRandomAccessStreamAsync();
                         await DispatcherQueue.EnqueueAsync(async () =>
                             image.Source = await stream.CreateBitmapAsync()
@@ -146,14 +146,6 @@ public partial class FilmsPage
                     }
                     catch (Exception ex)
                     {
-                        await DispatcherQueue.EnqueueAsync(() =>
-                            NotificationService.ShowNotification(
-                                "Изображение не загрузилось =(",
-                                $"{url}\n{ex.Message}",
-                                InfoBarSeverity.Warning,
-                                TimeSpan.FromSeconds(3)
-                            )
-                        );
                         Logger.LogError(ex, "{msg}", ex.Message);
                         throw;
                     }
