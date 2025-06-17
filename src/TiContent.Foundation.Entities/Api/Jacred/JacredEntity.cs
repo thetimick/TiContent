@@ -16,42 +16,59 @@ public record JacredEntity
 {
     public enum VideoTypeEntity
     {
-        [Description("SDR")] SDR,
+        [Description("SDR")]
+        SDR,
 
-        [Description("HDR")] HDR,
+        [Description("HDR")]
+        HDR,
 
-        [Description("n/n")] None
+        [Description("n/n")]
+        None
     }
 
     public enum TrackerEntity
     {
-        [Description("bitru")] Bitru,
+        [Description("bitru")]
+        Bitru,
 
-        [Description("kinozal")] Kinozal,
+        [Description("kinozal")]
+        Kinozal,
 
-        [Description("megapeer")] Megapeer,
+        [Description("megapeer")]
+        Megapeer,
 
-        [Description("nnmclub")] NNMClub,
+        [Description("nnmclub")]
+        NNMClub,
 
-        [Description("rutor")] Rutor,
+        [Description("rutor")]
+        Rutor,
 
-        [Description("rutracker")] Rutracker,
+        [Description("rutracker")]
+        Rutracker,
 
-        [Description("toloka")] Toloka,
+        [Description("toloka")]
+        Toloka,
 
-        [Description("selezen")] Selezen,
+        [Description("selezen")]
+        Selezen,
 
-        [Description("anilibria")] Anilibria,
+        [Description("anilibria")]
+        Anilibria,
 
-        [Description("torrentby")] TorrentBy,
+        [Description("torrentby")]
+        TorrentBy,
 
-        [Description("baibako")] Baibako,
+        [Description("baibako")]
+        Baibako,
 
-        [Description("animelayer")] AnimeLayer,
+        [Description("animelayer")]
+        AnimeLayer,
 
-        [Description("lostfilm")] LostFilm,
+        [Description("lostfilm")]
+        LostFilm,
 
-        [Description("n/n")] None
+        [Description("n/n")]
+        None
     }
 
     [JsonPropertyName("tracker")] [JsonConverter(typeof(TrackerConverter))]
@@ -120,20 +137,20 @@ internal class TrackerConverter : JsonConverter<JacredEntity.TrackerEntity>
     {
         var value = reader.GetString()?.Trim().Humanize(LetterCasing.LowerCase);
         return value switch {
-            "bitru"      => JacredEntity.TrackerEntity.Bitru,
-            "kinozal"    => JacredEntity.TrackerEntity.Kinozal,
-            "megapeer"   => JacredEntity.TrackerEntity.Megapeer,
-            "nnmclub"    => JacredEntity.TrackerEntity.NNMClub,
-            "rutor"      => JacredEntity.TrackerEntity.Rutor,
-            "rutracker"  => JacredEntity.TrackerEntity.Rutracker,
-            "toloka"     => JacredEntity.TrackerEntity.Toloka,
-            "selezen"    => JacredEntity.TrackerEntity.Selezen,
-            "anilibria"  => JacredEntity.TrackerEntity.Anilibria,
-            "torrentby"  => JacredEntity.TrackerEntity.TorrentBy,
-            "baibako"    => JacredEntity.TrackerEntity.Baibako,
+            "bitru" => JacredEntity.TrackerEntity.Bitru,
+            "kinozal" => JacredEntity.TrackerEntity.Kinozal,
+            "megapeer" => JacredEntity.TrackerEntity.Megapeer,
+            "nnmclub" => JacredEntity.TrackerEntity.NNMClub,
+            "rutor" => JacredEntity.TrackerEntity.Rutor,
+            "rutracker" => JacredEntity.TrackerEntity.Rutracker,
+            "toloka" => JacredEntity.TrackerEntity.Toloka,
+            "selezen" => JacredEntity.TrackerEntity.Selezen,
+            "anilibria" => JacredEntity.TrackerEntity.Anilibria,
+            "torrentby" => JacredEntity.TrackerEntity.TorrentBy,
+            "baibako" => JacredEntity.TrackerEntity.Baibako,
             "animelayer" => JacredEntity.TrackerEntity.AnimeLayer,
-            "lostfilm"   => JacredEntity.TrackerEntity.LostFilm,
-            _            => JacredEntity.TrackerEntity.None
+            "lostfilm" => JacredEntity.TrackerEntity.LostFilm,
+            _ => JacredEntity.TrackerEntity.None
         };
     }
 
@@ -200,7 +217,7 @@ internal class VideoTypeConverter : JsonConverter<JacredEntity.VideoTypeEntity>
         return value switch {
             "sdr" => JacredEntity.VideoTypeEntity.SDR,
             "hdr" => JacredEntity.VideoTypeEntity.HDR,
-            _     => JacredEntity.VideoTypeEntity.None
+            _ => JacredEntity.VideoTypeEntity.None
         };
     }
 

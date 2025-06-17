@@ -17,6 +17,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
+using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
 using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Components.Helpers;
 using TiContent.UI.WinUI.Providers;
@@ -94,32 +95,25 @@ public partial class GamesPage
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
         if (sender is Image { Tag: string url } image)
-            Task.Run(async () =>
-            {
-                try
+            DispatcherQueue.EnqueueAsync(async () =>
                 {
-                    var entity = await ImageProvider.ObtainImageAsync(url);
-                    var stream = await entity.Data.ToRandomAccessStreamAsync();
-                    DispatcherQueue.TryEnqueue(() =>
+                    try
                     {
-                        var bitmap = CreateBitmapAsync(stream);
-                        image.Source = bitmap;
-                    });
+                        var entity = await ImageProvider.ObtainImageAsync(url, false);
+                        var stream = await entity.Data.ToRandomAccessStreamAsync();
+                        DispatcherQueue.TryEnqueue(() =>
+                        {
+                            var bitmap = CreateBitmapAsync(stream);
+                            image.Source = bitmap;
+                        });
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "{msg}", ex.Message);
+                        throw;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    await DispatcherQueue.EnqueueAsync(() =>
-                        NotificationService.ShowNotification(
-                            "Изображение не загрузилось =(",
-                            $"{url}\n{ex.Message}",
-                            InfoBarSeverity.Warning,
-                            TimeSpan.FromSeconds(3)
-                        )
-                    );
-                    Logger.LogError(ex, "{msg}", ex.Message);
-                    throw;
-                }
-            });
+            );
     }
 
     // AutoSuggestBox

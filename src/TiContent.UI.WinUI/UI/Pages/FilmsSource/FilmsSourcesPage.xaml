@@ -59,7 +59,7 @@
         </Grid>
 
         <Grid
-            ColumnDefinitions="*, 0.35*"
+            ColumnDefinitions="*, 0.38*"
             ColumnSpacing="8"
             Row="1">
 
@@ -216,6 +216,14 @@
                     <ScrollViewer>
                         <StackPanel Spacing="4">
                             <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="Фильтрация" />
+
+                            <ToggleSwitch
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"
+                                Header="Содержит оригинальное название"
+                                IsOn="{x:Bind ViewModel.Filters.ContainsOriginalTitle, Mode=TwoWay}"
+                                OffContent="Необязательно"
+                                OnContent="Обязательно" />
 
                             <ComboBox
                                 HorizontalAlignment="Stretch"

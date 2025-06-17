@@ -22,84 +22,116 @@
             Text="Параметры" />
 
         <ScrollView Grid.Row="1">
-            <Grid RowDefinitions="Auto, Auto, Auto, Auto, *" RowSpacing="16">
-                <StackPanel Grid.Row="0">
-                    <TextBlock
-                        Margin="16,0,0,8"
-                        Style="{ThemeResource BodyStrongTextBlockStyle}"
-                        Text="Персонализация" />
+            <Grid RowDefinitions="Auto, *">
+                <StackPanel Grid.Row="0" Spacing="16">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="16,0,0,8"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="Персонализация" />
 
-                    <controls:SettingsCard Description="Настройка темы оформления" Header="Оформление">
-                        <controls:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE790;" />
-                        </controls:SettingsCard.HeaderIcon>
+                        <controls:SettingsCard Description="Настройка темы оформления" Header="Оформление">
+                            <controls:SettingsCard.HeaderIcon>
+                                <FontIcon Glyph="&#xE790;" />
+                            </controls:SettingsCard.HeaderIcon>
 
-                        <ComboBox SelectedIndex="{x:Bind ViewModel.ThemeIndex, Mode=TwoWay}">
-                            <ComboBoxItem Content="Системная" />
-                            <ComboBoxItem Content="Светлая" />
-                            <ComboBoxItem Content="Темная" />
-                        </ComboBox>
-                    </controls:SettingsCard>
+                            <ComboBox SelectedIndex="{x:Bind ViewModel.ThemeIndex, Mode=TwoWay}">
+                                <ComboBoxItem Content="Системная" />
+                                <ComboBoxItem Content="Светлая" />
+                                <ComboBoxItem Content="Темная" />
+                            </ComboBox>
+                        </controls:SettingsCard>
 
-                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущий размер окна" Header="Запоминать размер окна">
-                        <controls:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE78B;" />
-                        </controls:SettingsCard.HeaderIcon>
+                        <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущий размер окна" Header="Запоминать размер окна">
+                            <controls:SettingsCard.HeaderIcon>
+                                <FontIcon Glyph="&#xE78B;" />
+                            </controls:SettingsCard.HeaderIcon>
 
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowSizePersistent, Mode=TwoWay}" />
-                    </controls:SettingsCard>
+                            <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowSizePersistent, Mode=TwoWay}" />
+                        </controls:SettingsCard>
 
-                    <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущую позицию окна" Header="Запоминать позицию окна">
-                        <controls:SettingsCard.HeaderIcon>
-                            <FontIcon Glyph="&#xE78B;" />
-                        </controls:SettingsCard.HeaderIcon>
+                        <controls:SettingsCard Description="При каждом запуске восстанавливать предыдущую позицию окна" Header="Запоминать позицию окна">
+                            <controls:SettingsCard.HeaderIcon>
+                                <FontIcon Glyph="&#xE78B;" />
+                            </controls:SettingsCard.HeaderIcon>
 
-                        <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowOnCenterScreen, Converter={StaticResource BoolNegationConverter}, Mode=TwoWay}" />
-                    </controls:SettingsCard>
-                </StackPanel>
+                            <ToggleSwitch IsOn="{x:Bind ViewModel.IsWindowOnCenterScreen, Converter={StaticResource BoolNegationConverter}, Mode=TwoWay}" />
+                        </controls:SettingsCard>
+                    </StackPanel>
 
-                <StackPanel Grid.Row="1">
-                    <TextBlock
-                        Margin="16,0,0,8"
-                        Style="{ThemeResource BodyStrongTextBlockStyle}"
-                        Text="Ключи" />
+                    <StackPanel>
+                        <TextBlock
+                            Margin="16,0,0,8"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="Ключи" />
 
-                    <controls:SettingsCard
-                        Description="Токен доступа для TMDB"
-                        Header="TMDB"
-                        HeaderIcon="{ui:FontIcon Glyph='&#xE8D7;'}">
+                        <controls:SettingsCard Header="TMDB" HeaderIcon="{ui:FontIcon Glyph='&#xE8D7;'}">
+                            <TextBox PlaceholderText="Токен" Text="{x:Bind ViewModel.TMDBApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                        </controls:SettingsCard>
+                    </StackPanel>
 
-                        <TextBox PlaceholderText="Токен" Text="{x:Bind ViewModel.TMDBApiKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </controls:SettingsCard>
-                </StackPanel>
+                    <StackPanel>
+                        <TextBlock
+                            Margin="16,0,0,8"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="Действия" />
 
-                <StackPanel Grid.Row="2">
-                    <TextBlock
-                        Margin="16,0,0,8"
-                        Style="{ThemeResource BodyStrongTextBlockStyle}"
-                        Text="Действия" />
+                        <controls:SettingsCard
+                            Command="{x:Bind ViewModel.TapOnOpenStorageButtonCommand}"
+                            Description="Открыть папку, в которой хранятся пользовательские данные"
+                            Header="Хранилище"
+                            HeaderIcon="{ui:FontIcon Glyph='&#xEC25;'}"
+                            IsClickEnabled="True" />
+                    </StackPanel>
 
-                    <controls:SettingsCard
-                        Command="{x:Bind ViewModel.TapOnOpenStorageButtonCommand}"
-                        Description="Открыть папку, в которой хранятся пользовательские данные"
-                        Header="Хранилище"
-                        HeaderIcon="{ui:FontIcon Glyph='&#xEC25;'}"
-                        IsClickEnabled="True" />
-                </StackPanel>
+                    <StackPanel>
+                        <TextBlock
+                            Margin="16,0,0,8"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="Фильмы &amp; Сериалы" />
 
-                <StackPanel Grid.Row="3">
-                    <TextBlock
-                        Margin="16,0,0,8"
-                        Style="{ThemeResource BodyStrongTextBlockStyle}"
-                        Text="О Программе" />
+                        <controls:SettingsCard Header="Разрешение постеров TMDB" HeaderIcon="{ui:FontIcon Glyph='&#xE91B;'}">
+                            <ComboBox SelectedIndex="{x:Bind ViewModel.Films.PosterQualityIndex, Mode=TwoWay}">
+                                <ComboBoxItem Content="Наилучшее" />
+                                <ComboBoxItem Content="Высокое" />
+                                <ComboBoxItem Content="Среднее" />
+                                <ComboBoxItem Content="Низкое" />
+                            </ComboBox>
+                        </controls:SettingsCard>
+                    </StackPanel>
 
-                    <controls:SettingsCard
-                        Description="Агрегатор TMDB &amp; Jacred &amp; Hydra &amp; Hydra Links"
-                        Header="TiContent by the_timick"
-                        HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
+                    <StackPanel>
+                        <TextBlock
+                            Margin="16,0,0,8"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="Игры" />
 
-                        <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.3" />
-                    </controls:SettingsCard>
+                        <controls:SettingsCard
+                            Description="Избегать использование источников со статусами Use At Your Own Risk и NSFW"
+                            Header="Только проверенные источники"
+                            HeaderIcon="{ui:FontIcon Glyph='&#xE814;'}">
+
+                            <Grid>
+                                <ProgressRing IsActive="True" Visibility="{x:Bind ViewModel.GamesSources.UseOnlyTrustedSourcesInProgress, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <ToggleSwitch IsOn="{x:Bind ViewModel.GamesSources.UseOnlyTrustedSources, Mode=TwoWay}" Visibility="{x:Bind ViewModel.GamesSources.UseOnlyTrustedSourcesInProgress, Mode=OneWay, Converter={StaticResource InvertBoolToVisibilityConverter}}" />
+                            </Grid>
+                        </controls:SettingsCard>
+                    </StackPanel>
+
+                    <StackPanel>
+                        <TextBlock
+                            Margin="16,0,0,8"
+                            Style="{ThemeResource BodyStrongTextBlockStyle}"
+                            Text="О Программе" />
+
+                        <controls:SettingsCard
+                            Description="Агрегатор TMDB &amp; Jacred &amp; Hydra &amp; Hydra Links"
+                            Header="TiContent by the_timick"
+                            HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
+
+                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.3" />
+                        </controls:SettingsCard>
+                    </StackPanel>
                 </StackPanel>
             </Grid>
         </ScrollView>

@@ -115,7 +115,8 @@
                                 Appearance="Tertiary"
                                 FontTypography="Caption">
 
-                                <Run Text="{Binding UploadDate, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy HH:MM'}" />
+                                <Run
+                                    Text="{Binding UploadDate, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yyyy HH:MM'}" />
                                 <Run Text=" • " />
                                 <Run Text="{Binding Owner}" />
                                 <Run Text=" • " />

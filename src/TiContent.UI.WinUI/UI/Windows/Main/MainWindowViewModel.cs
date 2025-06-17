@@ -15,7 +15,8 @@ namespace TiContent.UI.WinUI.UI.Windows.Main;
 
 public partial class MainWindowViewModel(INavigationService navService) : ObservableObject
 {
-    [ObservableProperty] public partial ObservableCollection<object> MenuItems { get; set; } = [
+    [ObservableProperty]
+    public partial ObservableCollection<object> MenuItems { get; set; } = [
         new NavigationViewItemHeader { Content = "Каталог" },
         new NavigationViewItem {
             Icon = new FontIcon { Glyph = "\uE8B2" },
@@ -29,7 +30,8 @@ public partial class MainWindowViewModel(INavigationService navService) : Observ
         }
     ];
 
-    [ObservableProperty] public partial object? NavigationViewSelectedItem { get; set; }
+    [ObservableProperty]
+    public partial object? NavigationViewSelectedItem { get; set; }
 
     // Public Methods
 

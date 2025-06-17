@@ -6,17 +6,16 @@
 // ㅤ
 
 using System;
-using System.ComponentModel;
-using System.Threading.Tasks;
+using System.Numerics;
 using CommunityToolkit.WinUI;
 using CommunityToolkit.WinUI.Controls;
 using Microsoft.Extensions.Logging;
+using Microsoft.UI.Composition;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
 using TiContent.UI.WinUI.Components.Extensions;
-using TiContent.UI.WinUI.Components.Helpers;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.UI;
 
@@ -24,12 +23,12 @@ namespace TiContent.UI.WinUI.UI.Pages.Films;
 
 public partial class FilmsPage
 {
+    // Dependencies
+
     private FilmsPageViewModel ViewModel { get; set; } = null!;
     private IImageProvider ImageProvider { get; set; } = null!;
     private ILogger<FilmsPage> Logger { get; set; } = null!;
     private INotificationService NotificationService { get; set; } = null!;
-
-    private ScrollView? _scrollView;
 
     // LifeCycle
 
@@ -40,9 +39,8 @@ public partial class FilmsPage
         {
             ViewModel.OnLoaded();
 
-            _scrollView = DependencyObjectHelper.FindVisualChild<ScrollView>(ItemsControl);
             if (ViewModel.Items.Count > 0 && ViewModel.ScrollViewOffset > 0)
-                _scrollView?.ScrollTo(
+                ScrollView?.ScrollTo(
                     0,
                     ViewModel.ScrollViewOffset,
                     new ScrollingScrollOptions(ScrollingAnimationMode.Disabled)
@@ -63,7 +61,6 @@ public partial class FilmsPage
         Logger = dependencies.Logger;
         NotificationService = dependencies.NotificationService;
 
-        ViewModel.PropertyChanged += ViewModelOnPropertyChanged;
         DataContext = ViewModel;
 
         base.OnNavigatedTo(e);
@@ -71,18 +68,61 @@ public partial class FilmsPage
 
     // Private Methods
 
-    private void ViewModelOnPropertyChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName != nameof(ViewModel.ScrollViewOffset) || ViewModel.ScrollViewOffset != 0)
-            return;
-
-        _scrollView ??= DependencyObjectHelper.FindVisualChild<ScrollView>(ItemsControl);
-        _scrollView?.ScrollTo(0, 0, new ScrollingScrollOptions(ScrollingAnimationMode.Disabled));
-    }
+    // ScrollView
 
     private void ScrollView_OnViewChanged(ScrollView sender, object args)
     {
         ViewModel.OnScrollChanged(sender.VerticalOffset, sender.ScrollableHeight);
+
+        ScrollToTopButton.Opacity = sender.VerticalOffset > 200 ? 1 : 0;
+        ScrollToTopButton.IsHitTestVisible = sender.VerticalOffset > 200;
+    }
+
+    private void ScrollView_ScrollAnimationStarting(ScrollView sender, ScrollingScrollAnimationStartingEventArgs e)
+    {
+        var stockKeyFrameAnimation = e.Animation as Vector3KeyFrameAnimation;
+        if (stockKeyFrameAnimation == null)
+            return;
+
+        var targetVerticalOffset = e.EndPosition.Y;
+        var customKeyFrameAnimation = stockKeyFrameAnimation.Compositor.CreateVector3KeyFrameAnimation();
+        var deltaVerticalPosition = (float)(targetVerticalOffset - ScrollView.VerticalOffset);
+        var cubicBezierStart = stockKeyFrameAnimation.Compositor.CreateCubicBezierEasingFunction(
+            new Vector2(1.0f, 0.0f),
+            new Vector2(1.0f, 0.0f)
+        );
+        var step = stockKeyFrameAnimation.Compositor.CreateStepEasingFunction(1);
+        var cubicBezierEnd = stockKeyFrameAnimation.Compositor.CreateCubicBezierEasingFunction(
+            new Vector2(0.0f, 1.0f),
+            new Vector2(0.0f, 1.0f)
+        );
+
+        customKeyFrameAnimation.InsertKeyFrame(
+            0.499999f,
+            new Vector3((float)ScrollView.HorizontalOffset, targetVerticalOffset - 0.9f * deltaVerticalPosition, 0.0f),
+            cubicBezierStart
+        );
+        customKeyFrameAnimation.InsertKeyFrame(
+            0.5f,
+            new Vector3((float)ScrollView.HorizontalOffset, targetVerticalOffset - 0.1f * deltaVerticalPosition, 0.0f),
+            step
+        );
+        customKeyFrameAnimation.InsertKeyFrame(
+            1.0f,
+            new Vector3((float)ScrollView.HorizontalOffset, targetVerticalOffset, 0.0f),
+            cubicBezierEnd
+        );
+
+        customKeyFrameAnimation.Duration = TimeSpan.FromMilliseconds(1000);
+
+        e.Animation = customKeyFrameAnimation;
+    }
+
+    // ScrollToTopButton
+
+    private void ScrollToTopButton_OnClick(object sender, RoutedEventArgs e)
+    {
+        ScrollView.ScrollTo(0, 0);
     }
 
     private void SettingsCard_OnClick(object sender, RoutedEventArgs e)
@@ -94,30 +134,23 @@ public partial class FilmsPage
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
         if (sender is Image { Tag: string url } image)
-            Task.Run(async () =>
-            {
-                try
+            DispatcherQueue.EnqueueAsync(async () =>
                 {
-                    var entity = await ImageProvider.ObtainImageAsync(url);
-                    var stream = await entity.Data.ToRandomAccessStreamAsync();
-                    await DispatcherQueue.EnqueueAsync(async () =>
-                        image.Source = await stream.CreateBitmapAsync()
-                    );
+                    try
+                    {
+                        var entity = await ImageProvider.ObtainImageAsync(url, true);
+                        var stream = await entity.Data.ToRandomAccessStreamAsync();
+                        await DispatcherQueue.EnqueueAsync(async () =>
+                            image.Source = await stream.CreateBitmapAsync()
+                        );
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(ex, "{msg}", ex.Message);
+                        throw;
+                    }
                 }
-                catch (Exception ex)
-                {
-                    await DispatcherQueue.EnqueueAsync(() =>
-                        NotificationService.ShowNotification(
-                            "Изображение не загрузилось =(",
-                            $"{url}\n{ex.Message}",
-                            InfoBarSeverity.Warning,
-                            TimeSpan.FromSeconds(3)
-                        )
-                    );
-                    Logger.LogError(ex, "{msg}", ex.Message);
-                    throw;
-                }
-            });
+            );
     }
 
     // AutoSuggestBox

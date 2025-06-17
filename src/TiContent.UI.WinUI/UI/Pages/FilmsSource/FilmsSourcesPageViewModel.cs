@@ -37,17 +37,23 @@ public partial class FilmsSourcesPageViewModel
 {
     // Observable
 
-    [ObservableProperty] public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty]
+    public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty] public partial string Title { get; set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Title { get; set; } = string.Empty;
 
-    [ObservableProperty] public partial string Description { get; set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Description { get; set; } = string.Empty;
 
-    [ObservableProperty] public partial ObservableCollection<FilmsSourcePageItemEntity> Items { get; set; } = [];
+    [ObservableProperty]
+    public partial ObservableCollection<FilmsSourcePageItemEntity> Items { get; set; } = [];
 
-    [ObservableProperty] public partial int SortOrder { get; set; } = 2;
+    [ObservableProperty]
+    public partial int SortOrder { get; set; } = 2;
 
-    [ObservableProperty] public partial FiltersEntity Filters { get; set; } = new();
+    [ObservableProperty]
+    public partial FiltersEntity Filters { get; set; } = new();
 
     // Private Props
 
@@ -61,6 +67,8 @@ public partial class FilmsSourcesPageViewModel
     private readonly DispatcherQueue _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
 
     private ObservableCollection<FilmsSourcePageItemEntity> _allItems = [];
+
+    private InitialDataEntity? _initialData;
 
     public FilmsSourcesPageViewModel(
         INavigationService navService,
@@ -89,6 +97,7 @@ public partial class FilmsSourcesPageViewModel
     {
         switch (e.PropertyName)
         {
+            case nameof(Filters.ContainsOriginalTitle):
             case nameof(Filters.YearsIndex):
             case nameof(Filters.ContentTypeIndex):
             case nameof(Filters.VoicesIndex):
@@ -111,11 +120,13 @@ public partial class FilmsSourcesPageViewModel
 
     public void Receive(InitialDataEntity message)
     {
-        Title = message.Query;
-        SortOrder = _storage.Cached?.FilmsSource.SortOrder ?? 2;
+        _initialData = message;
+
+        Title = $"{message.Title} / {message.OriginalTitle}";
+        SortOrder = _storage.Cached.FilmsSource.SortOrder;
 
         _dataSource.ClearCache();
-        ObtainItems(message.Query);
+        ObtainItems(message.Title);
     }
 
     // Commands
@@ -238,6 +249,14 @@ public partial class FilmsSourcesPageViewModel
         {
             var passed = true;
 
+            if (Filters.ContainsOriginalTitle && _initialData is { } data)
+                passed &= entity.Title
+                    .Humanize(LetterCasing.LowerCase)
+                    .Contains(
+                        data.OriginalTitle
+                            .Humanize(LetterCasing.LowerCase)
+                    );
+
             if (Filters.QualitiesIndex > 0)
                 passed &= entity.Quality == Filters.Qualities[Filters.QualitiesIndex];
 
@@ -297,7 +316,10 @@ public partial class FilmsSourcesPageViewModel
 
 public partial class FilmsSourcesPageViewModel
 {
-    public record InitialDataEntity(string Query);
+    public record InitialDataEntity(
+        string Title,
+        string OriginalTitle
+    );
 }
 
 // HydraFilters
@@ -306,24 +328,32 @@ public partial class FilmsSourcesPageViewModel
 {
     public partial class FiltersEntity : ObservableObject
     {
-        [ObservableProperty] public partial ObservableCollection<string> Qualities { get; set; } = [];
+        [ObservableProperty]
+        public partial bool ContainsOriginalTitle { get; set; } = false;
 
-        [ObservableProperty] public partial int QualitiesIndex { get; set; }
+        [ObservableProperty]
+        public partial ObservableCollection<string> Qualities { get; set; } = [];
+        [ObservableProperty]
+        public partial int QualitiesIndex { get; set; }
 
-        [ObservableProperty] public partial ObservableCollection<string> ContentType { get; set; } = [];
+        [ObservableProperty]
+        public partial ObservableCollection<string> ContentType { get; set; } = [];
+        [ObservableProperty]
+        public partial int ContentTypeIndex { get; set; }
 
-        [ObservableProperty] public partial int ContentTypeIndex { get; set; }
+        [ObservableProperty]
+        public partial ObservableCollection<string> Voices { get; set; } = [];
+        [ObservableProperty]
+        public partial int VoicesIndex { get; set; }
 
-        [ObservableProperty] public partial ObservableCollection<string> Voices { get; set; } = [];
+        [ObservableProperty]
+        public partial ObservableCollection<string> Trackers { get; set; } = [];
+        [ObservableProperty]
+        public partial int TrackerIndex { get; set; }
 
-        [ObservableProperty] public partial int VoicesIndex { get; set; }
-
-        [ObservableProperty] public partial ObservableCollection<string> Trackers { get; set; } = [];
-
-        [ObservableProperty] public partial int TrackerIndex { get; set; }
-
-        [ObservableProperty] public partial ObservableCollection<string> Years { get; set; } = [];
-
-        [ObservableProperty] public partial int YearsIndex { get; set; }
+        [ObservableProperty]
+        public partial ObservableCollection<string> Years { get; set; } = [];
+        [ObservableProperty]
+        public partial int YearsIndex { get; set; }
     }
 }

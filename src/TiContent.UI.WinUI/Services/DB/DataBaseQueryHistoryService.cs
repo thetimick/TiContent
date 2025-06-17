@@ -26,14 +26,19 @@ public partial class DataBaseQueryQueryHistoryService(App.AppDataBaseContext db)
 
 public partial class DataBaseQueryQueryHistoryService : IDataBaseQueryHistoryService
 {
-    public async Task<List<DataBaseHistoryEntity>> ObtainHistoryAsync(DataBaseHistoryEntity.HistoryType type, string query)
+    public async Task<List<DataBaseHistoryEntity>> ObtainHistoryAsync(
+        DataBaseHistoryEntity.HistoryType type,
+        string query
+    )
     {
         var items = await db.QueryHistoryItems.AsNoTracking().Where(entity => entity.Type == type).ToListAsync();
 
         if (query.IsNullOrEmpty())
             return items;
 
-        return items.Any(s => s.Query == query.Trim()) ? [] : items.Where(entity => entity.Query.Contains(query.Trim())).ToList();
+        return items.Any(s => s.Query == query.Trim())
+            ? []
+            : items.Where(entity => entity.Query.Contains(query.Trim())).ToList();
     }
 
     public async Task AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType type, string value)
@@ -47,7 +52,8 @@ public partial class DataBaseQueryQueryHistoryService : IDataBaseQueryHistorySer
 
     public async Task ClearItemAsync(DataBaseHistoryEntity.HistoryType type, string value)
     {
-        if (await db.QueryHistoryItems.FirstOrDefaultAsync(entity => entity.Type == type && entity.Query == value.Trim()) is { } item)
+        if (await db.QueryHistoryItems.FirstOrDefaultAsync(entity =>
+                entity.Type == type && entity.Query == value.Trim()) is { } item)
         {
             db.QueryHistoryItems.Remove(item);
             await db.SaveChangesAsync();

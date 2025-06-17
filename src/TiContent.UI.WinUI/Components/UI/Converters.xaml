@@ -12,4 +12,6 @@
     <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
     <converters:IntLimitToStringConverter x:Key="IntLimitToStringConverter" />
     <converters:SplitToStringConverter x:Key="SplitToStringConverter" />
+    <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+    <converters:InvertBoolToVisibilityConverter x:Key="InvertBoolToVisibilityConverter" />
 </ResourceDictionary>

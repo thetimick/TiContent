@@ -25,13 +25,8 @@ public class JacredService(IRestClient client, IStorageService storage, ILogger<
 {
     public async Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default)
     {
-        if (storage.Cached?.Urls.JacredApiBaseUrl is not { } baseUrl)
-        {
-            logger.LogError("BaseUrl is empty");
-            return [];
-        }
-
-        var request = new RestRequest(UrlHelper.Combine(baseUrl, "api/v1.0/torrents")).AddParameter("search", search);
+        var request = new RestRequest(UrlHelper.Combine(storage.Cached.Urls.JacredApiBaseUrl, "api/v1.0/torrents"))
+            .AddParameter("search", search);
 
         var response = await client.ExecuteAsync<List<JacredEntity>>(request, token);
         if (response is { IsSuccessful: true, Data: { } data })

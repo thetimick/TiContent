@@ -9,4 +9,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TiContent.UI.WPF.Entities.DB;
 
-public record ImageEntity([property: Key] string Url, byte[] Data);
+public record ImageEntity(
+    [property: Key]
+    string Url,
+    byte[] Data
+);

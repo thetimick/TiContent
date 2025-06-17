@@ -38,11 +38,7 @@ public partial class App
             LoadStateFromStorage();
             SetupWindow();
             Task.Factory.StartNew(
-                async () =>
-                {
-                    await Task.Delay(3000, cancellationToken);
-                    await ObtainDataIfNeeded(cancellationToken);
-                },
+                async () => await ObtainDataIfNeeded(cancellationToken),
                 cancellationToken
             );
             return Task.CompletedTask;
@@ -62,13 +58,13 @@ public partial class App
         private void SetupWindow()
         {
             window.Activate();
-            window.Closed += async (_, _) => await AppHost.StopAsync();
+            window.Closed += (_, _) => AppHost.StopAsync().Wait();
         }
 
         private async Task ObtainDataIfNeeded(CancellationToken token)
         {
             await Task.WhenAll(
-                dbGamesSourceService.ObtainIfNeededAsync(token),
+                dbGamesSourceService.ObtainIfNeededAsync(false, token),
                 dbHydraFiltersService.ObtainIfNeededAsync(token)
             );
         }

@@ -19,6 +19,7 @@ using CommunityToolkit.WinUI.Collections;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
+using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.DB;
@@ -35,21 +36,29 @@ public partial class GamesPageViewModel : ObservableObject
 {
     // Observable
 
-    [ObservableProperty] public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty]
+    public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty] public partial ObservableCollection<GamesPageItemEntity> Items { get; set; } = [];
+    [ObservableProperty]
+    public partial ObservableCollection<GamesPageItemEntity> Items { get; set; } = [];
 
-    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty] public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
+    [ObservableProperty]
+    public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
 
-    [ObservableProperty] public partial int ContentTypeIndex { get; set; }
+    [ObservableProperty]
+    public partial int ContentTypeIndex { get; set; }
 
-    [ObservableProperty] public partial bool ContentTypeIsEnabled { get; set; } = true;
+    [ObservableProperty]
+    public partial bool ContentTypeIsEnabled { get; set; } = true;
 
-    [ObservableProperty] public partial double ScrollViewOffset { get; set; }
+    [ObservableProperty]
+    public partial double ScrollViewOffset { get; set; }
 
-    [ObservableProperty] public partial FiltersEntity Filters { get; set; } = new();
+    [ObservableProperty]
+    public partial FiltersEntity Filters { get; set; } = new();
 
     // Private Props
 
@@ -58,6 +67,7 @@ public partial class GamesPageViewModel : ObservableObject
     private readonly IDataBaseQueryHistoryService _queryHistoryService;
     private readonly INotificationService _notificationService;
     private readonly ILogger<GamesPageViewModel> _logger;
+    private readonly IDataBaseGamesSourceService _dbGamesSourceService;
 
     private readonly DispatcherQueue _dispatcherQueue;
     private readonly DispatcherQueueTimer _dispatcherQueueTimer;
@@ -70,7 +80,8 @@ public partial class GamesPageViewModel : ObservableObject
         INavigationService navigationService,
         IDataBaseQueryHistoryService queryHistoryService,
         INotificationService notificationService,
-        ILogger<GamesPageViewModel> logger
+        ILogger<GamesPageViewModel> logger,
+        IDataBaseGamesSourceService dbGamesSourceService
     )
     {
         _dataSource = dataSource;
@@ -78,6 +89,7 @@ public partial class GamesPageViewModel : ObservableObject
         _queryHistoryService = queryHistoryService;
         _notificationService = notificationService;
         _logger = logger;
+        _dbGamesSourceService = dbGamesSourceService;
 
         _dispatcherQueue = DispatcherQueue.GetForCurrentThread();
         _dispatcherQueueTimer = _dispatcherQueue.CreateTimer();
@@ -192,6 +204,17 @@ public partial class GamesPageViewModel
     {
         if (Items.FirstOrDefault(entity => entity.Id == id) is not { } item)
             return;
+
+        if (_dbGamesSourceService.InProgress)
+        {
+            _notificationService.ShowNotification(
+                "Пожалуйста, подождите...",
+                "В данный момент загружаются данные, необходимые для поиска доступных источников. Пожалуйста, дождитесь соответствующего сообщения, свидетельствующего об окончании операции",
+                InfoBarSeverity.Warning,
+                TimeSpan.FromSeconds(5)
+            );
+            return;
+        }
 
         _navigationService.NavigateTo(NavigationPath.GamesSource);
         WeakReferenceMessenger.Default.Send(
@@ -357,20 +380,27 @@ public partial class GamesPageViewModel
 {
     public partial class FiltersEntity : ObservableObject
     {
-        [ObservableProperty] public partial bool IsEnabled { get; set; } = true;
+        [ObservableProperty]
+        public partial bool IsEnabled { get; set; } = true;
 
-        [ObservableProperty] public partial AdvancedCollectionView Genres { get; set; } = [];
+        [ObservableProperty]
+        public partial AdvancedCollectionView Genres { get; set; } = [];
 
-        [ObservableProperty] public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
+        [ObservableProperty]
+        public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
             [];
 
-        [ObservableProperty] public partial string GenresQuery { get; set; } = string.Empty;
+        [ObservableProperty]
+        public partial string GenresQuery { get; set; } = string.Empty;
 
-        [ObservableProperty] public partial AdvancedCollectionView Tags { get; set; } = [];
+        [ObservableProperty]
+        public partial AdvancedCollectionView Tags { get; set; } = [];
 
-        [ObservableProperty] public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
+        [ObservableProperty]
+        public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
             [];
 
-        [ObservableProperty] public partial string TagsQuery { get; set; } = string.Empty;
+        [ObservableProperty]
+        public partial string TagsQuery { get; set; } = string.Empty;
     }
 }

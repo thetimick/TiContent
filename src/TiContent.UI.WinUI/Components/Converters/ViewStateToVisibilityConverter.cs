@@ -21,28 +21,28 @@ public partial class ViewStateToVisibilityConverter : IValueConverter
 
         return parameter switch {
             "empty" => viewState switch {
-                ViewStateEnum.Content    => Visibility.Collapsed,
-                ViewStateEnum.Empty      => Visibility.Visible,
+                ViewStateEnum.Content => Visibility.Collapsed,
+                ViewStateEnum.Empty => Visibility.Visible,
                 ViewStateEnum.InProgress => Visibility.Collapsed,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             },
             "progress" => viewState switch {
-                ViewStateEnum.Content    => Visibility.Collapsed,
-                ViewStateEnum.Empty      => Visibility.Collapsed,
+                ViewStateEnum.Content => Visibility.Collapsed,
+                ViewStateEnum.Empty => Visibility.Collapsed,
                 ViewStateEnum.InProgress => Visibility.Visible,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             },
             "inv_content" => viewState switch {
-                ViewStateEnum.Content    => Visibility.Collapsed,
-                ViewStateEnum.Empty      => Visibility.Visible,
+                ViewStateEnum.Content => Visibility.Collapsed,
+                ViewStateEnum.Empty => Visibility.Visible,
                 ViewStateEnum.InProgress => Visibility.Visible,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             },
             _ => viewState switch {
-                ViewStateEnum.Content    => Visibility.Visible,
-                ViewStateEnum.Empty      => Visibility.Collapsed,
+                ViewStateEnum.Content => Visibility.Visible,
+                ViewStateEnum.Empty => Visibility.Collapsed,
                 ViewStateEnum.InProgress => Visibility.Collapsed,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             }
         };
     }

@@ -18,6 +18,7 @@ using TiContent.Foundation.Constants;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.Foundation.Entities.ViewModel.GamesPage;
+using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.Api.Hydra;
@@ -46,7 +47,7 @@ public partial class App
         ConfigureLogging();
         services.AddLogging(builder => builder.AddSerilog(dispose: true));
 
-        services.AddDbContext<AppDataBaseContext>();
+        services.AddDbContext<AppDataBaseContext>(ServiceLifetime.Transient);
 
         services.AddSingleton<HttpClient>();
         services.AddSingleton<IRestClient, RestClient>(provider =>
@@ -74,6 +75,9 @@ public partial class App
         });
 
         services.AddSingleton(DispatcherQueue.GetForCurrentThread());
+
+        services.AddSingleton<IMainDispatcherQueue, MainDispatcherQueue>();
+        services.AddSingleton<IImageDispatcherQueue, ImageDispatcherQueue>();
 
         // Internal
 

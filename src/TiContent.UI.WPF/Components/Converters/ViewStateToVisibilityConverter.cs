@@ -22,28 +22,28 @@ public class ViewStateToVisibilityConverter : IValueConverter
 
         return parameter switch {
             "empty" => viewState switch {
-                ViewStateEnum.Content    => Visibility.Hidden,
-                ViewStateEnum.Empty      => Visibility.Visible,
+                ViewStateEnum.Content => Visibility.Hidden,
+                ViewStateEnum.Empty => Visibility.Visible,
                 ViewStateEnum.InProgress => Visibility.Hidden,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             },
             "progress" => viewState switch {
-                ViewStateEnum.Content    => Visibility.Hidden,
-                ViewStateEnum.Empty      => Visibility.Hidden,
+                ViewStateEnum.Content => Visibility.Hidden,
+                ViewStateEnum.Empty => Visibility.Hidden,
                 ViewStateEnum.InProgress => Visibility.Visible,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             },
             "inv_content" => viewState switch {
-                ViewStateEnum.Content    => Visibility.Hidden,
-                ViewStateEnum.Empty      => Visibility.Visible,
+                ViewStateEnum.Content => Visibility.Hidden,
+                ViewStateEnum.Empty => Visibility.Visible,
                 ViewStateEnum.InProgress => Visibility.Visible,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             },
             _ => viewState switch {
-                ViewStateEnum.Content    => Visibility.Visible,
-                ViewStateEnum.Empty      => Visibility.Hidden,
+                ViewStateEnum.Content => Visibility.Visible,
+                ViewStateEnum.Empty => Visibility.Hidden,
                 ViewStateEnum.InProgress => Visibility.Hidden,
-                _                        => throw new ArgumentOutOfRangeException(nameof(value))
+                _ => throw new ArgumentOutOfRangeException(nameof(value))
             }
         };
     }

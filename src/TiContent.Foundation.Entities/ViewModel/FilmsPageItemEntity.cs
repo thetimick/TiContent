@@ -33,18 +33,20 @@ public partial record FilmsPageItemEntity
         {
             CreateMap<TMDBResponseEntity.ItemEntity, FilmsPageItemEntity>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Id.ToString()))
-                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => $"{AppConstants.Urls.TMDBAssetsApi}{src.PosterPath}"))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.PosterPath))
                 .ForMember(
                     dest => dest.Title,
                     opt => opt.MapFrom(src => src.Title ?? src.OriginalTitle ?? src.Name ?? src.OriginalName ?? "n/n")
                 )
-                .ForMember(dest => dest.OriginalTitle, opt => opt.MapFrom(src => src.OriginalTitle ?? src.OriginalName ?? "n/n"))
+                .ForMember(dest => dest.OriginalTitle,
+                    opt => opt.MapFrom(src => src.OriginalTitle ?? src.OriginalName ?? "n/n"))
                 .ForMember(dest => dest.Description, opt => opt.MapFrom(src => src.Overview))
                 .ForMember(
                     dest => dest.Year,
                     opt => opt.MapFrom((src, _) => $"({(src.ReleaseDate ?? src.FirstAirDate)?.ToString("yyyy")})")
                 )
-                .ForMember(dest => dest.Vote, opt => opt.MapFrom((src, _) => $"{src.VoteAverage?.ToString("F1") ?? "-"}"))
+                .ForMember(dest => dest.Vote,
+                    opt => opt.MapFrom((src, _) => $"{src.VoteAverage?.ToString("F1") ?? "-"}"))
                 .ForMember(dest => dest.VoteCount, opt => opt.MapFrom((src, _) => $"{src.VoteCount ?? -1}"));
         }
     }

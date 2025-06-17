@@ -11,6 +11,10 @@ namespace TiContent.UI.WPF.Services.Hydra.V1;
 
 public interface IHydraApiService
 {
-    Task<HydraApiSearchResponseEntity> GetCatalogue(HydraApiSearchRequestParamsEntity @params, CancellationToken token = default);
+    Task<HydraApiSearchResponseEntity> GetCatalogue(
+        HydraApiSearchRequestParamsEntity @params,
+        CancellationToken token = default
+    );
+
     Task<HydraFiltersEntity> GetFilters(CancellationToken token = default);
 }

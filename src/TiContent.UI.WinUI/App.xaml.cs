@@ -45,7 +45,8 @@ public partial class App
 
     private static void HandleExceptions(object sender, UnhandledExceptionEventArgs e)
     {
-        e.Handled = true;
-        GetRequiredService<ILogger<App>>().LogError("{message}", e.Message);
+        e.Handled = false;
+        GetRequiredService<ILogger<App>>()
+            .LogError("{message}", e.Message);
     }
 }

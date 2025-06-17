@@ -9,6 +9,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
+using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.UI.Pages.Films;
 using TiContent.UI.WinUI.UI.Pages.Games;
@@ -111,9 +112,9 @@ public class NavigationService(IServiceProvider provider) : INavigationService
             not null when type == typeof(FilmsPage) => NavigationPath.Films,
             not null when type == typeof(FilmsSource_FilmsSourcesPage) =>
                 NavigationPath.FilmsSource,
-            not null when type == typeof(GamesPage)    => NavigationPath.FilmsSource,
+            not null when type == typeof(GamesPage) => NavigationPath.FilmsSource,
             not null when type == typeof(SettingsPage) => NavigationPath.Settings,
-            _                                          => null
+            _ => null
         };
     }
 }

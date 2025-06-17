@@ -5,20 +5,10 @@
 // Created by the_timick on 13.05.2025.
 // ⠀
 
-using System.Web;
-
 namespace TiContent.Foundation.Components.Helpers;
 
 public static class UrlHelper
 {
-    /// <summary>
-    ///     Combines a base URL with path segments and optional query parameters into a valid URL.
-    /// </summary>
-    /// <param name "baseUrl">The base URL (e.g., "https://example.com").</param>
-    /// <param name "segments">Path segments to append (e.g., "api", "resource").</param>
-    /// <returns>A combined URL string.</returns>
-    /// <exception cref="ArgumentNullException">Thrown if baseUrl is null or empty.</exception>
-    /// <exception cref="UriFormatException">Thrown if baseUrl is invalid.</exception>
     public static string Combine(string baseUrl, params string[] segments)
     {
         if (string.IsNullOrWhiteSpace(baseUrl))
@@ -45,34 +35,5 @@ public static class UrlHelper
             result += baseUri.Query;
 
         return result;
-    }
-
-    /// <summary>
-    ///     Combines a base URL with path segments and query parameters.
-    /// </summary>
-    /// <param name "baseUrl">The base URL (e.g., "https://example.com").</param>
-    /// <param name "queryParams">Query parameters as key-value pairs (e.g., ("id", "123")).</param>
-    /// <param name "segments">Path segments to append (e.g., "api", "resource").</param>
-    /// <returns>A combined URL string with query parameters.</returns>
-    public static string CombineWithQuery(
-        string baseUrl,
-        (string key, string value)[]? queryParams,
-        params string[] segments
-    )
-    {
-        var url = Combine(baseUrl, segments);
-
-        if (queryParams == null || queryParams.Length == 0)
-            return url;
-
-        var queryString = HttpUtility.ParseQueryString(string.Empty);
-        foreach (var (key, value) in queryParams)
-            if (!string.IsNullOrWhiteSpace(key))
-                queryString[key] = value;
-
-        if (queryString.Count > 0)
-            url += "?" + queryString;
-
-        return url;
     }
 }

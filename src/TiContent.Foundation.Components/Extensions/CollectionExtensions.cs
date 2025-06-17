@@ -6,12 +6,13 @@
 // ⠀
 
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TiContent.Foundation.Components.Extensions;
 
 public static class CollectionExtensions
 {
-    public static bool IsEmpty<T>(this IEnumerable<T>? source)
+    public static bool IsEmpty<T>([NotNullWhen(false)] this IEnumerable<T>? source)
     {
         return source == null || !source.Any();
     }

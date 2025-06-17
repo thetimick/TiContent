@@ -208,13 +208,15 @@
 
                         <controls:TokenizingTextBox.TokenItemTemplate>
                             <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                                <TextBlock
+                                    Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
                             </DataTemplate>
                         </controls:TokenizingTextBox.TokenItemTemplate>
 
                         <controls:TokenizingTextBox.SuggestedItemTemplate>
                             <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                                <TextBlock
+                                    Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
                             </DataTemplate>
                         </controls:TokenizingTextBox.SuggestedItemTemplate>
                     </controls:TokenizingTextBox>
