@@ -19,7 +19,7 @@ public record StorageEntity
 
     public record UrlsEntity
     {
-        public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApi;
+        public string JacredApiBaseUrl { get; init; } = AppConstants.Urls.JacredApiBaseUrl;
 
         public string HydraApiBaseUrl { get; init; } = AppConstants.Urls.HydraApi;
         public string HydraApiAssetsBaseUrl { get; init; } = AppConstants.Urls.HydraAssetsApi;

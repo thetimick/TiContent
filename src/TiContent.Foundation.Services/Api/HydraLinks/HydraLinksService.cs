@@ -5,16 +5,10 @@
 // Created by the_timick on 14.05.2025.
 // ⠀
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using RestSharp;
 using TiContent.Foundation.Entities.Api.HydraLinks;
-using TiContent.Foundation.Services;
 
-namespace TiContent.UI.WinUI.Services.Api.HydraLinks;
+namespace TiContent.Foundation.Services.Api.HydraLinks;
 
 public interface IHydraLinksService
 {

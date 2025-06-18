@@ -18,6 +18,7 @@ using TiContent.Foundation.Entities.Api.TMDB.Requests;
 using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.Foundation.Services.Api;
+using TiContent.Foundation.Services.Api.TMDB;
 using TiContent.UI.WinUI.DataSources.Abstraction;
 
 namespace TiContent.UI.WinUI.DataSources;

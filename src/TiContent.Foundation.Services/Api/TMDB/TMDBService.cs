@@ -14,7 +14,7 @@ using TiContent.Foundation.Entities.Api.TMDB;
 using TiContent.Foundation.Entities.Api.TMDB.Requests;
 using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 
-namespace TiContent.Foundation.Services.Api;
+namespace TiContent.Foundation.Services.Api.TMDB;
 
 public interface ITMDBApiService
 {

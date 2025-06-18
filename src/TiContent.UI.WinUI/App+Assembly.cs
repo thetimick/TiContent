@@ -10,7 +10,6 @@ using System.Net.Http;
 using AutoMapper.EquivalencyExpression;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.UI.Dispatching;
 using RestSharp;
 using Serilog;
 using TiContent.Foundation.Components.Interceptors;
@@ -20,13 +19,13 @@ using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.Foundation.Entities.ViewModel.GamesPage;
 using TiContent.Foundation.Services;
-using TiContent.Foundation.Services.Api;
+using TiContent.Foundation.Services.Api.Hydra;
+using TiContent.Foundation.Services.Api.HydraLinks;
+using TiContent.Foundation.Services.Api.Jacred;
+using TiContent.Foundation.Services.Api.TMDB;
 using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Providers;
-using TiContent.UI.WinUI.Services.Api.Hydra;
-using TiContent.UI.WinUI.Services.Api.HydraLinks;
-using TiContent.UI.WinUI.Services.Api.Jacred;
 using TiContent.UI.WinUI.Services.DB;
 using TiContent.UI.WinUI.Services.UI;
 using TiContent.UI.WinUI.Services.UI.Navigation;
@@ -36,6 +35,7 @@ using TiContent.UI.WinUI.UI.Pages.Games;
 using TiContent.UI.WinUI.UI.Pages.GamesSource;
 using TiContent.UI.WinUI.UI.Pages.Settings;
 using TiContent.UI.WinUI.UI.Windows.Main;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace TiContent.UI.WinUI;
 
@@ -83,7 +83,12 @@ public partial class App
 
         services.AddSingleton<IImageProvider, ImageProvider>();
 
-        services.AddSingleton<IStorageService, StorageService>();
+        services.AddSingleton<IStorageService, StorageService>(provider =>
+            new StorageService(
+                AppConstants.FileNames.StorageFileName,
+                provider.GetRequiredService<ILogger<StorageService>>()
+            )
+        );
         services.AddSingleton<ITMDBApiService, TMDBApiService>();
         services.AddSingleton<IJacredService, JacredService>();
         services.AddSingleton<IHydraApiService, HydraApiService>();

@@ -21,7 +21,7 @@ using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.HydraLinks;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Services;
-using TiContent.UI.WinUI.Services.Api.HydraLinks;
+using TiContent.Foundation.Services.Api.HydraLinks;
 using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.Services.DB;
