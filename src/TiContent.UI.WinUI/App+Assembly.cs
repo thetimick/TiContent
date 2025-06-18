@@ -74,10 +74,7 @@ public partial class App
             configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
         });
 
-        services.AddSingleton(DispatcherQueue.GetForCurrentThread());
-
         services.AddSingleton<IMainDispatcherQueue, MainDispatcherQueue>();
-        services.AddSingleton<IImageDispatcherQueue, ImageDispatcherQueue>();
 
         // Internal
 
