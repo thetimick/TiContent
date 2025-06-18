@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using Windows.Web.Http;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.DB;
-using TiContent.UI.WinUI.Services.Storage;
+using TiContent.Foundation.Services;
 
 namespace TiContent.UI.WinUI.Providers;
 

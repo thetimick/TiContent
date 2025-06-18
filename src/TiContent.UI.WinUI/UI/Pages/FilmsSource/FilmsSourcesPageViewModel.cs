@@ -24,8 +24,8 @@ using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.Jacred;
 using TiContent.Foundation.Entities.ViewModel;
+using TiContent.Foundation.Services;
 using TiContent.UI.WinUI.DataSources;
-using TiContent.UI.WinUI.Services.Storage;
 using TiContent.UI.WinUI.Services.UI;
 using TiContent.UI.WinUI.Services.UI.Navigation;
 

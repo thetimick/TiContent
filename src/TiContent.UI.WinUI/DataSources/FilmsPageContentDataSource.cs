@@ -17,8 +17,8 @@ using TiContent.Foundation.Entities.Api.TMDB;
 using TiContent.Foundation.Entities.Api.TMDB.Requests;
 using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 using TiContent.Foundation.Entities.ViewModel;
+using TiContent.Foundation.Services.Api;
 using TiContent.UI.WinUI.DataSources.Abstraction;
-using TiContent.UI.WinUI.Services.Api.TMDB;
 
 namespace TiContent.UI.WinUI.DataSources;
 
@@ -28,7 +28,7 @@ public interface IFilmsPageContentDataSource
     public record ParamsEntity(string Query, int Content);
 }
 
-public partial class FilmsPageContentDataSource(ITMDBService api, IMapper mapper)
+public partial class FilmsPageContentDataSource(ITMDBApiService api, IMapper mapper)
 {
     // Public Props
 

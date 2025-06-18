@@ -12,7 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using RestSharp;
 using TiContent.Foundation.Entities.Api.HydraLinks;
-using TiContent.UI.WinUI.Services.Storage;
+using TiContent.Foundation.Services;
 
 namespace TiContent.UI.WinUI.Services.Api.HydraLinks;
 

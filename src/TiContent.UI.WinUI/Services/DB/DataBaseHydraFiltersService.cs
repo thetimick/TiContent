@@ -16,8 +16,8 @@ using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.DB;
+using TiContent.Foundation.Services;
 using TiContent.UI.WinUI.Services.Api.Hydra;
-using TiContent.UI.WinUI.Services.Storage;
 using TiContent.UI.WinUI.Services.UI;
 
 namespace TiContent.UI.WinUI.Services.DB;

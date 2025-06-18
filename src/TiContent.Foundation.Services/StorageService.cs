@@ -5,14 +5,12 @@
 // Created by the_timick on 27.05.2025.
 //
 
-using System;
-using System.IO;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using TiContent.Foundation.Constants;
 using TiContent.Foundation.Entities.Storage;
 
-namespace TiContent.UI.WinUI.Services.Storage;
+namespace TiContent.Foundation.Services;
 
 public interface IStorageService
 {

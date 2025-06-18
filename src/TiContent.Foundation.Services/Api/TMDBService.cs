@@ -5,10 +5,7 @@
 // Created by the_timick on 12.05.2025.
 // ⠀
 
-using System;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using RestSharp;
@@ -16,11 +13,10 @@ using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.TMDB;
 using TiContent.Foundation.Entities.Api.TMDB.Requests;
 using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
-using TiContent.UI.WinUI.Services.Storage;
 
-namespace TiContent.UI.WinUI.Services.Api.TMDB;
+namespace TiContent.Foundation.Services.Api;
 
-public interface ITMDBService
+public interface ITMDBApiService
 {
     public Task<TMDBResponseEntity> ObtainAsync(
         TMDBRequestEntity entity,
@@ -38,13 +34,13 @@ public interface ITMDBService
     );
 }
 
-public partial class TMDBService(
+public partial class TMDBApiService(
     IRestClient client,
     IStorageService storage,
-    ILogger<TMDBService> logger
+    ILogger<TMDBApiService> logger
 );
 
-public partial class TMDBService : ITMDBService
+public partial class TMDBApiService : ITMDBApiService
 {
     public async Task<TMDBResponseEntity> ObtainAsync(
         TMDBRequestEntity entity,
@@ -111,7 +107,7 @@ public partial class TMDBService : ITMDBService
 
 // Private Methods
 
-public partial class TMDBService
+public partial class TMDBApiService
 {
     private RestRequest MakeRequestV2(string path)
     {
