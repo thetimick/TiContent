@@ -11,9 +11,9 @@ public interface IDataSource<in TInputEntity, TOutputEntity>
 {
     public bool InProgress { get; }
     public bool IsCompleted { get; }
-    public List<TOutputEntity> Cache { get; }
+    public TOutputEntity Cache { get; }
 
-    public Task<List<TOutputEntity>> ObtainAsync(
+    public Task<TOutputEntity> ObtainAsync(
         TInputEntity input,
         bool pagination
     );

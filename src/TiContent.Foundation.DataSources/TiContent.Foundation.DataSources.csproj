@@ -9,5 +9,6 @@
     <ItemGroup>
         <ProjectReference Include="..\TiContent.Foundation.Abstractions\TiContent.Foundation.Abstractions.csproj"/>
         <ProjectReference Include="..\TiContent.Foundation.Entities\TiContent.Foundation.Entities.csproj"/>
+        <ProjectReference Include="..\TiContent.Foundation.Services\TiContent.Foundation.Services.csproj"/>
     </ItemGroup>
 </Project>

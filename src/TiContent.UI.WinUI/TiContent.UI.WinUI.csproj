@@ -55,6 +55,7 @@
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\TiContent.Foundation.Components\TiContent.Foundation.Components.csproj"/>
+        <ProjectReference Include="..\TiContent.Foundation.DataSources\TiContent.Foundation.DataSources.csproj"/>
         <ProjectReference Include="..\TiContent.Foundation.Entities\TiContent.Foundation.Entities.csproj"/>
         <ProjectReference Include="..\TiContent.Foundation.Services\TiContent.Foundation.Services.csproj"/>
     </ItemGroup>

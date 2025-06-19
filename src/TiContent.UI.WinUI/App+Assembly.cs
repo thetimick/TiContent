@@ -15,6 +15,7 @@ using RestSharp;
 using Serilog;
 using TiContent.Foundation.Components.Interceptors;
 using TiContent.Foundation.Constants;
+using TiContent.Foundation.DataSources;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.Foundation.Entities.ViewModel.GamesPage;
@@ -88,17 +89,10 @@ public partial class App
         services.AddSingleton<IHydraApiService, HydraApiService>();
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
 
-        services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
-        services.AddSingleton<IFilmsPageContentDataSource, FilmsPageContentDataSource>();
-        services.AddSingleton<
-            IFilmsSourcePageContentDataSource,
-            FilmsSourcePageContentDataSource
-        >();
+        services.AddSingleton<ITMDBDataSource, TMDBDataSource>();
+        services.AddSingleton<IFilmsSourcePageContentDataSource, FilmsSourcePageContentDataSource>();
         services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
-        services.AddSingleton<
-            IGamesSourcePageContentDataSource,
-            GamesSourcePageContentDataSource
-        >();
+        services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
 
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IThemeService, ThemeService>();
