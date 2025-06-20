@@ -17,6 +17,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
+using TiContent.Foundation.Components.Abstractions;
 using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
 using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Components.Helpers;
@@ -37,6 +38,10 @@ public partial class GamesPage
     public GamesPage()
     {
         InitializeComponent();
+        ContentCase.Value = ViewStateEnum.Content;
+        InProgressCase.Value = ViewStateEnum.InProgress;
+        EmptyCase.Value = ViewStateEnum.Empty;
+
         Loaded += (_, _) =>
         {
             ViewModel.OnLoaded();
