@@ -15,6 +15,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
+using TiContent.Foundation.Components.Abstractions;
 using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.UI;
@@ -35,6 +36,10 @@ public partial class FilmsPage
     public FilmsPage()
     {
         InitializeComponent();
+        ContentCase.Value = ViewStateEnum.Content;
+        InProgressCase.Value = ViewStateEnum.InProgress;
+        EmptyCase.Value = ViewStateEnum.Empty;
+
         Loaded += (_, _) =>
         {
             ViewModel.OnLoaded();

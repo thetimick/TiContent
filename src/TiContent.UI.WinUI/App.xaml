@@ -9,6 +9,8 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+
+                <ResourceDictionary Source="Components/UI/Animations/Animations.xaml" />
                 <ResourceDictionary Source="Components/UI/Styles/CardStyles.xaml" />
                 <ResourceDictionary Source="Components/UI/Converters.xaml" />
             </ResourceDictionary.MergedDictionaries>
