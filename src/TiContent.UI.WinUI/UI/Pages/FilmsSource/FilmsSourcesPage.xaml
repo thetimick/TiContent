@@ -7,9 +7,9 @@
     xmlns:cControls="using:CommunityToolkit.WinUI.Controls"
     xmlns:controls="using:TiContent.UI.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:entities="using:TiContent.Foundation.Entities.ViewModel.FilmsSourcePage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:CommunityToolkit.WinUI"
-    xmlns:viewModel="using:TiContent.Foundation.Entities.ViewModel"
     mc:Ignorable="d">
 
     <Grid
@@ -48,13 +48,32 @@
 
             <StackPanel
                 Grid.Column="2"
-                Margin="16,0,0,0"
+                Margin="8,6,0,0"
                 VerticalAlignment="Center">
 
-                <TextBox
-                    Margin="0,2,0,0"
-                    PlaceholderText="Поиск"
-                    Visibility="Collapsed" />
+                <ComboBox
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    ItemsSource="{x:Bind ViewModel.SearchItems, Mode=OneWay}"
+                    SelectedIndex="{x:Bind ViewModel.SearchItemsIndex, Mode=TwoWay}">
+
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="entities:FilmsSourcePageSearchItemEntity">
+                            <StackPanel>
+                                <TextBlock
+                                    MaxLines="1"
+                                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                    Text="{x:Bind Title}" />
+
+                                <TextBlock
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    MaxLines="1"
+                                    Style="{ThemeResource CaptionTextBlockStyle}"
+                                    Text="{x:Bind Description}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
             </StackPanel>
         </Grid>
 
@@ -83,7 +102,7 @@
                 </ItemsControl.ItemsPanel>
 
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="viewModel:FilmsSourcePageItemEntity">
+                    <DataTemplate x:DataType="entities:FilmsSourcePageItemEntity">
                         <cControls:SettingsCard
                             Margin="0,0,0,4"
                             Click="MenuFlyoutItem_OnClick"

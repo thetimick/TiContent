@@ -10,7 +10,7 @@ using Humanizer;
 using Humanizer.Bytes;
 using TiContent.Foundation.Entities.Api.Jacred;
 
-namespace TiContent.Foundation.Entities.ViewModel;
+namespace TiContent.Foundation.Entities.ViewModel.FilmsSourcePage;
 
 public partial record FilmsSourcePageItemEntity
 {

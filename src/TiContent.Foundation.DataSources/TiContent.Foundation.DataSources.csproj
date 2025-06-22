@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>TiContent.Foundation.DataSources</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TiContent.Foundation.Abstractions\TiContent.Foundation.Abstractions.csproj"/>
+        <ProjectReference Include="..\TiContent.Foundation.Entities\TiContent.Foundation.Entities.csproj"/>
+        <ProjectReference Include="..\TiContent.Foundation.Services\TiContent.Foundation.Services.csproj"/>
+    </ItemGroup>
+</Project>

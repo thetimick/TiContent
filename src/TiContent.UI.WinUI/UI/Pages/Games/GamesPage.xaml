@@ -2,8 +2,8 @@
     x:Class="TiContent.UI.WinUI.UI.Pages.Games.GamesPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-    xmlns:customControls="using:TiContent.UI.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:entities="using:TiContent.Foundation.Entities.ViewModel.GamesPage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -14,168 +14,218 @@
         Margin="16"
         ColumnDefinitions="*,0.35*"
         ColumnSpacing="8"
-        RowDefinitions="Auto, *">
-
-        <TextBlock
-            Margin="32,8,0,24"
-            FontWeight="Bold"
-            Style="{ThemeResource TitleTextBlockStyle}"
-            Text="Игры" />
-
-        <ItemsControl
-            x:Name="ItemsControl"
-            Grid.Row="1"
-            Grid.Column="0"
-            ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}"
-            Visibility="{x:Bind ViewModel.State, Converter={StaticResource ViewStateToVisibilityConverter}, Mode=OneWay}">
-
-            <ItemsControl.Template>
-                <ControlTemplate>
-                    <ScrollView ViewChanged="ScrollView_OnViewChanged">
-                        <ItemsPresenter />
-                    </ScrollView>
-                </ControlTemplate>
-            </ItemsControl.Template>
-
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel />
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-
-            <ItemsControl.ItemTemplate>
-                <DataTemplate x:DataType="entities:GamesPageItemEntity">
-                    <controls:SettingsCard
-                        Margin="0,0,0,4"
-                        Click="SettingsCard_OnClick"
-                        CommandParameter="{x:Bind Id}"
-                        IsClickEnabled="True">
-
-                        <controls:SettingsCard.Header>
-                            <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
-                                <Border
-                                    Grid.Column="0"
-                                    Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
-                                    CornerRadius="8">
-
-                                    <Image
-                                        Width="230"
-                                        Height="108"
-                                        Loaded="Image_OnLoaded"
-                                        Stretch="Fill"
-                                        Tag="{x:Bind ImageUrl}" />
-                                </Border>
-
-                                <StackPanel Grid.Column="1" Spacing="4">
-                                    <TextBlock
-                                        MaxLines="2"
-                                        Style="{StaticResource SubtitleTextBlockStyle}"
-                                        Text="{x:Bind Title}" />
-
-                                    <StackPanel>
-                                        <TextBlock
-                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                            MaxLines="1"
-                                            Style="{StaticResource CaptionTextBlockStyle}"
-                                            Text="{x:Bind Shop}" />
-
-                                        <TextBlock
-                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                            MaxLines="1"
-                                            Style="{StaticResource CaptionTextBlockStyle}"
-                                            Text="{x:Bind Publisher}"
-                                            Visibility="{x:Bind Publisher, Converter={StaticResource NullToVisibilityConverter}}" />
-
-                                        <TextBlock
-                                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
-                                            MaxLines="1"
-                                            Style="{StaticResource CaptionTextBlockStyle}"
-                                            Text="{x:Bind Genres}"
-                                            Visibility="{x:Bind Genres, Converter={StaticResource NullToVisibilityConverter}}" />
-                                    </StackPanel>
-                                </StackPanel>
-                            </Grid>
-                        </controls:SettingsCard.Header>
-                    </controls:SettingsCard>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-
-        <customControls:PlaceholderUserControl
-            Grid.Row="1"
-            Grid.Column="0"
-            State="{x:Bind ViewModel.State, Mode=OneWay}" />
+        RowDefinitions="Auto, *"
+        RowSpacing="16">
 
         <Grid
-            Column="1"
-            Row="1"
-            RowDefinitions="Auto, Auto, Auto, *"
+            Grid.Row="0"
+            Grid.Column="0"
+            Grid.ColumnSpan="2"
+            ColumnDefinitions="*, Auto"
+            Style="{StaticResource CustomGridCardStyle}">
+
+            <StackPanel Grid.Column="0" Margin="16,2,0,0">
+                <TextBlock
+                    FontWeight="Bold"
+                    Style="{ThemeResource TitleTextBlockStyle}"
+                    Text="Игры" />
+
+                <TextBlock
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                    Text="Каталог игр от Hydra" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" Spacing="4">
+                <controls:Segmented
+                    HorizontalAlignment="Stretch"
+                    HorizontalContentAlignment="Stretch"
+                    Header="Популярно"
+                    IsEnabled="{x:Bind ViewModel.ContentTypeIsEnabled, Mode=OneWay}"
+                    SelectedIndex="{x:Bind ViewModel.ContentTypeIndex, Mode=TwoWay}">
+
+                    <controls:SegmentedItem
+                        Content="Каталог"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Icon="{ui:FontIcon Glyph='&#xE8F1;'}" />
+
+                    <controls:SegmentedItem
+                        Content="Популярно"
+                        FontSize="14"
+                        FontWeight="SemiBold"
+                        Icon="{ui:FontIcon Glyph='&#xECAD;'}" />
+                </controls:Segmented>
+
+                <AutoSuggestBox
+                    x:Name="AutoSuggestBox"
+                    GettingFocus="AutoSuggestBox_OnGettingFocus"
+                    ItemsSource="{x:Bind ViewModel.QueryHistoryItems, Mode=OneWay}"
+                    PlaceholderText="Поиск по каталогу"
+                    PointerPressed="AutoSuggestBox_OnPointerPressed"
+                    SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
+                    Text="{x:Bind ViewModel.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+                    <AutoSuggestBox.QueryIcon>
+                        <FontIcon FontSize="12" Glyph="&#xE721;" />
+                    </AutoSuggestBox.QueryIcon>
+
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock
+                                    Grid.Column="0"
+                                    Margin="0,0,0,1"
+                                    VerticalAlignment="Center"
+                                    Style="{ThemeResource BodyTextBlockStyle}"
+                                    Text="{Binding}" />
+
+                                <Button
+                                    Grid.Column="1"
+                                    Width="24"
+                                    Height="24"
+                                    Padding="0"
+                                    Click="ClearHistoryItemButton_OnClick"
+                                    ClickMode="Press"
+                                    CommandParameter="{Binding}">
+
+                                    <FontIcon FontSize="9" Glyph="&#xE894;" />
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
+            </StackPanel>
+        </Grid>
+
+        <controls:SwitchPresenter Grid.Row="1" Value="{x:Bind ViewModel.State, Mode=OneWay}">
+            <controls:Case x:Name="ContentCase">
+                <ItemsControl
+                    x:Name="ItemsControl"
+                    animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                    animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
+                    ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}">
+
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ScrollView ViewChanged="ScrollView_OnViewChanged">
+                                <ItemsPresenter />
+                            </ScrollView>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="entities:GamesPageItemEntity">
+                            <controls:SettingsCard
+                                Margin="0,0,0,4"
+                                Click="SettingsCard_OnClick"
+                                CommandParameter="{x:Bind Id}"
+                                IsClickEnabled="True">
+
+                                <controls:SettingsCard.Header>
+                                    <Grid ColumnDefinitions="Auto, *" ColumnSpacing="16">
+                                        <Border
+                                            Grid.Column="0"
+                                            Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
+                                            CornerRadius="8">
+
+                                            <Image
+                                                Width="230"
+                                                Height="108"
+                                                Loaded="Image_OnLoaded"
+                                                Stretch="Fill"
+                                                Tag="{x:Bind ImageUrl}" />
+                                        </Border>
+
+                                        <StackPanel Grid.Column="1" Spacing="4">
+                                            <TextBlock
+                                                MaxLines="2"
+                                                Style="{StaticResource SubtitleTextBlockStyle}"
+                                                Text="{x:Bind Title}" />
+
+                                            <StackPanel>
+                                                <TextBlock
+                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                    MaxLines="1"
+                                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                                    Text="{x:Bind Shop}" />
+
+                                                <TextBlock
+                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                    MaxLines="1"
+                                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                                    Text="{x:Bind Publisher}"
+                                                    Visibility="{x:Bind Publisher, Converter={StaticResource NullToVisibilityConverter}}" />
+
+                                                <TextBlock
+                                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                                    MaxLines="1"
+                                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                                    Text="{x:Bind Genres}"
+                                                    Visibility="{x:Bind Genres, Converter={StaticResource NullToVisibilityConverter}}" />
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Grid>
+                                </controls:SettingsCard.Header>
+                            </controls:SettingsCard>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </controls:Case>
+
+            <controls:Case x:Name="InProgressCase">
+                <Grid
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                    animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+
+                    <StackPanel
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="16">
+
+                        <ProgressRing IsIndeterminate="True" />
+                        <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Загрузка..." />
+                    </StackPanel>
+                </Grid>
+            </controls:Case>
+
+            <controls:Case x:Name="EmptyCase">
+                <Grid
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                    animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Style="{ThemeResource SubtitleTextBlockStyle}"
+                        Text="Ничего не найдено" />
+                </Grid>
+            </controls:Case>
+        </controls:SwitchPresenter>
+
+        <Grid
+            Grid.Row="1"
+            Grid.Column="1"
+            RowDefinitions="Auto, *"
             RowSpacing="8">
 
-            <AutoSuggestBox
-                x:Name="AutoSuggestBox"
-                Grid.Row="0"
-                GettingFocus="AutoSuggestBox_OnGettingFocus"
-                ItemsSource="{x:Bind ViewModel.QueryHistoryItems, Mode=OneWay}"
-                PlaceholderText="Поиск по каталогу"
-                PointerPressed="AutoSuggestBox_OnPointerPressed"
-                SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
-                Text="{x:Bind ViewModel.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-
-                <AutoSuggestBox.QueryIcon>
-                    <FontIcon FontSize="12" Glyph="&#xE721;" />
-                </AutoSuggestBox.QueryIcon>
-
-                <AutoSuggestBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid ColumnDefinitions="*, Auto">
-                            <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,0,1"
-                                VerticalAlignment="Center"
-                                Style="{ThemeResource BodyTextBlockStyle}"
-                                Text="{Binding}" />
-
-                            <Button
-                                Grid.Column="1"
-                                Width="24"
-                                Height="24"
-                                Padding="0"
-                                Click="ClearHistoryItemButton_OnClick"
-                                ClickMode="Press"
-                                CommandParameter="{Binding}">
-
-                                <FontIcon FontSize="9" Glyph="&#xE894;" />
-                            </Button>
-                        </Grid>
-                    </DataTemplate>
-                </AutoSuggestBox.ItemTemplate>
-            </AutoSuggestBox>
-
-            <controls:Segmented
-                Grid.Row="1"
-                HorizontalAlignment="Stretch"
-                HorizontalContentAlignment="Stretch"
-                Header="Популярно"
-                IsEnabled="{x:Bind ViewModel.ContentTypeIsEnabled, Mode=OneWay}"
-                SelectedIndex="{x:Bind ViewModel.ContentTypeIndex, Mode=TwoWay}">
-
-                <controls:SegmentedItem
-                    Content="Каталог"
-                    FontSize="14"
-                    FontWeight="SemiBold"
-                    Icon="{ui:FontIcon Glyph='&#xE8F1;'}" />
-
-                <controls:SegmentedItem
-                    Content="Популярно"
-                    FontSize="14"
-                    FontWeight="SemiBold"
-                    Icon="{ui:FontIcon Glyph='&#xECAD;'}" />
-            </controls:Segmented>
-
-            <Border Grid.Row="2" Style="{StaticResource CustomBorderCardStyle}">
-                <StackPanel Spacing="4">
-                    <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="Фильтрация" />
+            <Border Style="{StaticResource CustomBorderCardStyle}">
+                <StackPanel>
+                    <TextBlock
+                        Margin="0,0,0,4"
+                        Style="{ThemeResource BodyStrongTextBlockStyle}"
+                        Text="Фильтрация" />
 
                     <controls:TokenizingTextBox
                         IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
@@ -208,15 +258,13 @@
 
                         <controls:TokenizingTextBox.TokenItemTemplate>
                             <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock
-                                    Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
                             </DataTemplate>
                         </controls:TokenizingTextBox.TokenItemTemplate>
 
                         <controls:TokenizingTextBox.SuggestedItemTemplate>
                             <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock
-                                    Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
                             </DataTemplate>
                         </controls:TokenizingTextBox.SuggestedItemTemplate>
                     </controls:TokenizingTextBox>

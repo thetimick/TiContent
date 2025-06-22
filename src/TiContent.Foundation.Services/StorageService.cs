@@ -5,14 +5,11 @@
 // Created by the_timick on 27.05.2025.
 //
 
-using System;
-using System.IO;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using TiContent.Foundation.Constants;
 using TiContent.Foundation.Entities.Storage;
 
-namespace TiContent.UI.WinUI.Services.Storage;
+namespace TiContent.Foundation.Services;
 
 public interface IStorageService
 {
@@ -22,19 +19,22 @@ public interface IStorageService
     public StorageEntity Save(bool force = false);
 }
 
-public class StorageService(ILogger<StorageService> logger) : IStorageService
+public class StorageService(
+    string fileName,
+    ILogger<StorageService> logger
+) : IStorageService
 {
     public StorageEntity Cached { get; private set; } = null!;
     private readonly JsonSerializerOptions _options = new() { WriteIndented = true };
 
     public StorageEntity Obtain()
     {
-        if (!File.Exists(AppConstants.FileNames.StorageFileName))
+        if (!File.Exists(fileName))
             return Save(true);
 
         try
         {
-            var json = File.ReadAllText(AppConstants.FileNames.StorageFileName);
+            var json = File.ReadAllText(fileName);
             var cached = JsonSerializer.Deserialize<StorageEntity>(json, _options);
 
             ArgumentNullException.ThrowIfNull(cached);
@@ -51,7 +51,7 @@ public class StorageService(ILogger<StorageService> logger) : IStorageService
 
     public StorageEntity Save(bool force)
     {
-        var path = Path.Combine(AppContext.BaseDirectory, AppConstants.FileNames.StorageFileName);
+        var path = Path.Combine(AppContext.BaseDirectory, fileName);
 
         var directory = Path.GetDirectoryName(path);
         if (directory != null && !Directory.Exists(directory))

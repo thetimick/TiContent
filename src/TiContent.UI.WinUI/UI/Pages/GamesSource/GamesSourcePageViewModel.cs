@@ -21,8 +21,8 @@ using Microsoft.UI.Dispatching;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.ViewModel;
+using TiContent.Foundation.Services;
 using TiContent.UI.WinUI.DataSources;
-using TiContent.UI.WinUI.Services.Storage;
 using TiContent.UI.WinUI.Services.UI;
 using TiContent.UI.WinUI.Services.UI.Navigation;
 
@@ -34,15 +34,20 @@ public partial class GamesSourcePageViewModel
 {
     // Observable
 
-    [ObservableProperty] public partial string Title { get; set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Title { get; set; } = string.Empty;
 
-    [ObservableProperty] public partial string Description { get; set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Description { get; set; } = string.Empty;
 
-    [ObservableProperty] public partial AdvancedCollectionView Items { get; set; } = [];
+    [ObservableProperty]
+    public partial AdvancedCollectionView Items { get; set; } = [];
 
-    [ObservableProperty] public partial int SortOrder { get; set; }
+    [ObservableProperty]
+    public partial int SortOrder { get; set; }
 
-    [ObservableProperty] public partial FiltersEntity Filters { get; set; } = new();
+    [ObservableProperty]
+    public partial FiltersEntity Filters { get; set; } = new();
 
     // Private Props
 
@@ -240,10 +245,13 @@ public partial class GamesSourcePageViewModel
 {
     public partial class FiltersEntity : ObservableObject
     {
-        [ObservableProperty] public partial ObservableCollection<string> Owners { get; set; } = [];
+        [ObservableProperty]
+        public partial ObservableCollection<string> Owners { get; set; } = [];
 
-        [ObservableProperty] public partial int OwnersIndex { get; set; }
+        [ObservableProperty]
+        public partial int OwnersIndex { get; set; }
 
-        [ObservableProperty] public partial int LinksIndex { get; set; }
+        [ObservableProperty]
+        public partial int LinksIndex { get; set; }
     }
 }

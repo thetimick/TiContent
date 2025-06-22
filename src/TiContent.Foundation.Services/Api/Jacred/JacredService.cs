@@ -5,34 +5,32 @@
 // Created by the_timick on 27.04.2025.
 //
 
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.Jacred;
-using TiContent.UI.WinUI.Services.Storage;
 
-namespace TiContent.UI.WinUI.Services.Api.Jacred;
+namespace TiContent.Foundation.Services.Api.Jacred;
 
 public interface IJacredService
 {
     Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default);
 }
 
-public class JacredService(IRestClient client, IStorageService storage, ILogger<JacredService> logger) : IJacredService
+public partial class JacredService(
+    IRestClient client,
+    IStorageService storage
+);
+
+public partial class JacredService : IJacredService
 {
     public async Task<List<JacredEntity>> ObtainTorrentsAsync(string search, CancellationToken token = default)
     {
         var request = new RestRequest(UrlHelper.Combine(storage.Cached.Urls.JacredApiBaseUrl, "api/v1.0/torrents"))
             .AddParameter("search", search);
-
         var response = await client.ExecuteAsync<List<JacredEntity>>(request, token);
-        if (response is { IsSuccessful: true, Data: { } data })
-            return data;
-
-        logger.LogError(response.ErrorException, "{msg}", response.ErrorMessage);
-        return [];
+        return response is { IsSuccessful: true, Data: { } data }
+            ? data
+            : [];
     }
 }

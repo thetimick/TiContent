@@ -14,8 +14,8 @@ using Humanizer;
 using TiContent.Foundation.Entities.Api.Hydra;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel.GamesPage;
+using TiContent.Foundation.Services.Api.Hydra;
 using TiContent.UI.WinUI.DataSources.Abstraction;
-using TiContent.UI.WinUI.Services.Api.Hydra;
 using TiContent.UI.WinUI.Services.DB;
 
 namespace TiContent.UI.WinUI.DataSources;

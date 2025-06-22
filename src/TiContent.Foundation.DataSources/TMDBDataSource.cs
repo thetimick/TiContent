@@ -1,51 +1,54 @@
 ﻿// ⠀
-// FilmsPageContentDataSourceV2.cs
+// TMDBDataSource.cs
 // TiContent.UI.WinUI
 //
 // Created by the_timick on 08.06.2025.
-// ⠀
+// 
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using AutoMapper;
 using Humanizer;
+using TiContent.Foundation.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.Api.TMDB;
 using TiContent.Foundation.Entities.Api.TMDB.Requests;
 using TiContent.Foundation.Entities.Api.TMDB.Requests.Shared;
 using TiContent.Foundation.Entities.ViewModel;
-using TiContent.UI.WinUI.DataSources.Abstraction;
-using TiContent.UI.WinUI.Services.Api.TMDB;
+using TiContent.Foundation.Services.Api.TMDB;
 
-namespace TiContent.UI.WinUI.DataSources;
+namespace TiContent.Foundation.DataSources;
 
-public interface IFilmsPageContentDataSource
-    : IDataSource<FilmsPageItemEntity, IFilmsPageContentDataSource.ParamsEntity>
+public interface ITMDBDataSource : IDataSource<ITMDBDataSource.InputEntity, ITMDBDataSource.OutputEntity>
 {
-    public record ParamsEntity(string Query, int Content);
+    public record InputEntity(
+        string Query,
+        int Content
+    );
+
+    public record OutputEntity(
+        List<FilmsPageItemEntity> Items
+    );
 }
 
-public partial class FilmsPageContentDataSource(ITMDBService api, IMapper mapper)
+public partial class TMDBDataSource(ITMDBApiService api, IMapper mapper)
 {
-    // Public Props
-
-    public bool InProgress => _tokenSource != null;
-    public bool IsCompleted => _pagination.IsCompleted;
-    public List<FilmsPageItemEntity> Cache { get; } = [];
-
     // Private Props
 
     private readonly Pagination _pagination = new();
     private CancellationTokenSource? _tokenSource;
-}
+};
 
-public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
+public partial class TMDBDataSource : ITMDBDataSource
 {
-    public async Task<List<FilmsPageItemEntity>> ObtainAsync(
-        IFilmsPageContentDataSource.ParamsEntity @params,
+    // Props
+
+    public bool InProgress => _tokenSource != null;
+    public bool IsCompleted => _pagination.IsCompleted;
+    public ITMDBDataSource.OutputEntity Cache { get; } = new([]);
+
+    // Methods
+
+    public async Task<ITMDBDataSource.OutputEntity> ObtainAsync(
+        ITMDBDataSource.InputEntity input,
         bool pagination
     )
     {
@@ -59,16 +62,16 @@ public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
         if (!pagination)
             _pagination.Reset();
 
-        if (@params.Query.IsNullOrEmpty())
+        if (input.Query.IsNullOrEmpty())
         {
-            if (@params.Content != 2)
-                await ObtainTrendingAsync(@params.Content, pagination, _tokenSource.Token);
+            if (input.Content != 2)
+                await ObtainTrendingAsync(input.Content, pagination, _tokenSource.Token);
             else
-                await ObtainAsync(@params.Content, pagination, _tokenSource.Token);
+                await ObtainAsync(input.Content, pagination, _tokenSource.Token);
         }
         else
         {
-            await ObtainSearchAsync(@params.Query, pagination, _tokenSource.Token);
+            await ObtainSearchAsync(input.Query, pagination, _tokenSource.Token);
         }
 
         _pagination.NextPage();
@@ -76,9 +79,11 @@ public partial class FilmsPageContentDataSource : IFilmsPageContentDataSource
 
         return Cache;
     }
+
+    // Private Methods
 }
 
-public partial class FilmsPageContentDataSource
+public partial class TMDBDataSource
 {
     private async Task ObtainAsync(int content, bool pagination, CancellationToken token)
     {
@@ -152,12 +157,12 @@ public partial class FilmsPageContentDataSource
         var mapped = mapper.Map<List<TMDBResponseEntity.ItemEntity>, List<FilmsPageItemEntity>>(items);
 
         if (!pagination)
-            Cache.Clear();
-        Cache.AddRange(mapped);
+            Cache.Items.Clear();
+        Cache.Items.AddRange(mapped);
     }
 }
 
-public partial class FilmsPageContentDataSource
+public partial class TMDBDataSource
 {
     private class Pagination
     {

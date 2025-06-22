@@ -19,6 +19,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{14C598C0-71DC-
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.Components.UnitTests", "TiContent.Foundation.Components.UnitTests\TiContent.Foundation.Components.UnitTests.csproj", "{2EEB99DC-2A47-40C7-B0DA-DCE959D001A6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.DataSources", "TiContent.Foundation.DataSources\TiContent.Foundation.DataSources.csproj", "{365D030D-2B1E-4AD4-BEEA-55BD96D91E04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.Abstractions", "TiContent.Foundation.Abstractions\TiContent.Foundation.Abstractions.csproj", "{CB6C9108-9CD2-44EB-A866-860661D38F89}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.Services", "TiContent.Foundation.Services\TiContent.Foundation.Services.csproj", "{BC9B1E66-4018-48AA-8103-591FC350AC97}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.Services.UnitTests", "TiContent.Foundation.Services.UnitTests\TiContent.Foundation.Services.UnitTests.csproj", "{C189F793-E37A-40F4-9715-DD50F7102177}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TiContent.Foundation.DataSources.UnitTests", "TiContent.Foundation.DataSources.UnitTests\TiContent.Foundation.DataSources.UnitTests.csproj", "{3388C17A-6702-4144-874A-CC36460EBFE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +59,26 @@ Global
 		{2EEB99DC-2A47-40C7-B0DA-DCE959D001A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2EEB99DC-2A47-40C7-B0DA-DCE959D001A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2EEB99DC-2A47-40C7-B0DA-DCE959D001A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{365D030D-2B1E-4AD4-BEEA-55BD96D91E04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{365D030D-2B1E-4AD4-BEEA-55BD96D91E04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{365D030D-2B1E-4AD4-BEEA-55BD96D91E04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{365D030D-2B1E-4AD4-BEEA-55BD96D91E04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CB6C9108-9CD2-44EB-A866-860661D38F89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CB6C9108-9CD2-44EB-A866-860661D38F89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CB6C9108-9CD2-44EB-A866-860661D38F89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CB6C9108-9CD2-44EB-A866-860661D38F89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC9B1E66-4018-48AA-8103-591FC350AC97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC9B1E66-4018-48AA-8103-591FC350AC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC9B1E66-4018-48AA-8103-591FC350AC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC9B1E66-4018-48AA-8103-591FC350AC97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C189F793-E37A-40F4-9715-DD50F7102177}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C189F793-E37A-40F4-9715-DD50F7102177}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C189F793-E37A-40F4-9715-DD50F7102177}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C189F793-E37A-40F4-9715-DD50F7102177}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3388C17A-6702-4144-874A-CC36460EBFE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3388C17A-6702-4144-874A-CC36460EBFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3388C17A-6702-4144-874A-CC36460EBFE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3388C17A-6702-4144-874A-CC36460EBFE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +93,10 @@ Global
 		{9B923B1E-7D8E-48EE-B041-14A2E54BECFE} = {14C598C0-71DC-4505-AF28-185E2C765BDE}
 		{DD90FD85-9046-46FD-96D9-A01EA1E3633E} = {14C598C0-71DC-4505-AF28-185E2C765BDE}
 		{2EEB99DC-2A47-40C7-B0DA-DCE959D001A6} = {2D6CA515-9F2A-46C7-998A-2FC3A9E0C886}
+		{CB6C9108-9CD2-44EB-A866-860661D38F89} = {2D6CA515-9F2A-46C7-998A-2FC3A9E0C886}
+		{365D030D-2B1E-4AD4-BEEA-55BD96D91E04} = {2D6CA515-9F2A-46C7-998A-2FC3A9E0C886}
+		{BC9B1E66-4018-48AA-8103-591FC350AC97} = {2D6CA515-9F2A-46C7-998A-2FC3A9E0C886}
+		{C189F793-E37A-40F4-9715-DD50F7102177} = {2D6CA515-9F2A-46C7-998A-2FC3A9E0C886}
+		{3388C17A-6702-4144-874A-CC36460EBFE4} = {2D6CA515-9F2A-46C7-998A-2FC3A9E0C886}
 	EndGlobalSection
 EndGlobal

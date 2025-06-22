@@ -18,9 +18,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
 using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
+using TiContent.Foundation.DataSources;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
-using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.DB;
 using TiContent.UI.WinUI.Services.UI;
 using TiContent.UI.WinUI.Services.UI.Navigation;
@@ -32,23 +32,30 @@ public partial class FilmsPageViewModel : ObservableObject
 {
     // Observable
 
-    [ObservableProperty] public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
+    [ObservableProperty]
+    public partial ViewStateEnum State { get; set; } = ViewStateEnum.Empty;
 
-    [ObservableProperty] public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
+    [ObservableProperty]
+    public partial ObservableCollection<FilmsPageItemEntity> Items { get; set; } = [];
 
-    [ObservableProperty] public partial string Query { get; set; } = string.Empty;
+    [ObservableProperty]
+    public partial string Query { get; set; } = string.Empty;
 
-    [ObservableProperty] public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
+    [ObservableProperty]
+    public partial ObservableCollection<string> QueryHistoryItems { get; set; } = [];
 
-    [ObservableProperty] public partial int ContentType { get; set; }
+    [ObservableProperty]
+    public partial int ContentType { get; set; }
 
-    [ObservableProperty] public partial bool ContentTypeIsEnabled { get; set; } = true;
+    [ObservableProperty]
+    public partial bool ContentTypeIsEnabled { get; set; } = true;
 
-    [ObservableProperty] public partial double ScrollViewOffset { get; set; } = 0;
+    [ObservableProperty]
+    public partial double ScrollViewOffset { get; set; } = 0;
 
     // Private Props
 
-    private readonly IFilmsPageContentDataSource _dataSource;
+    private readonly ITMDBDataSource _dataSource;
     private readonly ILogger<FilmsPageViewModel> _logger;
     private readonly INavigationService _navigationService;
     private readonly IDataBaseQueryHistoryService _queryHistoryService;
@@ -61,7 +68,7 @@ public partial class FilmsPageViewModel : ObservableObject
     // LifeCycle
 
     public FilmsPageViewModel(
-        IFilmsPageContentDataSource dataSource,
+        ITMDBDataSource dataSource,
         ILogger<FilmsPageViewModel> logger,
         IDataBaseQueryHistoryService queryHistoryService,
         INavigationService navigationService,
@@ -202,12 +209,12 @@ public partial class FilmsPageViewModel
     {
         try
         {
-            var items = await _dataSource.ObtainAsync(
-                new IFilmsPageContentDataSource.ParamsEntity(Query, ContentType),
+            var output = await _dataSource.ObtainAsync(
+                new ITMDBDataSource.InputEntity(Query, ContentType),
                 pagination
             );
 
-            _dispatcherQueue.TryEnqueue(() => ApplyItems(items));
+            _dispatcherQueue.TryEnqueue(() => ApplyItems(output.Items));
         }
         catch (Exception ex)
         {

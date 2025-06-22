@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Entities.Api.Jacred;
-using TiContent.UI.WinUI.Services.Api.Jacred;
+using TiContent.Foundation.Services.Api.Jacred;
 
 namespace TiContent.UI.WinUI.DataSources;
 

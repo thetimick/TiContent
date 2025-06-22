@@ -5,16 +5,11 @@
 // Created by the_timick on 14.05.2025.
 // ⠀
 
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using RestSharp;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.Hydra;
-using TiContent.UI.WinUI.Services.Storage;
 
-namespace TiContent.UI.WinUI.Services.Api.Hydra;
+namespace TiContent.Foundation.Services.Api.Hydra;
 
 public interface IHydraApiService
 {
@@ -31,13 +26,10 @@ public interface IHydraApiService
     public Task<HydraFiltersEntity> ObtainFiltersAsync(CancellationToken token = default);
 }
 
-public partial class HydraApiService(IRestClient client, IStorageService storage)
-{
-    private string HydraApiBaseUrl => storage.Cached?.Urls.HydraApiBaseUrl ?? string.Empty;
-
-    private string HydraAssetsApiBaseUrl =>
-        storage.Cached?.Urls.HydraApiAssetsBaseUrl ?? string.Empty;
-}
+public partial class HydraApiService(
+    IRestClient client,
+    IStorageService storage
+);
 
 public partial class HydraApiService : IHydraApiService
 {
@@ -46,7 +38,7 @@ public partial class HydraApiService : IHydraApiService
         CancellationToken token = default
     )
     {
-        var path = UrlHelper.Combine(HydraApiBaseUrl, "catalogue", @params.PathType);
+        var path = UrlHelper.Combine(storage.Cached.Urls.HydraApiBaseUrl, "catalogue", @params.PathType);
         var request = new RestRequest(path)
             .AddParameter("take", @params.Take ?? 12)
             .AddParameter("skip", @params.Skip ?? 0);
@@ -64,7 +56,7 @@ public partial class HydraApiService : IHydraApiService
         CancellationToken token = default
     )
     {
-        var path = UrlHelper.Combine(HydraApiBaseUrl, "catalogue", "search");
+        var path = UrlHelper.Combine(storage.Cached.Urls.HydraApiBaseUrl, "catalogue", "search");
         var request = new RestRequest(path, Method.Post).AddBody(@params, ContentType.Json);
 
         var response = await client.ExecuteAsync<HydraApiSearchResponseEntity>(request, token);
@@ -78,11 +70,11 @@ public partial class HydraApiService : IHydraApiService
     public async Task<HydraFiltersEntity> ObtainFiltersAsync(CancellationToken token = default)
     {
         var genres = client.ExecuteAsync<HydraFiltersEntity.HydraFiltersGenresEntity>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-genres.json")),
+            new RestRequest(UrlHelper.Combine(storage.Cached.Urls.HydraApiAssetsBaseUrl, "steam-genres.json")),
             token
         );
         var tags = client.ExecuteAsync<HydraFiltersEntity.HydraFiltersTagsEntity>(
-            new RestRequest(UrlHelper.Combine(HydraAssetsApiBaseUrl, "steam-user-tags.json")),
+            new RestRequest(UrlHelper.Combine(storage.Cached.Urls.HydraApiAssetsBaseUrl, "steam-user-tags.json")),
             token
         );
 
