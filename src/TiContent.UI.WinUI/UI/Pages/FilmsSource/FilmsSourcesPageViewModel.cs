@@ -6,12 +6,10 @@
 // ⠀
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
-using AutoMapper;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -19,13 +17,13 @@ using CommunityToolkit.WinUI;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
-using TiContent.Foundation.Components.Abstractions;
+using TiContent.Foundation.Abstractions;
+using TiContent.Foundation.Abstractions.UI;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
-using TiContent.Foundation.Entities.Api.Jacred;
+using TiContent.Foundation.DataSources;
 using TiContent.Foundation.Entities.ViewModel.FilmsSourcePage;
 using TiContent.Foundation.Services;
-using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.UI;
 using TiContent.UI.WinUI.Services.UI.Navigation;
 
@@ -64,8 +62,7 @@ public partial class FilmsSourcesPageViewModel
     // Private Props
 
     private readonly INavigationService _navigationService;
-    private readonly IFilmsSourcePageContentDataSource _dataSource;
-    private readonly IMapper _mapper;
+    private readonly IDataSource<JacredDataSourceInputEntity, JacredDataSourceOutputEntity> _dataSource;
     private readonly ILogger<FilmsSourcesPageViewModel> _logger;
     private readonly IStorageService _storage;
     private readonly INotificationService _notificationService;
@@ -78,8 +75,7 @@ public partial class FilmsSourcesPageViewModel
 
     public FilmsSourcesPageViewModel(
         INavigationService navService,
-        IFilmsSourcePageContentDataSource dataSource,
-        IMapper mapper,
+        IDataSource<JacredDataSourceInputEntity, JacredDataSourceOutputEntity> dataSource,
         ILogger<FilmsSourcesPageViewModel> logger,
         IStorageService storage,
         INotificationService notificationService
@@ -87,7 +83,6 @@ public partial class FilmsSourcesPageViewModel
     {
         _navigationService = navService;
         _dataSource = dataSource;
-        _mapper = mapper;
         _logger = logger;
         _storage = storage;
         _notificationService = notificationService;
@@ -127,8 +122,6 @@ public partial class FilmsSourcesPageViewModel
         if (_initialData == null)
             return;
 
-        _dataSource.ClearCache();
-
         switch (value)
         {
             case 0:
@@ -155,7 +148,6 @@ public partial class FilmsSourcesPageViewModel
         ];
         SearchItemsIndex = 0;
 
-        _dataSource.ClearCache();
         ObtainItems(_initialData.Title);
     }
 
@@ -192,26 +184,20 @@ public partial class FilmsSourcesPageViewModel
 
     private void ObtainItems(string query)
     {
-        if (_dataSource.InProgress)
-            return;
-
         State = ViewStateEnum.InProgress;
-
         Task.Run(async () =>
         {
             try
             {
-                var rawItems = await _dataSource.ObtainItemsAsync(query);
-                var mappedItems = _mapper.Map<
-                    List<JacredEntity>,
-                    ObservableCollection<FilmsSourcePageItemEntity>
-                >(rawItems);
-
+                var input = new JacredDataSourceInputEntity(query);
+                var items = (await _dataSource.ObtainAsync(input, false))
+                    .Items
+                    .ToObservable();
                 await _dispatcherQueue.EnqueueAsync(() =>
                 {
-                    _allItems = mappedItems;
-                    SetupFilters(mappedItems);
-                    ApplySortAndFilters(mappedItems);
+                    _allItems = items;
+                    SetupFilters(items);
+                    ApplySortAndFilters(items);
                 });
             }
             catch (Exception ex)
@@ -220,8 +206,8 @@ public partial class FilmsSourcesPageViewModel
                 {
                     State = ViewStateEnum.Empty;
 
-                    _notificationService.ShowErrorNotification(ex);
                     _logger.LogError(ex, "{msg}", ex.Message);
+                    _notificationService.ShowErrorNotification(ex);
                 });
             }
         });

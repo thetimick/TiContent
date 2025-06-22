@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RestSharp;
 using Serilog;
+using TiContent.Foundation.Abstractions;
 using TiContent.Foundation.Components.Interceptors;
 using TiContent.Foundation.Constants;
 using TiContent.Foundation.DataSources;
@@ -95,7 +96,8 @@ public partial class App
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
 
         services.AddSingleton<ITMDBDataSource, TMDBDataSource>();
-        services.AddSingleton<IFilmsSourcePageContentDataSource, FilmsSourcePageContentDataSource>();
+        services
+            .AddSingleton<IDataSource<JacredDataSourceInputEntity, JacredDataSourceOutputEntity>, JacredDataSource>();
         services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
         services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
 
