@@ -17,6 +17,7 @@ using TiContent.Foundation.Constants;
 using TiContent.Foundation.DataSources;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
+using TiContent.Foundation.Entities.ViewModel.FilmsSourcePage;
 using TiContent.Foundation.Entities.ViewModel.GamesPage;
 using TiContent.Foundation.Services;
 using TiContent.Foundation.Services.Api.Hydra;
@@ -35,7 +36,6 @@ using TiContent.UI.WinUI.UI.Pages.Games;
 using TiContent.UI.WinUI.UI.Pages.GamesSource;
 using TiContent.UI.WinUI.UI.Pages.Settings;
 using TiContent.UI.WinUI.UI.Windows.Main;
-using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace TiContent.UI.WinUI;
 

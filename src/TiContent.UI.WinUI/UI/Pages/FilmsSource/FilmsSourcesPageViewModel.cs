@@ -23,7 +23,7 @@ using TiContent.Foundation.Components.Abstractions;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.Api.Jacred;
-using TiContent.Foundation.Entities.ViewModel;
+using TiContent.Foundation.Entities.ViewModel.FilmsSourcePage;
 using TiContent.Foundation.Services;
 using TiContent.UI.WinUI.DataSources;
 using TiContent.UI.WinUI.Services.UI;
@@ -45,6 +45,12 @@ public partial class FilmsSourcesPageViewModel
 
     [ObservableProperty]
     public partial string Description { get; set; } = string.Empty;
+
+    [ObservableProperty]
+    public partial ObservableCollection<FilmsSourcePageSearchItemEntity> SearchItems { get; set; } = [];
+
+    [ObservableProperty]
+    public partial int SearchItemsIndex { get; set; }
 
     [ObservableProperty]
     public partial ObservableCollection<FilmsSourcePageItemEntity> Items { get; set; } = [];
@@ -116,6 +122,24 @@ public partial class FilmsSourcesPageViewModel
         _storage.Cached.FilmsSource.SortOrder = value;
     }
 
+    partial void OnSearchItemsIndexChanged(int value)
+    {
+        if (_initialData == null)
+            return;
+
+        _dataSource.ClearCache();
+
+        switch (value)
+        {
+            case 0:
+                ObtainItems(_initialData.Title);
+            break;
+            case 1:
+                ObtainItems(_initialData.OriginalTitle);
+            break;
+        }
+    }
+
     // IRecipient
 
     public void Receive(InitialDataEntity message)
@@ -125,8 +149,14 @@ public partial class FilmsSourcesPageViewModel
         Title = $"{message.Title} / {message.OriginalTitle}";
         SortOrder = _storage.Cached.FilmsSource.SortOrder;
 
+        SearchItems = [
+            new FilmsSourcePageSearchItemEntity(message.Title, "Переведенное название"),
+            new FilmsSourcePageSearchItemEntity(message.OriginalTitle, "Оригинальное название")
+        ];
+        SearchItemsIndex = 0;
+
         _dataSource.ClearCache();
-        ObtainItems(message.Title);
+        ObtainItems(_initialData.Title);
     }
 
     // Commands
