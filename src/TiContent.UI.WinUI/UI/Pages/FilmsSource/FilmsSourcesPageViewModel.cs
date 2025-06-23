@@ -17,7 +17,6 @@ using CommunityToolkit.WinUI;
 using Humanizer;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
-using TiContent.Foundation.Abstractions;
 using TiContent.Foundation.Abstractions.UI;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.Components.Helpers;
@@ -62,7 +61,7 @@ public partial class FilmsSourcesPageViewModel
     // Private Props
 
     private readonly INavigationService _navigationService;
-    private readonly IDataSource<JacredDataSourceInputEntity, JacredDataSourceOutputEntity> _dataSource;
+    private readonly IJacredDataSource _dataSource;
     private readonly ILogger<FilmsSourcesPageViewModel> _logger;
     private readonly IStorageService _storage;
     private readonly INotificationService _notificationService;
@@ -75,7 +74,7 @@ public partial class FilmsSourcesPageViewModel
 
     public FilmsSourcesPageViewModel(
         INavigationService navService,
-        IDataSource<JacredDataSourceInputEntity, JacredDataSourceOutputEntity> dataSource,
+        IJacredDataSource dataSource,
         ILogger<FilmsSourcesPageViewModel> logger,
         IStorageService storage,
         INotificationService notificationService
@@ -189,7 +188,7 @@ public partial class FilmsSourcesPageViewModel
         {
             try
             {
-                var input = new JacredDataSourceInputEntity(query);
+                var input = new JacredDataSource.InputEntity(query);
                 var items = (await _dataSource.ObtainAsync(input, false))
                     .Items
                     .ToObservable();

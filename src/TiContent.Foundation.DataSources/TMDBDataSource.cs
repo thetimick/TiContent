@@ -17,8 +17,11 @@ using TiContent.Foundation.Services.Api.TMDB;
 
 namespace TiContent.Foundation.DataSources;
 
-public interface ITMDBDataSource : IDataSource<ITMDBDataSource.InputEntity, ITMDBDataSource.OutputEntity>
+public interface ITMDBDataSource : IDataSource<TMDBDataSource.InputEntity, TMDBDataSource.OutputEntity> { }
+
+public partial class TMDBDataSource(ITMDBApiService api, IMapper mapper)
 {
+    // Input \ Output
     public record InputEntity(
         string Query,
         int Content
@@ -27,10 +30,7 @@ public interface ITMDBDataSource : IDataSource<ITMDBDataSource.InputEntity, ITMD
     public record OutputEntity(
         List<FilmsPageItemEntity> Items
     );
-}
 
-public partial class TMDBDataSource(ITMDBApiService api, IMapper mapper)
-{
     // Private Props
 
     private readonly Pagination _pagination = new();
@@ -43,12 +43,12 @@ public partial class TMDBDataSource : ITMDBDataSource
 
     public bool InProgress => _tokenSource != null;
     public bool IsCompleted => _pagination.IsCompleted;
-    public ITMDBDataSource.OutputEntity Cache { get; } = new([]);
+    public OutputEntity Cache { get; } = new([]);
 
     // Methods
 
-    public async Task<ITMDBDataSource.OutputEntity> ObtainAsync(
-        ITMDBDataSource.InputEntity input,
+    public async Task<OutputEntity> ObtainAsync(
+        InputEntity input,
         bool pagination
     )
     {

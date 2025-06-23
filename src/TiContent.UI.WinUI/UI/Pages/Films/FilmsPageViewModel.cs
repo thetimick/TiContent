@@ -16,7 +16,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using CommunityToolkit.WinUI;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Dispatching;
-using TiContent.Foundation.Abstractions;
 using TiContent.Foundation.Abstractions.UI;
 using TiContent.Foundation.Components.Extensions;
 using TiContent.Foundation.DataSources;
@@ -211,7 +210,7 @@ public partial class FilmsPageViewModel
         try
         {
             var output = await _dataSource.ObtainAsync(
-                new ITMDBDataSource.InputEntity(Query, ContentType),
+                new TMDBDataSource.InputEntity(Query, ContentType),
                 pagination
             );
 

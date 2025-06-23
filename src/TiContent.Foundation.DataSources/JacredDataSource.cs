@@ -14,20 +14,30 @@ using TiContent.Foundation.Services.Api.Jacred;
 
 namespace TiContent.Foundation.DataSources;
 
+public interface IJacredDataSource : IDataSource<JacredDataSource.InputEntity, JacredDataSource.OutputEntity>;
+
 public partial class JacredDataSource(IJacredService api, IMapper mapper)
 {
-    private JacredDataSourceInputEntity? _previousInput;
-    private CancellationTokenSource? _tokenSource;
-};
+    public record InputEntity(
+        string Query
+    );
 
-public partial class JacredDataSource : IDataSource<JacredDataSourceInputEntity, JacredDataSourceOutputEntity>
+    public record OutputEntity(
+        List<FilmsSourcePageItemEntity> Items
+    );
+
+    private InputEntity? _previousInput;
+    private CancellationTokenSource? _tokenSource;
+}
+
+public partial class JacredDataSource : IJacredDataSource
 {
     public bool InProgress => _tokenSource != null;
     public bool IsCompleted => !Cache.Items.IsEmpty();
-    public JacredDataSourceOutputEntity Cache { get; } = new([]);
+    public OutputEntity Cache { get; } = new([]);
 
-    public async Task<JacredDataSourceOutputEntity> ObtainAsync(
-        JacredDataSourceInputEntity input,
+    public async Task<OutputEntity> ObtainAsync(
+        InputEntity input,
         bool pagination
     )
     {
@@ -58,13 +68,3 @@ public partial class JacredDataSource
         );
     }
 }
-
-// Input \ Output
-
-public record JacredDataSourceInputEntity(
-    string Query
-);
-
-public record JacredDataSourceOutputEntity(
-    List<FilmsSourcePageItemEntity> Items
-);

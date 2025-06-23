@@ -6,7 +6,6 @@
 //
 
 using Microsoft.UI.Xaml;
-using TiContent.Foundation.Abstractions;
 using TiContent.Foundation.Abstractions.UI;
 
 namespace TiContent.UI.WinUI.Components.UI.Controls;
