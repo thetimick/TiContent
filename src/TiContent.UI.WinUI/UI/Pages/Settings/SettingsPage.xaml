@@ -129,7 +129,7 @@
                             Header="TiContent by the_timick"
                             HeaderIcon="{ui:FontIcon Glyph='&#xE946;'}">
 
-                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.3" />
+                            <TextBlock Style="{ThemeResource BodyStrongTextBlockStyle}" Text="v.1.4" />
                         </controls:SettingsCard>
                     </StackPanel>
                 </StackPanel>
