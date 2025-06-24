@@ -75,10 +75,18 @@ public class DataBaseHydraFiltersService(
 
         return await db.HydraFiltersItems.AsNoTracking().ToListAsync(token);
     }
-
+    
     private bool IsEmptyOrExpiredDataBase()
     {
-        return db.HydraFiltersItems.AsNoTracking().IsEmpty()
-               || storage.Obtain().DataBaseTimestamp.HydraFilters < DateTime.Now.AddHours(-3);
+        try
+        {
+            var isEmpty = db.HydraFiltersItems.AsNoTracking().IsEmpty();
+            var timeout = storage.Cached.DataBaseTimestamp.HydraFilters < DateTime.Now.AddHours(-3);
+            return isEmpty || timeout;
+        }
+        catch
+        {
+            return true;
+        }
     }
 }

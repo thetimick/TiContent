@@ -8,7 +8,7 @@
 using System;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Data;
-using TiContent.Foundation.Components.Abstractions;
+using TiContent.Foundation.Abstractions.UI;
 
 namespace TiContent.UI.WinUI.Components.Converters;
 

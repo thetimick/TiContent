@@ -18,7 +18,6 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
         CancellationToken cancellationToken
     )
     {
-        // csharpier-ignore
         var str = $"""
                    REQUEST {request.Method.ToString().ToUpperInvariant()}
                        {request.Resource}
@@ -38,7 +37,6 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
     {
         if (response.IsSuccessful)
         {
-            // csharpier-ignore
             var str = $"""
                        RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)response.StatusCode} ({response.StatusCode.ToString()})
                            {response.Request.Resource}
@@ -47,7 +45,6 @@ public class RestClientLoggerInterceptor(ILogger<RestClientLoggerInterceptor> lo
         }
         else
         {
-            // csharpier-ignore
             var str = $"""
                        RESPONSE {response.Request.Method.ToString().ToUpperInvariant()} {(int)response.StatusCode} ({response.StatusCode.ToString()})
                            {response.Request.Resource}

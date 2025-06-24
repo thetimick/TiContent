@@ -95,7 +95,7 @@ public partial class App
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
 
         services.AddSingleton<ITMDBDataSource, TMDBDataSource>();
-        services.AddSingleton<IFilmsSourcePageContentDataSource, FilmsSourcePageContentDataSource>();
+        services.AddSingleton<IJacredDataSource, JacredDataSource>();
         services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
         services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
 

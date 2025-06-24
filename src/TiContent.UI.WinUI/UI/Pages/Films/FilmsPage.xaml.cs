@@ -15,7 +15,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
-using TiContent.Foundation.Components.Abstractions;
+using TiContent.Foundation.Abstractions.UI;
 using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.UI;
