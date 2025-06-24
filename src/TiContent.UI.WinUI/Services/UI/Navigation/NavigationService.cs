@@ -11,11 +11,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Controls;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.UI.Pages.Films;
+using TiContent.UI.WinUI.UI.Pages.FilmsSource;
 using TiContent.UI.WinUI.UI.Pages.Games;
 using TiContent.UI.WinUI.UI.Pages.GamesSource;
+using TiContent.UI.WinUI.UI.Pages.GamesStatus;
 using TiContent.UI.WinUI.UI.Pages.Settings;
-using FilmsSource_FilmsSourcesPage = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPage;
-using FilmsSource_FilmsSourcesPageViewModel = TiContent.UI.WinUI.UI.Pages.FilmsSource.FilmsSourcesPageViewModel;
 
 namespace TiContent.UI.WinUI.Services.UI.Navigation;
 
@@ -60,8 +60,8 @@ public class NavigationService(IServiceProvider provider) : INavigationService
             break;
             case NavigationPath.FilmsSource:
                 _frame.Navigate(
-                    typeof(FilmsSource_FilmsSourcesPage),
-                    provider.GetRequiredService<FilmsSource_FilmsSourcesPageViewModel>()
+                    typeof(FilmsSourcesPage),
+                    provider.GetRequiredService<FilmsSourcesPageViewModel>()
                 );
             break;
 
@@ -90,6 +90,16 @@ public class NavigationService(IServiceProvider provider) : INavigationService
                     provider.GetRequiredService<SettingsPageViewModel>()
                 );
             break;
+
+            case NavigationPath.GamesStatus:
+                _frame.Navigate(
+                    typeof(GamesStatusPage),
+                    new GamesStatusPage.Dependencies(
+                        provider.GetRequiredService<GamesStatusViewModel>()
+                    )
+                );
+            break;
+
             default:
                 throw new ArgumentOutOfRangeException(nameof(path), path, null);
         }
@@ -109,9 +119,10 @@ public class NavigationService(IServiceProvider provider) : INavigationService
     {
         return type switch {
             not null when type == typeof(FilmsPage) => NavigationPath.Films,
-            not null when type == typeof(FilmsSource_FilmsSourcesPage) =>
-                NavigationPath.FilmsSource,
-            not null when type == typeof(GamesPage) => NavigationPath.FilmsSource,
+            not null when type == typeof(FilmsSourcesPage) => NavigationPath.FilmsSource,
+            not null when type == typeof(GamesPage) => NavigationPath.Games,
+            not null when type == typeof(GamesSourcePage) => NavigationPath.GamesSource,
+            not null when type == typeof(GamesStatusPage) => NavigationPath.GamesStatus,
             not null when type == typeof(SettingsPage) => NavigationPath.Settings,
             _ => null
         };

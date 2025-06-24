@@ -35,6 +35,7 @@ using TiContent.UI.WinUI.UI.Pages.Films;
 using TiContent.UI.WinUI.UI.Pages.FilmsSource;
 using TiContent.UI.WinUI.UI.Pages.Games;
 using TiContent.UI.WinUI.UI.Pages.GamesSource;
+using TiContent.UI.WinUI.UI.Pages.GamesStatus;
 using TiContent.UI.WinUI.UI.Pages.Settings;
 using TiContent.UI.WinUI.UI.Windows.Main;
 
@@ -124,6 +125,7 @@ public partial class App
         services.AddSingleton<FilmsSourcesPageViewModel>();
         services.AddSingleton<GamesPageViewModel>();
         services.AddSingleton<GamesSourcePageViewModel>();
+        services.AddSingleton<GamesStatusViewModel>();
         services.AddSingleton<SettingsPageViewModel>();
     }
 

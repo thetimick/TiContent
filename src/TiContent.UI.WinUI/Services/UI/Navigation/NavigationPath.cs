@@ -14,14 +14,17 @@ public enum NavigationPath
     [Description("Фильмы & Сериалы")]
     Films,
 
-    [Description("Источники")]
+    [Description]
     FilmsSource,
 
     [Description("Игры")]
     Games,
 
-    [Description("Источники")]
+    [Description]
     GamesSource,
+
+    [Description("Game Status")]
+    GamesStatus,
 
     [Description("Параметры")]
     Settings

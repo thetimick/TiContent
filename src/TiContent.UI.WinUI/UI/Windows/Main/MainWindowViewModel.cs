@@ -27,6 +27,12 @@ public partial class MainWindowViewModel(INavigationService navService) : Observ
             Icon = new FontIcon { Glyph = "\uE7FC" },
             Content = NavigationPath.Games.Humanize(),
             Tag = NavigationPath.Games
+        },
+        new NavigationViewItemHeader { Content = "Сервисы" },
+        new NavigationViewItem {
+            Icon = new FontIcon { Glyph = "\uE7FC" },
+            Content = NavigationPath.GamesStatus.Humanize(),
+            Tag = NavigationPath.GamesStatus
         }
     ];
 
