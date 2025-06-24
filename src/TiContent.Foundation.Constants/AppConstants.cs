@@ -28,5 +28,7 @@ public static class AppConstants
         public const string TMDBApiAssetsBaseUrl = "https://imagetmdb.com";
 
         public const string HydraLinksSources = "https://library.hydra.wiki/data/resources.json";
+
+        public const string GameStatusBaseUrl = "https://gamestatus.info";
     }
 }
