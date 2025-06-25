@@ -24,14 +24,14 @@ public sealed partial class HeaderPageControl
         nameof(Title),
         typeof(string),
         typeof(HeaderPageControl),
-        new PropertyMetadata("")
+        new PropertyMetadata(null)
     );
 
     public static readonly DependencyProperty DescriptionProperty = DependencyProperty.Register(
         nameof(Description),
         typeof(string),
         typeof(HeaderPageControl),
-        new PropertyMetadata("")
+        new PropertyMetadata(null)
     );
 
     public static readonly DependencyProperty HeaderContentProperty = DependencyProperty.Register(
@@ -65,18 +65,27 @@ public sealed partial class HeaderPageControl
         set => SetValue(DescriptionProperty, value);
     }
 
-    public UIElement HeaderContent
+    public UIElement? HeaderContent
     {
-        get => (UIElement)GetValue(HeaderContentProperty);
+        get => (UIElement?)GetValue(HeaderContentProperty);
         set => SetValue(HeaderContentProperty, value);
     }
 
     // Private Props
 
-    private Thickness TitleControlMargin =>
-        BackButtonVisibility == Visibility.Collapsed
-            ? new Thickness(16, -4, 0, 0)
-            : new Thickness(8, -4, 0, 0);
+    private Thickness TitleControlMargin
+    {
+        get
+        {
+            var thickness = new Thickness(16, -8, 0, 0);
+            if (BackButtonVisibility == Visibility.Visible)
+                thickness.Left = 8;
+            if (HeaderContent == null)
+                thickness.Top = -6;
+            return thickness;
+        }
+    }
+
 
     // LifeCycle
 

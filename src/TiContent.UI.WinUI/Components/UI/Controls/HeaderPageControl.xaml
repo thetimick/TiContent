@@ -9,7 +9,7 @@
     xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
 
-    <Grid ColumnDefinitions="Auto, *, 0.35*" Style="{StaticResource CustomGridCardStyle}">
+    <Grid ColumnDefinitions="Auto, *, Auto" Style="{StaticResource CustomGridCardStyle}">
         <Button
             Grid.Column="0"
             Padding="16"
