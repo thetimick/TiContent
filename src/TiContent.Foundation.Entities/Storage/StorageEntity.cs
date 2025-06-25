@@ -29,6 +29,8 @@ public record StorageEntity
         public string TMDBApiAssetsBaseUrl { get; init; } = AppConstants.Urls.TMDBApiAssetsBaseUrl;
 
         public string HydraLinksSources { get; init; } = AppConstants.Urls.HydraLinksSources;
+
+        public string GameStatusBaseUrl { get; init; } = AppConstants.Urls.GameStatusBaseUrl;
     }
 
     public record KeysEntity

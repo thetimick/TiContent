@@ -1,5 +1,5 @@
 ﻿// ㅤ
-// HomePage.xaml.cs
+// GamesPage.xaml.cs
 // TiContent.UI.WinUI
 // ㅤ
 // Created by Timick on 16.12.2024.

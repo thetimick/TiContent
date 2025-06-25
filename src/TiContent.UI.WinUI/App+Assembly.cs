@@ -20,6 +20,7 @@ using TiContent.Foundation.Entities.ViewModel;
 using TiContent.Foundation.Entities.ViewModel.FilmsSourcePage;
 using TiContent.Foundation.Entities.ViewModel.GamesPage;
 using TiContent.Foundation.Services;
+using TiContent.Foundation.Services.Api.GameStatus;
 using TiContent.Foundation.Services.Api.Hydra;
 using TiContent.Foundation.Services.Api.HydraLinks;
 using TiContent.Foundation.Services.Api.Jacred;
@@ -34,6 +35,7 @@ using TiContent.UI.WinUI.UI.Pages.Films;
 using TiContent.UI.WinUI.UI.Pages.FilmsSource;
 using TiContent.UI.WinUI.UI.Pages.Games;
 using TiContent.UI.WinUI.UI.Pages.GamesSource;
+using TiContent.UI.WinUI.UI.Pages.GamesStatus;
 using TiContent.UI.WinUI.UI.Pages.Settings;
 using TiContent.UI.WinUI.UI.Windows.Main;
 
@@ -79,10 +81,13 @@ public partial class App
 
         // Internal
 
+        // Hosting
         services.AddHostedService<ConfigureService>();
 
+        // Providers
         services.AddSingleton<IImageProvider, ImageProvider>();
 
+        // Services
         services.AddSingleton<IStorageService, StorageService>(provider =>
             new StorageService(
                 AppConstants.FileNames.StorageFileName,
@@ -93,20 +98,26 @@ public partial class App
         services.AddSingleton<IJacredService, JacredService>();
         services.AddSingleton<IHydraApiService, HydraApiService>();
         services.AddSingleton<IHydraLinksService, HydraLinksService>();
-
-        services.AddSingleton<ITMDBDataSource, TMDBDataSource>();
-        services.AddSingleton<IJacredDataSource, JacredDataSource>();
-        services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
-        services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
+        services.AddSingleton<IGameStatusApiService, GameStatusApiService>();
 
         services.AddSingleton<INavigationService, NavigationService>();
         services.AddSingleton<IThemeService, ThemeService>();
         services.AddSingleton<INotificationService, NotificationService>();
 
+        // DataSources
+        services.AddSingleton<ITMDBDataSource, TMDBDataSource>();
+        services.AddSingleton<IJacredDataSource, JacredDataSource>();
+        services.AddSingleton<IGameStatusDataSource, GameStatusDataSource>();
+
+        services.AddSingleton<IGamesPageContentDataSource, GamesPageContentDataSource>();
+        services.AddSingleton<IGamesSourcePageContentDataSource, GamesSourcePageContentDataSource>();
+
+        // DB
         services.AddSingleton<IDataBaseQueryHistoryService, DataBaseQueryQueryHistoryService>();
         services.AddSingleton<IDataBaseGamesSourceService, DataBaseGamesSourceService>();
         services.AddSingleton<IDataBaseHydraFiltersService, DataBaseHydraFiltersService>();
 
+        // UI
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<MainWindow>();
 
@@ -114,6 +125,7 @@ public partial class App
         services.AddSingleton<FilmsSourcesPageViewModel>();
         services.AddSingleton<GamesPageViewModel>();
         services.AddSingleton<GamesSourcePageViewModel>();
+        services.AddSingleton<GamesStatusViewModel>();
         services.AddSingleton<SettingsPageViewModel>();
     }
 
