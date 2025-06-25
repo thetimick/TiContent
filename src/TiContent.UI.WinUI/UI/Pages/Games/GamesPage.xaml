@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:customControls="using:TiContent.UI.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:entities="using:TiContent.Foundation.Entities.ViewModel.GamesPage"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -15,88 +16,78 @@
         ColumnDefinitions="*,0.35*"
         ColumnSpacing="8"
         RowDefinitions="Auto, *"
-        RowSpacing="16">
+        RowSpacing="8">
 
-        <Grid
+        <customControls:HeaderPageControl
+            Title="Игры"
             Grid.Row="0"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            ColumnDefinitions="*, Auto"
-            Style="{StaticResource CustomGridCardStyle}">
+            Description="Каталог игр от Hydra">
 
-            <StackPanel Grid.Column="0" Margin="16,2,0,0">
-                <TextBlock
-                    FontWeight="Bold"
-                    Style="{ThemeResource TitleTextBlockStyle}"
-                    Text="Игры" />
+            <customControls:HeaderPageControl.HeaderContent>
+                <StackPanel Spacing="4">
+                    <controls:Segmented
+                        HorizontalAlignment="Stretch"
+                        HorizontalContentAlignment="Stretch"
+                        Header="Популярно"
+                        IsEnabled="{x:Bind ViewModel.ContentTypeIsEnabled, Mode=OneWay}"
+                        SelectedIndex="{x:Bind ViewModel.ContentTypeIndex, Mode=TwoWay}">
 
-                <TextBlock
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Style="{ThemeResource BodyStrongTextBlockStyle}"
-                    Text="Каталог игр от Hydra" />
-            </StackPanel>
+                        <controls:SegmentedItem
+                            Content="Каталог"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Icon="{ui:FontIcon Glyph='&#xE8F1;'}" />
 
-            <StackPanel Grid.Column="1" Spacing="4">
-                <controls:Segmented
-                    HorizontalAlignment="Stretch"
-                    HorizontalContentAlignment="Stretch"
-                    Header="Популярно"
-                    IsEnabled="{x:Bind ViewModel.ContentTypeIsEnabled, Mode=OneWay}"
-                    SelectedIndex="{x:Bind ViewModel.ContentTypeIndex, Mode=TwoWay}">
+                        <controls:SegmentedItem
+                            Content="Популярно"
+                            FontSize="14"
+                            FontWeight="SemiBold"
+                            Icon="{ui:FontIcon Glyph='&#xECAD;'}" />
+                    </controls:Segmented>
 
-                    <controls:SegmentedItem
-                        Content="Каталог"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Icon="{ui:FontIcon Glyph='&#xE8F1;'}" />
+                    <AutoSuggestBox
+                        x:Name="AutoSuggestBox"
+                        GettingFocus="AutoSuggestBox_OnGettingFocus"
+                        ItemsSource="{x:Bind ViewModel.QueryHistoryItems, Mode=OneWay}"
+                        PlaceholderText="Поиск по каталогу"
+                        PointerPressed="AutoSuggestBox_OnPointerPressed"
+                        SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
+                        Text="{x:Bind ViewModel.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
 
-                    <controls:SegmentedItem
-                        Content="Популярно"
-                        FontSize="14"
-                        FontWeight="SemiBold"
-                        Icon="{ui:FontIcon Glyph='&#xECAD;'}" />
-                </controls:Segmented>
+                        <AutoSuggestBox.QueryIcon>
+                            <FontIcon FontSize="12" Glyph="&#xE721;" />
+                        </AutoSuggestBox.QueryIcon>
 
-                <AutoSuggestBox
-                    x:Name="AutoSuggestBox"
-                    GettingFocus="AutoSuggestBox_OnGettingFocus"
-                    ItemsSource="{x:Bind ViewModel.QueryHistoryItems, Mode=OneWay}"
-                    PlaceholderText="Поиск по каталогу"
-                    PointerPressed="AutoSuggestBox_OnPointerPressed"
-                    SuggestionChosen="AutoSuggestBox_OnSuggestionChosen"
-                    Text="{x:Bind ViewModel.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                        <AutoSuggestBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*, Auto">
+                                    <TextBlock
+                                        Grid.Column="0"
+                                        Margin="0,0,0,1"
+                                        VerticalAlignment="Center"
+                                        Style="{ThemeResource BodyTextBlockStyle}"
+                                        Text="{Binding}" />
 
-                    <AutoSuggestBox.QueryIcon>
-                        <FontIcon FontSize="12" Glyph="&#xE721;" />
-                    </AutoSuggestBox.QueryIcon>
+                                    <Button
+                                        Grid.Column="1"
+                                        Width="24"
+                                        Height="24"
+                                        Padding="0"
+                                        Click="ClearHistoryItemButton_OnClick"
+                                        ClickMode="Press"
+                                        CommandParameter="{Binding}">
 
-                    <AutoSuggestBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid ColumnDefinitions="*, Auto">
-                                <TextBlock
-                                    Grid.Column="0"
-                                    Margin="0,0,0,1"
-                                    VerticalAlignment="Center"
-                                    Style="{ThemeResource BodyTextBlockStyle}"
-                                    Text="{Binding}" />
-
-                                <Button
-                                    Grid.Column="1"
-                                    Width="24"
-                                    Height="24"
-                                    Padding="0"
-                                    Click="ClearHistoryItemButton_OnClick"
-                                    ClickMode="Press"
-                                    CommandParameter="{Binding}">
-
-                                    <FontIcon FontSize="9" Glyph="&#xE894;" />
-                                </Button>
-                            </Grid>
-                        </DataTemplate>
-                    </AutoSuggestBox.ItemTemplate>
-                </AutoSuggestBox>
-            </StackPanel>
-        </Grid>
+                                        <FontIcon FontSize="9" Glyph="&#xE894;" />
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </AutoSuggestBox.ItemTemplate>
+                    </AutoSuggestBox>
+                </StackPanel>
+            </customControls:HeaderPageControl.HeaderContent>
+        </customControls:HeaderPageControl>
 
         <controls:SwitchPresenter Grid.Row="1" Value="{x:Bind ViewModel.State, Mode=OneWay}">
             <controls:Case x:Name="ContentCase">
@@ -218,58 +209,57 @@
             Grid.Row="1"
             Grid.Column="1"
             RowDefinitions="Auto, *"
-            RowSpacing="8">
+            RowSpacing="8"
+            Style="{StaticResource CustomGridCardStyle}">
 
-            <Border Style="{StaticResource CustomBorderCardStyle}">
-                <StackPanel>
-                    <TextBlock
-                        Margin="0,0,0,4"
-                        Style="{ThemeResource BodyStrongTextBlockStyle}"
-                        Text="Фильтрация" />
+            <StackPanel>
+                <TextBlock
+                    Margin="0,0,0,4"
+                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                    Text="Фильтрация" />
 
-                    <controls:TokenizingTextBox
-                        IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
-                        ItemsSource="{x:Bind ViewModel.Filters.GenresSelectedItems, Mode=TwoWay}"
-                        PlaceholderText="Жанры"
-                        QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
-                        SuggestedItemsSource="{x:Bind ViewModel.Filters.Genres, Mode=TwoWay}"
-                        Text="{x:Bind ViewModel.Filters.GenresQuery, Mode=TwoWay}">
+                <controls:TokenizingTextBox
+                    IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
+                    ItemsSource="{x:Bind ViewModel.Filters.GenresSelectedItems, Mode=TwoWay}"
+                    PlaceholderText="Жанры"
+                    QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
+                    SuggestedItemsSource="{x:Bind ViewModel.Filters.Genres, Mode=TwoWay}"
+                    Text="{x:Bind ViewModel.Filters.GenresQuery, Mode=TwoWay}">
 
-                        <controls:TokenizingTextBox.TokenItemTemplate>
-                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock Text="{x:Bind Title}" />
-                            </DataTemplate>
-                        </controls:TokenizingTextBox.TokenItemTemplate>
+                    <controls:TokenizingTextBox.TokenItemTemplate>
+                        <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                            <TextBlock Text="{x:Bind Title}" />
+                        </DataTemplate>
+                    </controls:TokenizingTextBox.TokenItemTemplate>
 
-                        <controls:TokenizingTextBox.SuggestedItemTemplate>
-                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock Text="{x:Bind Title}" />
-                            </DataTemplate>
-                        </controls:TokenizingTextBox.SuggestedItemTemplate>
-                    </controls:TokenizingTextBox>
+                    <controls:TokenizingTextBox.SuggestedItemTemplate>
+                        <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                            <TextBlock Text="{x:Bind Title}" />
+                        </DataTemplate>
+                    </controls:TokenizingTextBox.SuggestedItemTemplate>
+                </controls:TokenizingTextBox>
 
-                    <controls:TokenizingTextBox
-                        IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
-                        ItemsSource="{x:Bind ViewModel.Filters.TagsSelectedItems, Mode=TwoWay}"
-                        PlaceholderText="Теги"
-                        QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
-                        SuggestedItemsSource="{x:Bind ViewModel.Filters.Tags, Mode=TwoWay}"
-                        Text="{x:Bind ViewModel.Filters.TagsQuery, Mode=TwoWay}">
+                <controls:TokenizingTextBox
+                    IsEnabled="{x:Bind ViewModel.Filters.IsEnabled, Mode=OneWay}"
+                    ItemsSource="{x:Bind ViewModel.Filters.TagsSelectedItems, Mode=TwoWay}"
+                    PlaceholderText="Теги"
+                    QueryIcon="{ui:FontIconSource Glyph='&#xE721;'}"
+                    SuggestedItemsSource="{x:Bind ViewModel.Filters.Tags, Mode=TwoWay}"
+                    Text="{x:Bind ViewModel.Filters.TagsQuery, Mode=TwoWay}">
 
-                        <controls:TokenizingTextBox.TokenItemTemplate>
-                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
-                            </DataTemplate>
-                        </controls:TokenizingTextBox.TokenItemTemplate>
+                    <controls:TokenizingTextBox.TokenItemTemplate>
+                        <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                            <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                        </DataTemplate>
+                    </controls:TokenizingTextBox.TokenItemTemplate>
 
-                        <controls:TokenizingTextBox.SuggestedItemTemplate>
-                            <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
-                                <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
-                            </DataTemplate>
-                        </controls:TokenizingTextBox.SuggestedItemTemplate>
-                    </controls:TokenizingTextBox>
-                </StackPanel>
-            </Border>
+                    <controls:TokenizingTextBox.SuggestedItemTemplate>
+                        <DataTemplate x:DataType="entities:GamesPageFilterItemEntity">
+                            <TextBlock Text="{x:Bind Title, Converter={StaticResource SplitToStringConverter}, ConverterParameter='|,,,0'}" />
+                        </DataTemplate>
+                    </controls:TokenizingTextBox.SuggestedItemTemplate>
+                </controls:TokenizingTextBox>
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

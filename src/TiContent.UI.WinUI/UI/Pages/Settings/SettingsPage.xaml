@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:converters="using:CommunityToolkit.WinUI.Converters"
+    xmlns:customControls="using:TiContent.UI.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:CommunityToolkit.WinUI"
@@ -13,13 +14,12 @@
         <converters:BoolNegationConverter x:Key="BoolNegationConverter" />
     </Page.Resources>
 
-    <Grid Margin="16" RowDefinitions="Auto, *">
-        <TextBlock
-            Grid.Row="0"
-            Margin="32,8,0,24"
-            FontWeight="Bold"
-            Style="{ThemeResource TitleTextBlockStyle}"
-            Text="Параметры" />
+    <Grid
+        Margin="16"
+        RowDefinitions="Auto, *"
+        RowSpacing="16">
+
+        <customControls:HeaderPageControl Title="Параметры" Description="Настройте приложение под себя" />
 
         <ScrollView Grid.Row="1">
             <Grid RowDefinitions="Auto, *">

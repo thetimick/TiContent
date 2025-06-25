@@ -17,43 +17,17 @@
         RowDefinitions="Auto, *"
         RowSpacing="8">
 
-        <Grid
+        <controls:HeaderPageControl
+            Title="{x:Bind ViewModel.Title}"
             Grid.Row="0"
-            Padding="16,12,16,16"
-            ColumnDefinitions="Auto, *, 0.35*"
-            Style="{StaticResource CustomGridCardStyle}">
+            BackButtonCommand="{x:Bind ViewModel.TapOnBackButtonCommand}"
+            BackButtonVisibility="Visible"
+            Description="{x:Bind ViewModel.Description, Mode=OneWay}">
 
-            <Button
-                Grid.Column="0"
-                Margin="0,4,8,0"
-                Padding="16"
-                Command="{x:Bind ViewModel.TapOnBackButtonCommand}"
-                Style="{ThemeResource EllipsisButton}">
-
-                <SymbolIcon Symbol="Back" />
-            </Button>
-
-            <StackPanel Grid.Column="1">
-                <TextBlock
-                    FontWeight="Bold"
-                    MaxLines="1"
-                    Style="{ThemeResource TitleTextBlockStyle}"
-                    Text="{x:Bind ViewModel.Title, Mode=TwoWay}" />
-
-                <TextBlock
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Style="{ThemeResource BodyStrongTextBlockStyle}"
-                    Text="{x:Bind ViewModel.Description, Mode=TwoWay}" />
-            </StackPanel>
-
-            <StackPanel
-                Grid.Column="2"
-                Margin="8,6,0,0"
-                VerticalAlignment="Center">
-
+            <controls:HeaderPageControl.HeaderContent>
                 <ComboBox
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
+                    Width="248"
+                    VerticalAlignment="Center"
                     ItemsSource="{x:Bind ViewModel.SearchItems, Mode=OneWay}"
                     SelectedIndex="{x:Bind ViewModel.SearchItemsIndex, Mode=TwoWay}">
 
@@ -74,8 +48,8 @@
                         </DataTemplate>
                     </ComboBox.ItemTemplate>
                 </ComboBox>
-            </StackPanel>
-        </Grid>
+            </controls:HeaderPageControl.HeaderContent>
+        </controls:HeaderPageControl>
 
         <Grid
             ColumnDefinitions="*, 0.38*"
