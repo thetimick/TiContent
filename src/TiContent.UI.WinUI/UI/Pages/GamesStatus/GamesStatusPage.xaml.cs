@@ -6,6 +6,7 @@
 // 
 
 using Microsoft.UI.Xaml.Navigation;
+using TiContent.Foundation.Abstractions.UI;
 
 namespace TiContent.UI.WinUI.UI.Pages.GamesStatus;
 
@@ -16,6 +17,12 @@ public sealed partial class GamesStatusPage
     public GamesStatusPage()
     {
         InitializeComponent();
+
+        ContentCase.Value = ViewStateEnum.Content;
+        InProgressCase.Value = ViewStateEnum.InProgress;
+        EmptyCase.Value = ViewStateEnum.Empty;
+
+        Loaded += (_, _) => ViewModel.OnLoaded();
     }
 
     protected override void OnNavigatedTo(NavigationEventArgs e)

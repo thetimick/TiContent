@@ -4,15 +4,34 @@
     x:Class="TiContent.UI.WinUI.UI.Pages.GamesStatus.GamesStatusPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:controls="using:TiContent.UI.WinUI.Components.UI.Controls"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:customControls="using:TiContent.UI.WinUI.Components.UI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Margin="16" RowDefinitions="Auto, *">
-        <controls:HeaderPageControl
+    <Grid
+        Margin="16"
+        RowDefinitions="Auto, *"
+        RowSpacing="16">
+
+        <customControls:HeaderPageControl
             Title="Game Status"
             Grid.Row="0"
             Description="Календарь релизов от сервиса Game Status" />
+
+        <controls:SwitchPresenter Grid.Row="1" Value="{x:Bind ViewModel.State, Mode=OneWay}">
+            <controls:Case x:Name="ContentCase">
+                <TextBlock Text="12345" />
+            </controls:Case>
+
+            <controls:Case x:Name="InProgressCase">
+                <customControls:PlaceholderUserControl State="InProgress" />
+            </controls:Case>
+
+            <controls:Case x:Name="EmptyCase">
+                <customControls:PlaceholderUserControl State="Empty" />
+            </controls:Case>
+        </controls:SwitchPresenter>
     </Grid>
 </Page>
