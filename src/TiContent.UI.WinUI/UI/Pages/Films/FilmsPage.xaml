@@ -122,7 +122,20 @@
                                                         Height="142"
                                                         Loaded="Image_OnLoaded"
                                                         Stretch="Fill"
-                                                        Tag="{x:Bind ImageUrl}" />
+                                                        Tag="{x:Bind ImageUrl}"
+                                                        ToolTipService.Placement="Right">
+
+                                                        <ToolTipService.ToolTip>
+                                                            <ToolTip Padding="0" CornerRadius="8">
+                                                                <Image
+                                                                    Width="200"
+                                                                    Height="284"
+                                                                    Loaded="Image_OnLoaded"
+                                                                    Stretch="Fill"
+                                                                    Tag="{x:Bind ImageUrl}" />
+                                                            </ToolTip>
+                                                        </ToolTipService.ToolTip>
+                                                    </Image>
                                                 </Border>
 
                                                 <StackPanel Grid.Column="1" Orientation="Vertical">
