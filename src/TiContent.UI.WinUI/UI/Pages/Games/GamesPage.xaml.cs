@@ -97,26 +97,11 @@ public partial class GamesPage
 
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
-        if (sender is Image { Tag: string url } image)
-            DispatcherQueue.EnqueueAsync(async () =>
-                {
-                    try
-                    {
-                        var entity = await ImageProvider.ObtainImageAsync(url, false);
-                        var stream = await entity.Data.ToRandomAccessStreamAsync();
-                        DispatcherQueue.TryEnqueue(() =>
-                        {
-                            var bitmap = CreateBitmapAsync(stream);
-                            image.Source = bitmap;
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogError(ex, "{msg}", ex.Message);
-                        throw;
-                    }
-                }
-            );
+        if (sender is not Image { Tag: string url } image)
+            return;
+        DispatcherQueue.EnqueueAsync(async () =>
+            image.Source = await ImageProvider.ObtainBitmapImageAsync(url, false)
+        );
     }
 
     // AutoSuggestBox

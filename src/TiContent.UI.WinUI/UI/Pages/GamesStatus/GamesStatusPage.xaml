@@ -51,7 +51,10 @@
 
                                         <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
                                             <Border Height="117" CornerRadius="8">
-                                                <Image Source="{x:Bind ImageUrl}" Stretch="UniformToFill" />
+                                                <Image
+                                                    Loaded="Image_OnLoaded"
+                                                    Source="{x:Bind ImageUrl}"
+                                                    Stretch="UniformToFill" />
                                             </Border>
 
                                             <Border

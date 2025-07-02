@@ -9,18 +9,27 @@ using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Web.Http;
+using CommunityToolkit.WinUI;
+using Microsoft.Extensions.Logging;
+using Microsoft.UI.Xaml.Media.Imaging;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Services;
+using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
+using TiContent.UI.WinUI.Components.Extensions;
 
 namespace TiContent.UI.WinUI.Providers;
 
 public interface IImageProvider
 {
-    public Task<DataBaseImageEntity> ObtainImageAsync(string url, bool fromFilmPage);
+    public Task<BitmapImage> ObtainBitmapImageAsync(string url, bool fromFilmPage);
 }
 
-public partial class ImageProvider(App.AppDataBaseContext db, IStorageService storage)
+public partial class ImageProvider(
+    App.AppDataBaseContext db,
+    IStorageService storage,
+    ILogger<ImageProvider> logger
+)
 {
     private readonly HttpClient _client = new();
 }
@@ -39,6 +48,21 @@ public partial class ImageProvider : IImageProvider
         await db.ImageItems.AddAsync(entity);
         await db.SaveChangesAsync();
         return entity;
+    }
+
+    public async Task<BitmapImage> ObtainBitmapImageAsync(string url, bool fromFilmPage)
+    {
+        try
+        {
+            var entity = await ObtainImageAsync(url, fromFilmPage);
+            var stream = await entity.Data.ToRandomAccessStreamAsync();
+            return await stream.CreateBitmapAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{msg}", ex.Message);
+            throw;
+        }
     }
 }
 

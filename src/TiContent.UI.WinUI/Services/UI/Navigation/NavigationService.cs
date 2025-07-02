@@ -95,7 +95,8 @@ public class NavigationService(IServiceProvider provider) : INavigationService
                 _frame.Navigate(
                     typeof(GamesStatusPage),
                     new GamesStatusPage.Dependencies(
-                        provider.GetRequiredService<GamesStatusViewModel>()
+                        provider.GetRequiredService<GamesStatusViewModel>(),
+                        provider.GetRequiredService<IImageProvider>()
                     )
                 );
             break;
