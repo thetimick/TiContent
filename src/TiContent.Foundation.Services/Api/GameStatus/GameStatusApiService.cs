@@ -14,6 +14,8 @@ namespace TiContent.Foundation.Services.Api.GameStatus;
 public interface IGameStatusApiService
 {
     public Task<GameStatusMainResponseEntity> ObtainMainAsync(CancellationToken token = default);
+    public Task<GameStatusReleasedResponseEntity> ObtainReleasedAsync(CancellationToken token = default);
+    public Task<GameStatusLastCrackedResponseEntity> ObtainLastCrackedAsync(CancellationToken token = default);
 }
 
 public partial class GameStatusApiService(
@@ -35,6 +37,40 @@ public partial class GameStatusApiService : IGameStatusApiService
 
         var request = new RestRequest(path);
         var response = await client.ExecuteAsync<GameStatusMainResponseEntity>(request, token);
+
+        if (response is { IsSuccessful: true, Data: not null })
+            return response.Data;
+
+        response.ThrowIfError();
+        throw new InvalidOperationException();
+    }
+
+    public async Task<GameStatusReleasedResponseEntity> ObtainReleasedAsync(CancellationToken token = default)
+    {
+        return await ObtainAsync<GameStatusReleasedResponseEntity>("releasedgame", token);
+    }
+
+    public async Task<GameStatusLastCrackedResponseEntity> ObtainLastCrackedAsync(CancellationToken token = default)
+    {
+        return await ObtainAsync<GameStatusLastCrackedResponseEntity>("lastcrackedgames", token);
+    }
+}
+
+public partial class GameStatusApiService
+{
+    private async Task<T> ObtainAsync<T>(string lastPathToken, CancellationToken token = default)
+    {
+        var path = UrlHelper.Combine(
+            storage.Cached.Urls.GameStatusBaseUrl,
+            "back",
+            "api",
+            "gameinfo",
+            "game",
+            lastPathToken
+        );
+
+        var request = new RestRequest(path);
+        var response = await client.ExecuteAsync<T>(request, token);
 
         if (response is { IsSuccessful: true, Data: not null })
             return response.Data;

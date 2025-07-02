@@ -7,6 +7,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.WinUI;
@@ -28,15 +29,22 @@ public partial class GamesStatusViewModel(
     ILogger<GamesStatusViewModel> logger
 ) : ObservableObject;
 
-// Commands
-
 public partial class GamesStatusViewModel
 {
     [ObservableProperty]
     public partial ViewStateEnum State { get; set; }
 
     [ObservableProperty]
-    public partial AdvancedCollectionView MostViewedItems { get; set; } = [];
+    public partial int ContentTypeIndex { get; set; }
+
+    [ObservableProperty]
+    public partial AdvancedCollectionView Items { get; set; } = [];
+
+    partial void OnContentTypeIndexChanged([SuppressMessage("ReSharper", "UnusedParameterInPartialMethod")] int value)
+    {
+        State = ViewStateEnum.InProgress;
+        Task.Factory.StartNew(ObtainAsync);
+    }
 }
 
 // Public
@@ -58,7 +66,10 @@ public partial class GamesStatusViewModel
     {
         try
         {
-            var output = await dataSource.ObtainAsync(new IGameStatusDataSource.InputEntity(), false);
+            var output = await dataSource.ObtainAsync(
+                new IGameStatusDataSource.InputEntity(ContentTypeIndex),
+                false
+            );
             await queue.Queue.EnqueueAsync(() => ApplyItems(output.Items));
         }
         catch (Exception ex)
@@ -71,11 +82,11 @@ public partial class GamesStatusViewModel
 
     private void ApplyItems(List<GamesStatusPageItemEntity> items)
     {
-        using var disposable = MostViewedItems.DeferRefresh();
+        using var disposable = Items.DeferRefresh();
 
-        MostViewedItems.Clear();
+        Items.Clear();
         foreach (var item in items)
-            MostViewedItems.Add(item);
+            Items.Add(item);
 
         State = items.IsEmpty()
             ? ViewStateEnum.Empty

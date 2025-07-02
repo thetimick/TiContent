@@ -14,6 +14,7 @@ public partial class GamesStatusPageItemEntity
 {
     public string ImageUrl { get; init; } = string.Empty;
     public string Title { get; init; } = string.Empty;
+    public DateTime ReleaseDate { get; init; } = DateTime.UnixEpoch;
 }
 
 public partial class GamesStatusPageItemEntity
@@ -22,7 +23,7 @@ public partial class GamesStatusPageItemEntity
     {
         public MapProfile()
         {
-            CreateMap<GameStatusMainResponseEntity.ItemEntity, GamesStatusPageItemEntity>()
+            CreateMap<GameStatusResponseItemEntity, GamesStatusPageItemEntity>()
                 .ForMember(
                     dest => dest.ImageUrl,
                     opt => opt.MapFrom(src => src.ShortImage)
@@ -30,6 +31,10 @@ public partial class GamesStatusPageItemEntity
                 .ForMember(
                     dest => dest.Title,
                     opt => opt.MapFrom(src => src.Title)
+                )
+                .ForMember(
+                    dest => dest.ReleaseDate,
+                    opt => opt.MapFrom(src => src.ReleaseDate)
                 );
         }
     }
