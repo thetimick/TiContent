@@ -9,13 +9,11 @@ using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Web.Http;
-using CommunityToolkit.WinUI;
 using Microsoft.Extensions.Logging;
 using Microsoft.UI.Xaml.Media.Imaging;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Services;
-using TiContent.UI.WinUI.Components.CustomDispatcherQueue;
 using TiContent.UI.WinUI.Components.Extensions;
 
 namespace TiContent.UI.WinUI.Providers;
@@ -36,20 +34,6 @@ public partial class ImageProvider(
 
 public partial class ImageProvider : IImageProvider
 {
-    public async Task<DataBaseImageEntity> ObtainImageAsync(string url, bool fromFilmPage)
-    {
-        var fullUrl = fromFilmPage ? MakeUrlForFilms(url) : url;
-        if (await db.ImageItems.FindAsync(fullUrl) is { } item)
-            return item;
-
-        var imageData = await LoadImageAsync(fullUrl);
-        var entity = new DataBaseImageEntity(fullUrl, imageData);
-
-        await db.ImageItems.AddAsync(entity);
-        await db.SaveChangesAsync();
-        return entity;
-    }
-
     public async Task<BitmapImage> ObtainBitmapImageAsync(string url, bool fromFilmPage)
     {
         try
@@ -70,6 +54,20 @@ public partial class ImageProvider : IImageProvider
 
 public partial class ImageProvider
 {
+    private async Task<DataBaseImageEntity> ObtainImageAsync(string url, bool fromFilmPage)
+    {
+        var fullUrl = fromFilmPage ? MakeUrlForFilms(url) : url;
+        if (await db.ImageItems.FindAsync(fullUrl) is { } item)
+            return item;
+
+        var imageData = await LoadImageAsync(fullUrl);
+        var entity = new DataBaseImageEntity(fullUrl, imageData);
+
+        await db.ImageItems.AddAsync(entity);
+        await db.SaveChangesAsync();
+        return entity;
+    }
+
     private async Task<byte[]> LoadImageAsync(string url)
     {
         var buffer = await _client.GetBufferAsync(new Uri(url));

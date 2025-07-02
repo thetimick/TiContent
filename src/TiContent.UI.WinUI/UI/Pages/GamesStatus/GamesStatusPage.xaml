@@ -53,8 +53,8 @@
                                             <Border Height="117" CornerRadius="8">
                                                 <Image
                                                     Loaded="Image_OnLoaded"
-                                                    Source="{x:Bind ImageUrl}"
-                                                    Stretch="UniformToFill" />
+                                                    Stretch="UniformToFill"
+                                                    Tag="{x:Bind ImageUrl}" />
                                             </Border>
 
                                             <Border

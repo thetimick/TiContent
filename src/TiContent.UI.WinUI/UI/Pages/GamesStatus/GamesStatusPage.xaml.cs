@@ -47,7 +47,7 @@ public sealed partial class GamesStatusPage
         if (sender is not Image { Tag: string url } image)
             return;
         DispatcherQueue.EnqueueAsync(async () =>
-            image.Source = await ImageProvider.ObtainBitmapImageAsync(url, true)
+            image.Source = await ImageProvider.ObtainBitmapImageAsync(url, false)
         );
     }
 }
