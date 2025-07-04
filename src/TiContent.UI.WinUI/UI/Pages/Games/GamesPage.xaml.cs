@@ -5,7 +5,6 @@
 // Created by Timick on 16.12.2024.
 // ㅤ
 
-using System;
 using System.ComponentModel;
 using Windows.Storage.Streams;
 using CommunityToolkit.WinUI;
@@ -17,7 +16,6 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.UI.Xaml.Navigation;
 using TiContent.Foundation.Abstractions.UI;
-using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Components.Helpers;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.UI;
@@ -97,26 +95,11 @@ public partial class GamesPage
 
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
-        if (sender is Image { Tag: string url } image)
-            DispatcherQueue.EnqueueAsync(async () =>
-                {
-                    try
-                    {
-                        var entity = await ImageProvider.ObtainImageAsync(url, false);
-                        var stream = await entity.Data.ToRandomAccessStreamAsync();
-                        DispatcherQueue.TryEnqueue(() =>
-                        {
-                            var bitmap = CreateBitmapAsync(stream);
-                            image.Source = bitmap;
-                        });
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogError(ex, "{msg}", ex.Message);
-                        throw;
-                    }
-                }
-            );
+        if (sender is not Image { Tag: string url } image)
+            return;
+        DispatcherQueue.EnqueueAsync(async () =>
+            image.Source = await ImageProvider.ObtainBitmapImageAsync(url, false)
+        );
     }
 
     // AutoSuggestBox

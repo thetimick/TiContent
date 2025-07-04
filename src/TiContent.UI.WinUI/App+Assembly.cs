@@ -19,6 +19,7 @@ using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Entities.ViewModel;
 using TiContent.Foundation.Entities.ViewModel.FilmsSourcePage;
 using TiContent.Foundation.Entities.ViewModel.GamesPage;
+using TiContent.Foundation.Entities.ViewModel.GamesStatus;
 using TiContent.Foundation.Services;
 using TiContent.Foundation.Services.Api.GameStatus;
 using TiContent.Foundation.Services.Api.Hydra;
@@ -75,6 +76,7 @@ public partial class App
             configuration.AddProfile<GamesPageItemEntity.MapProfile>();
             configuration.AddProfile<GamesPageFilterItemEntity.MapProfile>();
             configuration.AddProfile<GamesSourcePageItemEntity.MapProfile>();
+            configuration.AddProfile<GamesStatusPageItemEntity.MapProfile>();
         });
 
         services.AddSingleton<IMainDispatcherQueue, MainDispatcherQueue>();

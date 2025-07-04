@@ -9,25 +9,52 @@ using System;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Threading.Tasks;
 using Windows.Web.Http;
+using Microsoft.Extensions.Logging;
+using Microsoft.UI.Xaml.Media.Imaging;
 using TiContent.Foundation.Components.Helpers;
 using TiContent.Foundation.Entities.DB;
 using TiContent.Foundation.Services;
+using TiContent.UI.WinUI.Components.Extensions;
 
 namespace TiContent.UI.WinUI.Providers;
 
 public interface IImageProvider
 {
-    public Task<DataBaseImageEntity> ObtainImageAsync(string url, bool fromFilmPage);
+    public Task<BitmapImage> ObtainBitmapImageAsync(string url, bool fromFilmPage);
 }
 
-public partial class ImageProvider(App.AppDataBaseContext db, IStorageService storage)
+public partial class ImageProvider(
+    App.AppDataBaseContext db,
+    IStorageService storage,
+    ILogger<ImageProvider> logger
+)
 {
     private readonly HttpClient _client = new();
 }
 
 public partial class ImageProvider : IImageProvider
 {
-    public async Task<DataBaseImageEntity> ObtainImageAsync(string url, bool fromFilmPage)
+    public async Task<BitmapImage> ObtainBitmapImageAsync(string url, bool fromFilmPage)
+    {
+        try
+        {
+            var entity = await ObtainImageAsync(url, fromFilmPage);
+            var stream = await entity.Data.ToRandomAccessStreamAsync();
+            return await stream.CreateBitmapAsync();
+        }
+        catch (Exception ex)
+        {
+            logger.LogError(ex, "{msg}", ex.Message);
+            throw;
+        }
+    }
+}
+
+// Private Methods
+
+public partial class ImageProvider
+{
+    private async Task<DataBaseImageEntity> ObtainImageAsync(string url, bool fromFilmPage)
     {
         var fullUrl = fromFilmPage ? MakeUrlForFilms(url) : url;
         if (await db.ImageItems.FindAsync(fullUrl) is { } item)
@@ -40,12 +67,7 @@ public partial class ImageProvider : IImageProvider
         await db.SaveChangesAsync();
         return entity;
     }
-}
 
-// Private Methods
-
-public partial class ImageProvider
-{
     private async Task<byte[]> LoadImageAsync(string url)
     {
         var buffer = await _client.GetBufferAsync(new Uri(url));

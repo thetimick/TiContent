@@ -16,7 +16,6 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Navigation;
 using TiContent.Foundation.Abstractions.UI;
-using TiContent.UI.WinUI.Components.Extensions;
 using TiContent.UI.WinUI.Providers;
 using TiContent.UI.WinUI.Services.UI;
 
@@ -138,24 +137,11 @@ public partial class FilmsPage
 
     private void Image_OnLoaded(object sender, RoutedEventArgs e)
     {
-        if (sender is Image { Tag: string url } image)
-            DispatcherQueue.EnqueueAsync(async () =>
-                {
-                    try
-                    {
-                        var entity = await ImageProvider.ObtainImageAsync(url, true);
-                        var stream = await entity.Data.ToRandomAccessStreamAsync();
-                        await DispatcherQueue.EnqueueAsync(async () =>
-                            image.Source = await stream.CreateBitmapAsync()
-                        );
-                    }
-                    catch (Exception ex)
-                    {
-                        Logger.LogError(ex, "{msg}", ex.Message);
-                        throw;
-                    }
-                }
-            );
+        if (sender is not Image { Tag: string url } image)
+            return;
+        DispatcherQueue.EnqueueAsync(async () =>
+            image.Source = await ImageProvider.ObtainBitmapImageAsync(url, true)
+        );
     }
 
     // AutoSuggestBox

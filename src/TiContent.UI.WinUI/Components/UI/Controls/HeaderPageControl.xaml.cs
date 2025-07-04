@@ -1,6 +1,5 @@
 using System.Windows.Input;
 using Microsoft.UI.Xaml;
-using Microsoft.UI.Xaml.Controls;
 
 namespace TiContent.UI.WinUI.Components.UI.Controls;
 
