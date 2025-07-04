@@ -49,16 +49,38 @@ public partial class GameStatusDataSource : IGameStatusDataSource
         switch (input.ContentType)
         {
             case 0:
-                var released = await api.ObtainReleasedAsync(_tokenSource.Token);
-                var items = released.Data.Summer
-                    .Concat(released.Data.Spring)
-                    .Concat(released.Data.Winter)
-                    .ToList();
-                ApplyItems(items);
+                var calendar = await api.ObtainCalendarAsync(_tokenSource.Token);
+                var calendarItems =
+                    calendar.Calendar.January
+                        .Concat(calendar.Calendar.February)
+                        .Concat(calendar.Calendar.March)
+                        .Concat(calendar.Calendar.April)
+                        .Concat(calendar.Calendar.May)
+                        .Concat(calendar.Calendar.June)
+                        .Concat(calendar.Calendar.July)
+                        .Concat(calendar.Calendar.August)
+                        .Concat(calendar.Calendar.September)
+                        .Concat(calendar.Calendar.October)
+                        .Concat(calendar.Calendar.November)
+                        .Concat(calendar.Calendar.December)
+                        .ToList();
+                ApplyItems(calendarItems);
             break;
+
             case 1:
+                var released = await api.ObtainReleasedAsync(_tokenSource.Token);
+                var releasedItems =
+                    released.Data.Summer
+                        .Concat(released.Data.Spring)
+                        .Concat(released.Data.Winter)
+                        .ToList();
+                ApplyItems(releasedItems);
+            break;
+
+            case 2:
                 var cracked = await api.ObtainLastCrackedAsync(_tokenSource.Token);
-                ApplyItems(cracked.Items);
+                var crackedItems = cracked.Items;
+                ApplyItems(crackedItems);
             break;
         }
 
@@ -70,9 +92,7 @@ public partial class GameStatusDataSource
 {
     private void ApplyItems(List<GameStatusResponseItemEntity> items)
     {
-        var mapped = mapper.Map<List<GameStatusResponseItemEntity>, List<GamesStatusPageItemEntity>>(items)
-            .OrderByDescending(entity => entity.ReleaseDate);
-
+        var mapped = mapper.Map<List<GameStatusResponseItemEntity>, List<GamesStatusPageItemEntity>>(items);
         Cache.Items.Clear();
         Cache.Items.AddRange(mapped);
     }

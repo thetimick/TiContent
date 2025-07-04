@@ -26,63 +26,75 @@
         <controls:Segmented
             Grid.Row="1"
             Margin="0,8,0,0"
+            IsEnabled="{x:Bind ViewModel.State, Converter={StaticResource ViewStateToEnabledConverter}, Mode=OneWay}"
             SelectedIndex="{x:Bind ViewModel.ContentTypeIndex, Mode=TwoWay}">
 
+            <controls:SegmentedItem Content="Ожидается" Icon="{cte:FontIcon Glyph='&#xE8A9;'}" />
             <controls:SegmentedItem Content="Выпущено" Icon="{cte:FontIcon Glyph='&#xE8A9;'}" />
-            <controls:SegmentedItem Content="Взломано" Icon="{cte:FontIcon Glyph='&#xE8A9;'}" />
-            <controls:SegmentedItem Content="Календарь" Icon="{cte:FontIcon Glyph='&#xE787;'}" />
+            <controls:SegmentedItem Content="Взломано" Icon="{cte:FontIcon Glyph='&#xE787;'}" />
         </controls:Segmented>
 
         <controls:SwitchPresenter Grid.Row="2" Value="{x:Bind ViewModel.State, Mode=OneWay}">
             <controls:Case x:Name="ContentCase">
-                <ScrollView animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
-                    <ItemsRepeater ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}">
-                        <ItemsRepeater.Layout>
-                            <controls:StaggeredLayout
+                <ItemsControl ItemsSource="{x:Bind ViewModel.Items, Mode=OneWay}">
+                    <ItemsControl.Template>
+                        <ControlTemplate>
+                            <ScrollView>
+                                <ItemsPresenter />
+                            </ScrollView>
+                        </ControlTemplate>
+                    </ItemsControl.Template>
+
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <controls:StaggeredPanel
                                 ColumnSpacing="4"
                                 DesiredColumnWidth="212"
-                                ItemsStretch="Fill"
                                 RowSpacing="4" />
-                        </ItemsRepeater.Layout>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
 
-                        <ItemsRepeater.ItemTemplate>
-                            <DataTemplate x:DataType="gsEntities:GamesStatusPageItemEntity">
-                                <Grid
-                                    RowDefinitions="Auto, Auto"
-                                    RowSpacing="4"
-                                    Style="{StaticResource CustomGridCardStyle}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="gsEntities:GamesStatusPageItemEntity">
+                            <Grid
+                                RowDefinitions="Auto, Auto"
+                                RowSpacing="4"
+                                Style="{StaticResource CustomGridCardStyle}">
 
-                                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
-                                        <Border Height="117" CornerRadius="8">
-                                            <Image
-                                                Loaded="Image_OnLoaded"
-                                                Stretch="UniformToFill"
-                                                Tag="{x:Bind ImageUrl}" />
-                                        </Border>
+                                <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+                                    <Border
+                                        Height="117"
+                                        Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
+                                        CornerRadius="8">
 
-                                        <Border
-                                            Margin="0,2,2,0"
-                                            Padding="8,2,8,3"
-                                            HorizontalAlignment="Right"
-                                            VerticalAlignment="Top"
-                                            Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
-                                            CornerRadius="12"
-                                            Style="{StaticResource CustomBorderCardStyle}">
+                                        <Image
+                                            Loaded="Image_OnLoaded"
+                                            Stretch="UniformToFill"
+                                            Tag="{x:Bind ImageUrl}" />
+                                    </Border>
 
-                                            <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind ReleaseDate, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yy'}" />
-                                        </Border>
-                                    </Grid>
+                                    <Border
+                                        Margin="0,2,2,0"
+                                        Padding="8,2,8,3"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Top"
+                                        Background="{ThemeResource AcrylicBackgroundFillColorBaseBrush}"
+                                        CornerRadius="12"
+                                        Style="{StaticResource CustomBorderCardStyle}">
 
-                                    <TextBlock
-                                        Grid.Row="1"
-                                        MaxLines="1"
-                                        Style="{ThemeResource BodyStrongTextBlockStyle}"
-                                        Text="{x:Bind Title}" />
+                                        <TextBlock Style="{ThemeResource CaptionTextBlockStyle}" Text="{x:Bind ReleaseDate, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='dd.MM.yy'}" />
+                                    </Border>
                                 </Grid>
-                            </DataTemplate>
-                        </ItemsRepeater.ItemTemplate>
-                    </ItemsRepeater>
-                </ScrollView>
+
+                                <TextBlock
+                                    Grid.Row="1"
+                                    MaxLines="1"
+                                    Style="{ThemeResource BodyStrongTextBlockStyle}"
+                                    Text="{x:Bind Title}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
             </controls:Case>
 
             <controls:Case x:Name="InProgressCase">
