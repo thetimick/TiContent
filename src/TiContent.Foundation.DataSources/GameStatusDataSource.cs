@@ -70,7 +70,9 @@ public partial class GameStatusDataSource
 {
     private void ApplyItems(List<GameStatusResponseItemEntity> items)
     {
-        var mapped = mapper.Map<List<GameStatusResponseItemEntity>, List<GamesStatusPageItemEntity>>(items);
+        var mapped = mapper.Map<List<GameStatusResponseItemEntity>, List<GamesStatusPageItemEntity>>(items)
+            .OrderByDescending(entity => entity.ReleaseDate);
+
         Cache.Items.Clear();
         Cache.Items.AddRange(mapped);
     }
