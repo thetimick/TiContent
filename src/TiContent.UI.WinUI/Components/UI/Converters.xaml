@@ -8,6 +8,7 @@
     <converters:DateTimeToStringConverter x:Key="DateTimeToStringConverter" />
     <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
     <converters:ViewStateToVisibilityConverter x:Key="ViewStateToVisibilityConverter" />
+    <converters:ViewStateToEnabledConverter x:Key="ViewStateToEnabledConverter" />
     <converters:VoteToColorConverter x:Key="VoteToColorConverter" />
     <converters:ByteSizeToStringConverter x:Key="ByteSizeToStringConverter" />
     <converters:IntLimitToStringConverter x:Key="IntLimitToStringConverter" />
