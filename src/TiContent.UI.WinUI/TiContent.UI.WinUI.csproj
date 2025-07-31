@@ -12,8 +12,8 @@
         <LangVersion>preview</LangVersion>
         <Company>the_timick</Company>
         <Product>TiContent</Product>
-        <AssemblyVersion>1.4</AssemblyVersion>
-        <FileVersion>1.4</FileVersion>
+        <AssemblyVersion>1.5</AssemblyVersion>
+        <FileVersion>1.5</FileVersion>
         <ApplicationIcon>Resources\Assets\wpfui.ico</ApplicationIcon>
     </PropertyGroup>
     <ItemGroup>
@@ -43,7 +43,7 @@
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.7" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.7" />
-        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4188" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.26100.4654" />
         <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.7.250606001" />
         <PackageReference Include="RestSharp" Version="112.1.0" />
         <PackageReference Include="Serilog.Extensions.Hosting" Version="9.0.0" />

@@ -5,6 +5,7 @@
 // Created by the_timick on 03.06.2025.
 // ⠀
 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ public interface IDataBaseQueryHistoryService
 {
     public Task<List<DataBaseHistoryEntity>> ObtainHistoryAsync(DataBaseHistoryEntity.HistoryType type, string query);
 
-    public Task AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType type, string value);
+    public Task AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType type, string value, DateTime date);
     public Task ClearItemAsync(DataBaseHistoryEntity.HistoryType type, string value);
 }
 
@@ -41,11 +42,11 @@ public partial class DataBaseQueryQueryHistoryService : IDataBaseQueryHistorySer
             : items.Where(entity => entity.Query.Contains(query.Trim())).ToList();
     }
 
-    public async Task AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType type, string value)
+    public async Task AddValueToHistoryAsync(DataBaseHistoryEntity.HistoryType type, string value, DateTime date)
     {
         if (!db.QueryHistoryItems.Any(entity => entity.Type == type && entity.Query == value.Trim()))
         {
-            await db.QueryHistoryItems.AddAsync(new DataBaseHistoryEntity { Type = type, Query = value.Trim() });
+            await db.QueryHistoryItems.AddAsync(new DataBaseHistoryEntity { Type = type, Query = value.Trim(), Date = date });
             await db.SaveChangesAsync();
         }
     }

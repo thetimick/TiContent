@@ -19,5 +19,8 @@ public class DataBaseHistoryEntity
 
     public HistoryType Type { get; init; }
 
-    [Key] public string Query { get; init; } = string.Empty;
+    [Key] 
+    public string Query { get; init; } = string.Empty;
+    
+    public DateTime Date { get; init; } = DateTime.UnixEpoch;
 }

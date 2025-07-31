@@ -235,7 +235,10 @@ public partial class FilmsPageViewModel
                 DataBaseHistoryEntity.HistoryType.Films,
                 Query
             )
-        ).Select(entity => entity.Query);
+        )
+        .OrderByDescending(entity => entity.Date)
+        .Select(entity => entity.Query);
+        
         _dispatcherQueue.TryEnqueue(() => ApplyQueryHistoryItems(items));
     }
 
@@ -245,7 +248,8 @@ public partial class FilmsPageViewModel
             return;
         await _queryHistoryService.AddValueToHistoryAsync(
             DataBaseHistoryEntity.HistoryType.Films,
-            Query.Trim()
+            Query.Trim(),
+            DateTime.Now
         );
     }
 
