@@ -31,6 +31,7 @@ public partial record FilmsSourcePageItemEntity
     public string Tracker { get; init; } = string.Empty;
     public ByteSize Size { get; init; } = ByteSize.MinValue;
     public List<string> Voices { get; init; } = [];
+    public List<long> Seasons { get; init; } = [];
     public ContentTypeEnum ContentType { get; init; } = ContentTypeEnum.Any;
 }
 
@@ -62,6 +63,7 @@ public partial record FilmsSourcePageItemEntity
                 .ForMember(dest => dest.Tracker, opt => opt.MapFrom(src => src.Tracker.Humanize()))
                 .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
                 .ForMember(dest => dest.Voices, opt => opt.MapFrom(src => src.Voices))
+                .ForMember(dest => dest.Seasons, opt => opt.MapFrom(src => src.Seasons))
                 .ForMember(
                     dest => dest.ContentType,
                     opt =>
