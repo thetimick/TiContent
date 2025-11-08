@@ -349,7 +349,8 @@ public partial class GamesPageViewModel
             return;
         await _queryHistoryService.AddValueToHistoryAsync(
             DataBaseHistoryEntity.HistoryType.Games,
-            Query.Trim()
+            Query.Trim(),
+            DateTime.Now
         );
     }
 
@@ -387,8 +388,7 @@ public partial class GamesPageViewModel
         public partial AdvancedCollectionView Genres { get; set; } = [];
 
         [ObservableProperty]
-        public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } =
-            [];
+        public partial ObservableCollection<GamesPageFilterItemEntity> GenresSelectedItems { get; set; } = [];
 
         [ObservableProperty]
         public partial string GenresQuery { get; set; } = string.Empty;
@@ -397,8 +397,7 @@ public partial class GamesPageViewModel
         public partial AdvancedCollectionView Tags { get; set; } = [];
 
         [ObservableProperty]
-        public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } =
-            [];
+        public partial ObservableCollection<GamesPageFilterItemEntity> TagsSelectedItems { get; set; } = [];
 
         [ObservableProperty]
         public partial string TagsQuery { get; set; } = string.Empty;

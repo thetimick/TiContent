@@ -101,6 +101,7 @@ public partial class FilmsSourcesPageViewModel
             case nameof(Filters.YearsIndex):
             case nameof(Filters.ContentTypeIndex):
             case nameof(Filters.VoicesIndex):
+            case nameof(Filters.SeasonsIndex):
             case nameof(Filters.TrackerIndex):
             case nameof(Filters.QualitiesIndex):
                 ApplySortAndFilters(_allItems);
@@ -236,6 +237,13 @@ public partial class FilmsSourcesPageViewModel
             .Prepend("Не задано")
             .ToObservable();
 
+        Filters.Seasons = source
+            .SelectMany(entity => entity.Seasons.Select(s => $"{s}"))
+            .Distinct()
+            .OrderByDescending(s => s)
+            .Prepend("Не задано")
+            .ToObservable();
+
         Filters.Trackers = source
             .Select(entity => entity.Tracker)
             .Distinct()
@@ -253,6 +261,7 @@ public partial class FilmsSourcesPageViewModel
         Filters.QualitiesIndex = 0;
         Filters.ContentTypeIndex = 0;
         Filters.VoicesIndex = 0;
+        Filters.SeasonsIndex = 0;
         Filters.TrackerIndex = 0;
         Filters.YearsIndex = 0;
     }
@@ -277,13 +286,15 @@ public partial class FilmsSourcesPageViewModel
 
             if (Filters.ContentTypeIndex > 0)
                 passed &=
-                    entity.ContentType
-                    == Enum.Parse<FilmsSourcePageItemEntity.ContentTypeEnum>(
+                    entity.ContentType == Enum.Parse<FilmsSourcePageItemEntity.ContentTypeEnum>(
                         Filters.ContentType[Filters.ContentTypeIndex]
                     );
 
             if (Filters.VoicesIndex > 0)
                 passed &= entity.Voices.Contains(Filters.Voices[Filters.VoicesIndex]);
+
+            if (Filters.SeasonsIndex > 0)
+                passed &= entity.Seasons.Contains(long.Parse(Filters.Seasons[Filters.SeasonsIndex]));
 
             if (Filters.TrackerIndex > 0)
                 passed &= entity.Tracker == Filters.Trackers[Filters.TrackerIndex];
@@ -348,26 +359,37 @@ public partial class FilmsSourcesPageViewModel
 
         [ObservableProperty]
         public partial ObservableCollection<string> Qualities { get; set; } = [];
+
         [ObservableProperty]
         public partial int QualitiesIndex { get; set; }
 
         [ObservableProperty]
         public partial ObservableCollection<string> ContentType { get; set; } = [];
+
         [ObservableProperty]
         public partial int ContentTypeIndex { get; set; }
 
         [ObservableProperty]
         public partial ObservableCollection<string> Voices { get; set; } = [];
+
         [ObservableProperty]
         public partial int VoicesIndex { get; set; }
 
         [ObservableProperty]
+        public partial ObservableCollection<string> Seasons { get; set; } = [];
+
+        [ObservableProperty]
+        public partial int SeasonsIndex { get; set; }
+
+        [ObservableProperty]
         public partial ObservableCollection<string> Trackers { get; set; } = [];
+
         [ObservableProperty]
         public partial int TrackerIndex { get; set; }
 
         [ObservableProperty]
         public partial ObservableCollection<string> Years { get; set; } = [];
+
         [ObservableProperty]
         public partial int YearsIndex { get; set; }
     }

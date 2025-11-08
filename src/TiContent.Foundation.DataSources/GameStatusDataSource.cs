@@ -69,12 +69,7 @@ public partial class GameStatusDataSource : IGameStatusDataSource
 
             case 1:
                 var released = await api.ObtainReleasedAsync(_tokenSource.Token);
-                var releasedItems =
-                    released.Data.Summer
-                        .Concat(released.Data.Spring)
-                        .Concat(released.Data.Winter)
-                        .ToList();
-                ApplyItems(releasedItems);
+                ApplyItems(released.All);
             break;
 
             case 2:

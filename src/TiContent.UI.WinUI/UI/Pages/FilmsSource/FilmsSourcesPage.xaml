@@ -243,7 +243,8 @@
                                 HorizontalAlignment="Stretch"
                                 HorizontalContentAlignment="Stretch"
                                 Header="Сезон"
-                                Visibility="Collapsed" />
+                                ItemsSource="{x:Bind ViewModel.Filters.Seasons, Mode=TwoWay}"
+                                SelectedIndex="{x:Bind ViewModel.Filters.SeasonsIndex, Mode=TwoWay}" />
 
                             <ComboBox
                                 HorizontalAlignment="Stretch"

@@ -61,16 +61,21 @@
 
                                 <AutoSuggestBox.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid ColumnDefinitions="*, Auto">
-                                            <TextBlock
+                                        <Grid ColumnDefinitions="Auto, *, Auto" ColumnSpacing="12">
+                                            <FontIcon
                                                 Grid.Column="0"
+                                                FontSize="16"
+                                                Glyph="&#xE81C;" />
+
+                                            <TextBlock
+                                                Grid.Column="1"
                                                 Margin="0,0,0,1"
                                                 VerticalAlignment="Center"
                                                 Style="{ThemeResource BodyTextBlockStyle}"
                                                 Text="{Binding}" />
 
                                             <Button
-                                                Grid.Column="1"
+                                                Grid.Column="2"
                                                 Width="24"
                                                 Height="24"
                                                 Padding="0"
